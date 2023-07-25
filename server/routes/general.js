@@ -1,43 +1,19 @@
 import express from "express";
 import db from "../db/conn.js";
 import { ObjectId } from "mongodb";
+import { homepageFeed, userRegister, userLogin }  from "../controller/general.js";
 
 const router = express.Router();
 
 // HOMEPAGE
-router.get("/", async (req, res) => {
-    // get classes list
-    // get user profile
-  let collection = await db.collection("records");
-  let results = await collection.find({}).toArray();
-  res.send(results).status(200);
-});
+router.get("/", homepageFeed)
 
 // AUTHETICATION
-// This section will help you create a new record.
-router.post("/register", async (req, res) => {
-    let newDocument = {
-      name: req.body.name,
-      position: req.body.position,
-      level: req.body.level,
-    };
-    let collection = await db.collection("records");
-    let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
-  });
-  
-router.post("/login", async (req, res) => {
-    let newDocument = {
-    name: req.body.name,
-    position: req.body.position,
-    level: req.body.level,
-    };
-    let collection = await db.collection("records");
-    let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
-});
+// Register
+router.post("/register", userRegister)
+router.post("/login", userLogin)
 
-// CLASSES
+// CLASSES VIEW
 router.get("/list", async (req, res) => {
     // get classes list
   let collection = await db.collection("records");

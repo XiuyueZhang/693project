@@ -7,34 +7,32 @@ const connectionString = process.env.ATLAS_URI || "";
 const client = new MongoClient(connectionString, { useNewUrlParser: true, useUnifiedTopology: true, writeConcern: { w: "majority" } });
 
 
-async function connectAndInsertData() {
-  let conn;
-  try {
-    conn = await client.connect();
-    console.log("Connected to MongoDB Atlas.");
 
-    const db = conn.db("CLOUDTECH-DATABASE");
+let conn;
+try {
+  conn = await client.connect();
+  console.log("Connected to MongoDB Atlas.");
+} catch (e) {
+  console.error(e);
+} 
 
-    // ADD DATA ONLY ONCE
-    // Insert users data
-    // const usersCollection = db.collection('users');
-    // const usersResult = await usersCollection.insertMany(users);
-    // console.log(`${usersResult.insertedCount} users inserted.`);
+let db = conn.db("CLOUDTECH-DATABASE");
 
-    // // Insert classes data
-    // const classesCollection = db.collection('classes');
-    // const classesResult = await classesCollection.insertMany(classes);
-    // console.log(`${classesResult.insertedCount} classes inserted.`);
+// // ADD DATA ONLY ONCE
+// // Insert users data
+// const usersCollection = db.collection('users');
+// const usersResult = await usersCollection.insertMany(users);
+// console.log(`${usersResult.insertedCount} users inserted.`);
 
-    // // Insert enrolment data
-    // const enrolmentsCollection = db.collection('enrolments');
-    // const enrolmentsResult = await enrolmentsCollection.insertMany(enrolments);
-    // console.log(`${enrolmentsResult.insertedCount} enrolments inserted.`);
-  } catch (e) {
-    console.error(e);
-  } 
-}
+// // Insert classes data
+// const classesCollection = db.collection('classes');
+// const classesResult = await classesCollection.insertMany(classes);
+// console.log(`${classesResult.insertedCount} classes inserted.`);
 
-connectAndInsertData();
+// // Insert enrolment data
+// const enrolmentsCollection = db.collection('enrolments');
+// const enrolmentsResult = await enrolmentsCollection.insertMany(enrolments);
+// console.log(`${enrolmentsResult.insertedCount} enrolments inserted.`);
 
-export default client;
+
+export default db;

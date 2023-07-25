@@ -1,16 +1,16 @@
 const users = [
   {
-    _id: 'user001',
-    name: 'John Doe',
-    age: 30,
-    email: 'john@example.com',
+    _id: "64bf385bcce2a4f8eeb9ada9",
+    firstName: 'Lily',
+    lastName: "Johns",
+    email: 'lily.j@example.com',
     password: "$2b$10$dsasdgsagasda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy"
   },
   {
-    _id: 'user002',
-    name: 'Jane Smith',
-    age: 25,
-    email: 'jane@example.com',
+    _id: "64bf385bcce2a4f8eeb9adac",
+    firstName: 'Lynne',
+    lastName: "Royston",
+    email: 'lynne@example.com',
     password: "$!FEAS@!O)_IDJda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy"
   },
   // Add more dummy data objects as needed
@@ -18,7 +18,7 @@ const users = [
 
 const classes = [
   {
-    _id: 'class001',
+    _id: "64bf385bcce2a4f8eeb9adad",
     title: 'AWS Certified Cloud Practitioner',
     level: 'Associate',
     videoPath: '/videos/aws-certified-cloud-practitioner.mp4',
@@ -26,7 +26,7 @@ const classes = [
     isActive: true
   },
   {
-    _id: 'class002',
+    _id: "64bf385bcce2a4f8eeb9adaf",
     title: 'AWS Certified Solutions Architect - Associate',
     level: 'Associate',
     videoPath: '/videos/aws-certified-solutions-architect-associate.mp4',
@@ -34,7 +34,7 @@ const classes = [
     isActive: true
   },
   {
-    _id: 'class003',
+    _id: "64bf385bcce2a4f8eeb9adae",
     title: 'Google Cloud Associate Cloud Engineer',
     level: 'Associate',
     videoPath: '/videos/google-cloud-associate-cloud-engineer.mp4',
@@ -42,7 +42,7 @@ const classes = [
     isActive: false
   },
   {
-    _id: 'class004',
+    _id: "64bf385bcce2a4f8eeb9adaj",
     title: 'Google Cloud Professional Data Engineer',
     level: 'Professional',
     videoPath: '/videos/google-cloud-professional-data-engineer.mp4',
@@ -53,10 +53,10 @@ const classes = [
 ];
 
 const enrolments = [
-  { userId: 'user001', classId: 'class001' },
-  { userId: 'user001', classId: 'class002' },
-  { userId: 'user002', classId: 'class003' },
-  { userId: 'user002', classId: 'class004' },
+  { userId: "64bf385bcce2a4f8eeb9ada9", classId: "64bf385bcce2a4f8eeb9adad" },
+  { userId: "64bf385bcce2a4f8eeb9ada9", classId: "64bf385bcce2a4f8eeb9adae" },
+  { userId: "64bf385bcce2a4f8eeb9adac", classId: "64bf385bcce2a4f8eeb9adae" },
+  { userId: "64bf385bcce2a4f8eeb9adac", classId: "64bf385bcce2a4f8eeb9adaj" },
 ];
 
 export { users, classes, enrolments };
