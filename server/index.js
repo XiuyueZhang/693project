@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import "./loadEnvironment.mjs";
+import "./loadEnvironment.js";
 import users from "./routes/users.js"
 import general from "./routes/general.js"
 import admin from "./routes/admin.js"
