@@ -1,5 +1,6 @@
 import db from "../db/conn.js";
 
+// CLASSES
 const getClassList = async () => {
     let classesCollection = await db.collection("classes");
     let classesResults = await classesCollection.find({}).toArray();
@@ -12,6 +13,7 @@ const getClassDetail = async (query) => {
     return classesResults;
 }
 
+// USERS
 const getUserInfo = async () => {
     let userCollection = await db.collection("users");
     let userResults = await userCollection.find({}).toArray();
@@ -30,6 +32,7 @@ const insertUser = async (newUser) => {
     await collection.insertOne(newUser);
 }
 
+// ENROLMENTS
 const getEnrolmentInfo = async () => {
     let enrolmentsCollection = await db.collection("enrolments");
     let enrolmentsResults = await enrolmentsCollection.find({}).toArray();
