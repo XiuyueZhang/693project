@@ -1,6 +1,7 @@
 import db from "../db/conn.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
 
 // HOMEPAGE FEED
 const homepageFeed = async (req, res) => {
@@ -35,6 +36,22 @@ const userRegister = async (req, res) => {
         password,
     } = req.body;
 
+    // Validate firstName and lastName are strings
+    if (typeof firstName !== "string" || typeof lastName !== "string") {
+        return res.status(400).json({ msg: "First name and last name must be strings. " });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ msg: "Invalid email format. " });
+    }
+
+    // Validate password length
+    if (password.length <= 5) {
+        return res.status(400).json({ msg: "Password must be more than 5 characters. " });
+    }
+
     let collection = await db.collection("users");
 
     // check if the user email exists in DB
@@ -56,8 +73,6 @@ const userRegister = async (req, res) => {
     } else {
         res.status(424).json({ msg: "Email already exists. Please log in. " });
     }
-
-
 };
 
 const passwordCheck = async (passwordPassedIn, passwordInDB) => {
@@ -71,19 +86,31 @@ const userLogin = async (req, res) => {
         password,
     } = req.body;
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ msg: "Invalid email format. " });
+    }
+
+    // Validate password length
+    if (password.length <= 5) {
+        return res.status(400).json({ msg: "Password must be more than 5 characters. " });
+    }
+
     let collection = await db.collection("users");
 
     const user = await collection.findOne({ email: email });
     // If user not found
     if (!user) return res.status(404).json({ msg: "Username or password does not exist. " });
     // User is found, check password
-    const isMatch = passwordCheck(password, user.password);
+    const isMatch = await passwordCheck(password, user.password);
     if (!isMatch) return res.status(404).json({ msg: "Username or password is not valid. " });
-
-    // If password match, get token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    const response = userFormatResponse(user, token)
-    res.status(200).json({ response });
+    else{
+        // If password match, get token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        const response = userFormatResponse(user, token)
+        res.status(200).json({ response });
+    }
 };
 
 const userFormatResponse = (user, token) => {
@@ -104,16 +131,32 @@ const classList = async (req, res) => {
     res.send(classesResults).status(200);
 };
 
+// VALIDATE classId
+function isValidObjectId(str) {
+    try {
+      const objectId = new ObjectId(str);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
 const classDetail = async (req, res) => {
-    const classId = req.params.classId
-    console.log(classId)
+
     // get selected class info
     let collection = await db.collection("classes");
-    let query = { _id: classId };
-    let response = await collection.findOne(query);
 
-    if (!response) res.send("Class not found").status(404);
-    else res.send(response).status(200);
+    const isValidId = isValidObjectId(req.params.classId)
+    if(isValidId){
+        console.log("wozhixingle")
+        let query = { _id: new ObjectId(req.params.classId) };
+        let response = await collection.findOne(query);
+        if (!response) res.send("Class not found").status(404);
+        else res.send(response).status(200);
+    }else{
+        res.status(404).send("Class not found");
+    }
+
 };
 
 export { homepageFeed, userRegister, userLogin, classList, classDetail };

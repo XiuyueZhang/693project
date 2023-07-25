@@ -7,7 +7,6 @@ const router = express.Router();
 router.get("/", homepageFeed)
 
 // AUTHETICATION
-// Register
 router.post("/register", userRegister)
 router.post("/login", userLogin)
 

@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-// This section will help you update a record by id.
+// UPDATE CLASS BY ID
 router.post("/class/add/:classId", async (req, res) => {
     let newDocument = {
         name: req.body.name,
@@ -16,7 +16,7 @@ router.post("/class/add/:classId", async (req, res) => {
       res.send(result).status(204);
 });
 
-// This section will help you delete a record
+// DELETE CLASS BY ID
 router.delete("/class/delete/:classId", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
 

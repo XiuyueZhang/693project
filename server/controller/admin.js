@@ -25,9 +25,9 @@ const addClass = async (req, res) => {
     res.send(result).status(204);
 };
 
-// This section will help you update a record by id.
+// UPDATE CLASS BY ID
 const updateClass = async (req, res) => {
-    const query = { _id: req.params.classId };  //???ObjectId
+    const query = { _id: new ObjectId(req.params.classId) }; 
     const updates = {
         $set: {
             title: req.body.title,
@@ -44,9 +44,9 @@ const updateClass = async (req, res) => {
     res.send(result).status(200);
 };
 
-// This section will help you delete a record
+// DELETE CLASS BY ID
 const deleteClass = async (req, res) => {
-    const query = { _id: req.params.id };
+    const query = { _id: new ObjectId(req.params.id) };
 
     const collection = db.collection("classes");
     let result = await collection.deleteOne(query);
