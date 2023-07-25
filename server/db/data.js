@@ -5,13 +5,22 @@ const users = [
     firstName: 'Lily',
     lastName: "Johns",
     email: 'lily.j@example.com',
-    password: "$2b$10$dsasdgsagasda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy"
+    password: "$2b$10$dsasdgsagasda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy",
+    role: "user",
   },
   {
     firstName: 'Lynne',
     lastName: "Royston",
     email: 'lynne@example.com',
-    password: "$!FEAS@!O)_IDJda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy"
+    password: "$!FEAS@!O)_IDJda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy",
+    role: "user",
+  },
+  {
+    firstName: 'Sunny',
+    lastName: "Zh",
+    email: 'sunny.zh@admin.com',
+    password: "$2b$10$.io7JkaNKhegCSVyecUb2Oxx1ciBG4bCcgorOUEWbBXy5aC0BYrba",
+    role: "admin",
   },
 ];
 

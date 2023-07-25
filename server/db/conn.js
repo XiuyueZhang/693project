@@ -18,8 +18,8 @@ try {
 
 let db = conn.db("CLOUDTECH-DATABASE");
 
-// // ADD DATA ONLY ONCE
-// // Insert users data
+// ADD DATA ONLY ONCE
+// Insert users data
 // const usersCollection = db.collection('users');
 // const usersResult = await usersCollection.insertMany(users);
 // console.log(`${usersResult.insertedCount} users inserted.`);

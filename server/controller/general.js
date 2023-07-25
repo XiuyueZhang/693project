@@ -52,6 +52,7 @@ const userRegister = async (req, res) => {
                 lastName,
                 email,
                 password: passwordHash,
+                role: "user",
             }
 
             await insertUser(newUser);
@@ -116,7 +117,8 @@ const userFormatResponse = (user, token) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        token: token || ""
+        role: user.role,
+        token: token || "",
     }
     return response;
 }
@@ -125,9 +127,8 @@ const userFormatResponse = (user, token) => {
 // CLASSES
 const classList = async (req, res) => {
     // get classes list
-    let classesCollection = await db.collection("classes");
-    let classesResults = await classesCollection.find({}).toArray();
-    res.send(classesResults).status(200);
+    let response = await getClassList();
+    res.send(response).status(200);
 };
 
 const classDetail = async (req, res) => {
