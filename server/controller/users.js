@@ -1,4 +1,3 @@
-import db from "../db/conn.js";
 import { ObjectId } from "mongodb";
 import { enrolClassById, deleteEnrolledClassById } from "../persistence/users.js"
 
