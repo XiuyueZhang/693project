@@ -1,8 +1,8 @@
 import db from "../db/conn.js";
-import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// HOMEPAGE FEED
 const homepageFeed = async (req, res) => {
     // get user profile
     let userCollection = await db.collection("users");
@@ -26,6 +26,7 @@ const homepageFeed = async (req, res) => {
     res.status(200).json(responseData);
 };
 
+// REGISTER, LOGIN
 const userRegister = async (req, res) => {
     const {
         firstName,
@@ -33,22 +34,30 @@ const userRegister = async (req, res) => {
         email,
         password,
     } = req.body;
-    
+
     let collection = await db.collection("users");
 
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    // check if the user email exists in DB
+    const user = await collection.findOne({ email: email });
+    if (!user) {
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password: passwordHash,
+        const newUser = {
+            firstName,
+            lastName,
+            email,
+            password: passwordHash,
+        }
+
+        await collection.insertOne(newUser);
+        const response = userFormatResponse(newUser)
+        res.send(response).status(204);
+    } else {
+        res.status(424).json({ msg: "Email already exists. Please log in. " });
     }
 
-    await collection.insertOne(newUser);
-    const response = userFormatResponse(newUser)
-    res.send(response).status(204);
+
 };
 
 const passwordCheck = async (passwordPassedIn, passwordInDB) => {
@@ -61,7 +70,7 @@ const userLogin = async (req, res) => {
         email,
         password,
     } = req.body;
-    
+
     let collection = await db.collection("users");
 
     const user = await collection.findOne({ email: email });
@@ -69,7 +78,7 @@ const userLogin = async (req, res) => {
     if (!user) return res.status(404).json({ msg: "Username or password does not exist. " });
     // User is found, check password
     const isMatch = passwordCheck(password, user.password);
-    if(!isMatch) return res.status(404).json({ msg: "Username or password is not valid. " });
+    if (!isMatch) return res.status(404).json({ msg: "Username or password is not valid. " });
 
     // If password match, get token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -87,4 +96,24 @@ const userFormatResponse = (user, token) => {
     return response;
 }
 
-export { homepageFeed, userRegister, userLogin };
+// CLASSES
+const classList = async (req, res) => {
+    // get classes list
+    let classesCollection = await db.collection("classes");
+    let classesResults = await classesCollection.find({}).toArray();
+    res.send(classesResults).status(200);
+};
+
+const classDetail = async (req, res) => {
+    const classId = req.params.classId
+    console.log(classId)
+    // get selected class info
+    let collection = await db.collection("classes");
+    let query = { _id: classId };
+    let response = await collection.findOne(query);
+
+    if (!response) res.send("Class not found").status(404);
+    else res.send(response).status(200);
+};
+
+export { homepageFeed, userRegister, userLogin, classList, classDetail };

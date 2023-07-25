@@ -13,7 +13,6 @@ const users = [
     email: 'lynne@example.com',
     password: "$!FEAS@!O)_IDJda//G9JxQ4bQ8KXf4OAIe/X/AK9skyWUy"
   },
-  // Add more dummy data objects as needed
 ];
 
 const classes = [
@@ -49,7 +48,6 @@ const classes = [
     category: 'google',
     isActive: true
   },
-  // Add more dummy data objects as needed
 ];
 
 const enrolments = [
