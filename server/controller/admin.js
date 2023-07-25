@@ -1,5 +1,6 @@
 import db from "../db/conn.js";
 import { ObjectId } from "mongodb";
+import { addClassById, updateClassById, deleteClassById } from "../persistence/admin.js"
 
 // ADD, UPDATE, DELETE CLASSES
 const addClass = async (req, res) => {
@@ -10,7 +11,6 @@ const addClass = async (req, res) => {
         category,
         isActive,
     } = req.body;
-    let collection = await db.collection("classes");
 
     const classToInsert = {
         _id: new ObjectId(),
@@ -21,37 +21,55 @@ const addClass = async (req, res) => {
         isActive,
     };
 
-    let result = await collection.insertOne(classToInsert);
-    res.send(result).status(204);
+    const response = await addClassById(classToInsert);
+    res.send(response).status(204);
 };
 
 // UPDATE CLASS BY ID
 const updateClass = async (req, res) => {
-    const query = { _id: new ObjectId(req.params.classId) }; 
-    const updates = {
-        $set: {
-            title: req.body.title,
-            level: req.body.level,
-            videoPath: req.body.videoPath,
-            category: req.body.category,
-            isActive: req.body.isActive,
-        }
-    };
+    const isValidClassId = isValidObjectId(req.params.classId)
+    if (isValidClassId) {
+        const query = { _id: new ObjectId(req.params.classId) };
+        const updates = {
+            $set: {
+                title: req.body.title,
+                level: req.body.level,
+                videoPath: req.body.videoPath,
+                category: req.body.category,
+                isActive: req.body.isActive,
+            }
+        };
 
-    let collection = await db.collection("classes");
-    let result = await collection.updateOne(query, updates);
-
-    res.send(result).status(200);
+        const response = await updateClassById(query, updates);
+        res.send(response).status(200);
+    } else {
+        res.status(404).send("Class not found");
+    }
 };
+
+// VALIDATE classId
+function isValidObjectId(str) {
+    try {
+        const objectId = new ObjectId(str);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 // DELETE CLASS BY ID
 const deleteClass = async (req, res) => {
-    const query = { _id: new ObjectId(req.params.id) };
+    const isValidClassId = isValidObjectId(req.params.id)
+    if (isValidClassId) {
+        const query = { _id: new ObjectId(req.params.id) };
+        
+        const result = deleteClassById(query);
+        res.send(result).status(200);
+    } else {
+        res.status(404).send("Class not found");
+    }
 
-    const collection = db.collection("classes");
-    let result = await collection.deleteOne(query);
 
-    res.send(result).status(200);
 };
 
 export { addClass, updateClass, deleteClass };

@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { getClassList, getUserInfo, getEnrolmentInfo, findUser, insertUser } from "../persistence/general.js"
+import { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, insertUser } from "../persistence/general.js"
 
 
 // HOMEPAGE FEED
@@ -131,15 +131,11 @@ const classList = async (req, res) => {
 };
 
 const classDetail = async (req, res) => {
-
-    // get selected class info
-    let collection = await db.collection("classes");
-
     const isValidId = isValidObjectId(req.params.classId)
     if (isValidId) {
-        console.log("wozhixingle")
         let query = { _id: new ObjectId(req.params.classId) };
-        let response = await collection.findOne(query);
+        // get selected class info
+        let response = await getClassDetail(query);
         if (!response) res.send("Class not found").status(404);
         else res.send(response).status(200);
     } else {
