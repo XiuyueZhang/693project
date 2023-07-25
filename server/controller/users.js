@@ -1,25 +1,41 @@
 import { ObjectId } from "mongodb";
-import { enrolClassById, deleteEnrolledClassById } from "../persistence/users.js"
+import { enrolClassById, deleteEnrolledClassById, findEnrolmentById, checkUserIdExist, checkClassIdExist } from "../persistence/users.js"
 
 // ADD, DELETE CLASSES
 const addEnrolment = async (req, res) => {
-  const { userId, classId } = req.body;
-  const isValidIdUser = isValidObjectId(userId);
-  const isValidIdClass = isValidObjectId(classId);
+    const { userId, classId } = req.body;
+    const isValidIdUser = isValidObjectId(userId);
+    const isValidIdClass = isValidObjectId(classId);
 
-  if(isValidIdUser && isValidIdClass){
-      const enrolmentToInsert = {
-          userId, 
-          classId,
-      };
+    if (isValidIdUser && isValidIdClass) {
+        const queryUserId = new ObjectId(userId);
+        const queryClassId = new ObjectId(classId);
 
-      const response = await enrolClassById(enrolmentToInsert);
-      res.send(response).status(204);
+        const isExistingUserValidId = await isExistingUserId(queryUserId);
+        const isExistingClassValidId = await isExistingClassId(queryClassId);
+
+        if (isExistingUserValidId && isExistingClassValidId) {
+            // Check if the userId, classId pair exists
+            const enrolment = await findEnrolmentById(queryUserId, queryClassId);
+            if (!enrolment) {
+                const enrolmentToInsert = {
+                    userId: queryUserId,
+                    classId: queryClassId
+                };
+
+                const response = await enrolClassById(enrolmentToInsert);
+                res.status(201).send(response); // 201 (Created) for success response
+            } else {
+                res.status(409).send("You have already added the class"); // 409 (Conflict) for duplicate enrolment
+            }
+        } else {
+            res.status(404).send("User or class does not exist");
+        }
     } else {
-        res.status(404).send("User or class not found");
+        res.status(400).send("Invalid userId or classId");
     }
-    
 };
+
 
 // VALIDATE ID
 function isValidObjectId(str) {
@@ -31,20 +47,61 @@ function isValidObjectId(str) {
     }
 }
 
+// CHECK MATCHING USERID AND CLASSID
+async function isExistingUserId(id) {
+    try {
+        const queryId = new ObjectId(id)
+        const isExistingUserId = await checkUserIdExist(queryId);
+        if (isExistingUserId) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+async function isExistingClassId(id) {
+    try {
+        const queryId = new ObjectId(id)
+        const isExistingClassId = await checkClassIdExist(queryId);
+        if (isExistingClassId) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
 // DELETE CLASS BY ID
 const deleteEnrolment = async (req, res) => {
     const { userId, classId } = req.body;
     const isValidIdUser = isValidObjectId(userId);
     const isValidIdClass = isValidObjectId(classId);
 
-    if(isValidIdUser && isValidIdClass){
-      const userQueryId = new ObjectId(userId);
-      const classQueryId = new ObjectId(classId);
-      
-      const query = { userId: userQueryId, classId: classQueryId };
-      const response = deleteEnrolledClassById(query);
-        res.send(response).status(200);
-    }else {
+    if (isValidIdUser && isValidIdClass) {
+        const queryUserId = new ObjectId(userId);
+        const queryClassId = new ObjectId(classId);
+
+        // CHECK USERID AND CLASSID EXISTS
+        const isExistingUserValidId = await isExistingUserId(queryUserId);
+        const isExistingClassValidId = await isExistingClassId(queryClassId);
+        if(isExistingUserValidId && isExistingClassValidId){
+            // CHECK IF ENROLMENT EXISTS
+            const isEnrolmentExists = await findEnrolmentById(queryUserId, queryClassId);
+            if(isEnrolmentExists){
+                const query = { userId: queryUserId, classId: queryClassId };
+                const response = await deleteEnrolledClassById(query);
+                res.send(response).status(200);
+            } else{
+                res.status(404).send("Oops, you have not enrolled in this class");
+            }
+        } else {
+            res.status(404).send("User or class does not exist");
+        }
+    } else {
         res.status(404).send("User or class not found");
     }
 };

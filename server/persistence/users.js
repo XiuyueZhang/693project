@@ -8,8 +8,35 @@ const enrolClassById = async(enrolmentToInsert) => {
 }
 
 const deleteEnrolledClassById = async(query) => {
-    let result = await collection.deleteOne(query);
+    const result = await collection.deleteOne(query);
     return result;
 }
 
-export { enrolClassById, deleteEnrolledClassById }
+const findEnrolmentById = async (userId, classId) => {
+    const query = {
+        userId: userId, 
+        classId: classId
+    };
+    const result = await collection.findOne(query);
+    return result;
+}
+
+const checkUserIdExist = async (queryId) => {
+    const query = {
+        _id: queryId
+    }
+    const userCollection = db.collection("users");
+    const result = await userCollection.findOne(query);
+    return result;
+}
+
+const checkClassIdExist = async (queryId) => {
+    const query = {
+        _id: queryId
+    }
+    const classCollection = db.collection("classes");
+    const result = await classCollection.findOne(query);
+    return result;
+}
+
+export { enrolClassById, deleteEnrolledClassById, findEnrolmentById, checkUserIdExist, checkClassIdExist }
