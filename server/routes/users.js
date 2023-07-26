@@ -1,14 +1,14 @@
 import express from "express";
 import { addEnrolment, deleteEnrolment } from "../controller/users.js"
-import { isUser } from "../controller/auth.js";
+import { isUser, verifyToken } from "../controller/auth.js";
 
 const router = express.Router();
 
 // ENROL IN CLASS
-router.post("/class/addEnrolment", isUser, addEnrolment)
+router.post("/class/addEnrolment", verifyToken, isUser, addEnrolment)
 
 // DELETE ENROLLED CLASS
-router.delete("/class/deleteEnrolment", isUser, deleteEnrolment)
+router.delete("/class/deleteEnrolment", verifyToken, isUser, deleteEnrolment)
 
 
 export default router;

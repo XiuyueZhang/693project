@@ -113,6 +113,7 @@ const validateReq = (email, password) => {
 
 const userFormatResponse = (user, token) => {
     const response = {
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

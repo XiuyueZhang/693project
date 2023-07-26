@@ -3,6 +3,7 @@ import { enrolClassById, deleteEnrolledClassById, findEnrolmentById, checkUserId
 
 // ADD, DELETE CLASSES
 const addEnrolment = async (req, res) => {
+    console.log("wozhixingle")
     const { userId, classId } = req.body;
     const isValidIdUser = isValidObjectId(userId);
     const isValidIdClass = isValidObjectId(classId);

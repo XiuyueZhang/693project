@@ -7,6 +7,6 @@ const router = express.Router();
 // ADD, UPDATE, DELETE CLASSES
 router.post("/class/add", verifyToken, isAdmin, addClass);
 router.patch("/class/update/:classId", verifyToken, isAdmin, updateClass);
-router.patch("/class/updatestatus/:classId", verifyToken, isAdmin, updateClassStatus)
+router.patch("/class/updateStatus/:classId", verifyToken, isAdmin, updateClassStatus)
 
 export default router;
