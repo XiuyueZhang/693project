@@ -16,6 +16,11 @@ app.use('/', general);
 app.use('/user', users);
 app.use('/admin', admin);
 
+// Handle 404 request
+app.use((req, res) => {
+  res.status(404).send({error: "Page not found"})
+})
+
 // start the Express server
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
