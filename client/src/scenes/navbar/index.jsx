@@ -39,7 +39,12 @@ const Navbar = () => {
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
 
-    const fullName = "dummy user";
+    const fullName = `${user.firstName} ${user.lastName}`;
+
+    const handleLogout = () => {
+        dispatch(setLogout());
+        navigate("/")
+    }
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -182,7 +187,7 @@ const Navbar = () => {
                                 <MenuItem value={fullName}>
                                     <Typography>{fullName}</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={() => dispatch(setLogout())}>
+                                <MenuItem onClick={handleLogout}>
                                     Log Out
                                 </MenuItem>
                             </Select>
