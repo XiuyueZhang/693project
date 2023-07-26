@@ -39,6 +39,7 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const [errorMsg, setErrorMsg] = useState('');
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,24 +76,34 @@ const Form = () => {
       body: JSON.stringify(values),
     });
     const loggedIn = await loggedInResponse.json();
-    const {id, email, firstName, lastName, role, token} = loggedIn.response;
-    onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: {
-            id,
-            firstName, 
-            lastName, 
-            role, 
-            email,
-          },
-          token: token,
-        })
-      );
-      navigate("/home");
-    }
-  };
+    const error = loggedIn?.msg
+    console.log(error);
+    if(error===undefined){
+      // User info is received
+      console.log("wozhixingle");
+      const {id, email, firstName, lastName, role, token} = loggedIn.response;
+      onSubmitProps.resetForm();
+      if (loggedIn) {
+        dispatch(
+          setLogin({
+            user: {
+              id,
+              firstName, 
+              lastName, 
+              role, 
+              email,
+            },
+            token: token,
+          })
+        );
+        navigate("/home");
+      }
+  }else{
+    setErrorMsg(loggedIn.msg);
+  }
+}
+
+
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);
@@ -100,6 +111,18 @@ const Form = () => {
   };
 
   return (
+    <>
+    {errorMsg && (
+        <Box>
+          <Typography
+          variant="subtitle1" gutterBottom
+          mb="2rem"
+          color="red">
+            {errorMsg} Please try again.
+          </Typography>
+        </Box>
+      )}
+    
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
@@ -193,6 +216,7 @@ const Form = () => {
               onClick={() => {
                 setPageType(isLogin ? "register" : "login");
                 resetForm();
+                setErrorMsg("");
               }}
               sx={{
                 textDecoration: "underline",
@@ -211,6 +235,7 @@ const Form = () => {
         </form>
       )}
     </Formik>
+    </>
   );
 };
 
