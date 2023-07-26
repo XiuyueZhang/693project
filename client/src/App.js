@@ -1,5 +1,6 @@
 import './App.css';
-import Home from './scenes/homepage'
+import Home from './scenes/homepage';
+import Login from './scenes/login';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -17,6 +18,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
+            <Route path='/' element={<Login />}/>
             <Route
               path="/home"
               element={<Home /> }
