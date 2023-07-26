@@ -1,11 +1,31 @@
-import { configureStore } from '@reduxjs/toolkit'
-import authReducer from "./auth/authSlice"
+import { createSlice } from "@reduxjs/toolkit";
 
-export const store = configureStore({
-  reducer: {
-    auth: authReducer,
+const initialState = {
+  mode: "light",
+  user: null,
+  token: null,
+};
+
+export const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    setMode: (state) => {
+      state.mode = state.mode === "light" ? "dark" : "light";
+    },
+    setLogin: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+    },
+    setLogout: (state) => {
+      state.user = null;
+      state.token = null;
+    },
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-    }),
-})
+});
+
+
+
+export const { setMode, setLogin, setLogout } =
+  authSlice.actions;
+export default authSlice.reducer;
