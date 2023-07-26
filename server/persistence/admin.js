@@ -13,7 +13,9 @@ const updateClassById = async(query, updates) => {
 }
 
 const deleteClassById = async(query) => {
+    console.log(query)
     let result = await collection.deleteOne(query);
+    console.log(result)
     return result;
 }
 

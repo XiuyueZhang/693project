@@ -58,11 +58,11 @@ function isValidObjectId(str) {
 
 // DELETE CLASS BY ID
 const deleteClass = async (req, res) => {
-    const isValidClassId = isValidObjectId(req.params.id)
+    const isValidClassId = isValidObjectId(req.params.classId)
     if (isValidClassId) {
-        const query = { _id: new ObjectId(req.params.id) };
-        
-        const result = deleteClassById(query);
+        const query = { _id: new ObjectId(req.params.classId) };
+
+        const result = await deleteClassById(query);
         res.send(result).status(200);
     } else {
         res.status(404).send("Class not found");
