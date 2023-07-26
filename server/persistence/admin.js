@@ -2,21 +2,30 @@ import db from "../db/conn.js";
 
 const collection = db.collection("classes");
 
-const addClassById = async(classToInsert) => {
-    let result = await collection.insertOne(classToInsert);
+const addClassById = async (classToInsert) => {
+    const result = await collection.insertOne(classToInsert);
     return result;
 }
 
-const updateClassById = async(query, updates) => {
-    let result = await collection.updateOne(query, updates);
+const updateClassById = async (query, updates) => {
+    const result = await collection.updateOne(query, updates);
     return result;
 }
 
-const deleteClassById = async(query) => {
-    console.log(query)
-    let result = await collection.deleteOne(query);
-    console.log(result)
+const updateActiveStatusClassById = async (query, updates) => {
+    const result = await collection.updateOne(query, updates);
     return result;
 }
 
-export { addClassById, updateClassById, deleteClassById }
+const findClassByTitle = async (title = "", videoPath = "") => {
+    const titleResult = await collection.findOne({ title: title })
+    const videoPathResult = await collection.findOne({ videoPath: videoPath })
+
+    if (titleResult || videoPathResult) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export { addClassById, updateClassById, updateActiveStatusClassById, findClassByTitle }

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 // VERIFY TOKEN
-const verifyToken = async (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     try {
       let token = req.header("Authorization");
   
@@ -17,14 +17,12 @@ const verifyToken = async (req, res, next) => {
       req.user = verified;
       next();
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).send("Please log in");
     }
   };
 
 // VERIFY ROLE
 export const isAdmin = async (req, res, next) => {
-    verifyToken();
-
     try {
         let role = req.header("role");
         if(role === "admin"){
@@ -38,8 +36,6 @@ export const isAdmin = async (req, res, next) => {
 };
 
 export const isUser = async (req, res, next) => {
-    verifyToken();
-
     try {
         let role = req.header("role");
         if(role === "user"){

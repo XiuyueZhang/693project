@@ -1,12 +1,12 @@
 import express from "express";
-import { addClass, updateClass, deleteClass } from "../controller/admin.js";
-import { isAdmin } from "../controller/auth.js";
+import { addClass, updateClass, updateClassStatus } from "../controller/admin.js";
+import { verifyToken, isAdmin } from "../controller/auth.js";
 
 const router = express.Router();
 
 // ADD, UPDATE, DELETE CLASSES
-router.post("/class/add", isAdmin, addClass);
-router.patch("/class/update/:classId", isAdmin, updateClass);
-router.delete("/class/delete/:classId", isAdmin, deleteClass)
+router.post("/class/add", verifyToken, isAdmin, addClass);
+router.patch("/class/update/:classId", verifyToken, isAdmin, updateClass);
+router.patch("/class/updatestatus/:classId", verifyToken, isAdmin, updateClassStatus)
 
 export default router;
