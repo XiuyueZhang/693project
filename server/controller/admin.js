@@ -62,8 +62,8 @@ const deleteClass = async (req, res) => {
     if (isValidClassId) {
         const query = { _id: new ObjectId(req.params.classId) };
 
-        const result = await deleteClassById(query);
-        res.send(result).status(200);
+        const response = await deleteClassById(query);
+        res.send(response).status(200);
     } else {
         res.status(404).send("Class not found");
     }

@@ -1,4 +1,3 @@
-import db from "../db/conn.js";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
