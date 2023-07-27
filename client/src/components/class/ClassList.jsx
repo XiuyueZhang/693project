@@ -65,7 +65,7 @@ function ClassList(props) {
                     {classList.map((classItem) => (
                         <Box
                             key={classItem._id}
-                            sx={{ minWidth: "350px", marginLeft: isWideScreen ? "0" : "50px" }}
+                            sx={{ minWidth: "350px" }}
                         >
                             <ClassItem classItem={classItem} />
                         </Box>

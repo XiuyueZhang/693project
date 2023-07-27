@@ -20,7 +20,7 @@ function ClassItem(props) {
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     return (
-        <Box sx={{ width:"580px", padding:"1rem"}}>
+        <Box sx={{ width:"550px", padding:"1rem"}}>
             <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "48%" }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
