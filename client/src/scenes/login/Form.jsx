@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -97,8 +98,25 @@ const Form = () => {
         // Store role, token to localStorage
         
         // Get homepage content feed
-        
-        navigate("/");
+        try {
+          // send Axios get request to get homepage content
+          const response = await axios.get('http://localhost:5050/', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              role: role,
+            },
+          });
+  
+          // Check if the HTTP request was successful
+          if (response.status === 200) {
+            console.log(response.data)
+            // HTTP request after successful login is sent here
+            navigate("/"); // Navigates to the home page
+          }
+        } catch (error) {
+          console.error('Axios GET error:', error);
+          // Handle errors with the Axios GET request if any
+        }
       }
     } else {
       setErrorMsg(loggedIn.msg);
