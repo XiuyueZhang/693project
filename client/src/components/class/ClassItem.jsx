@@ -13,18 +13,35 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
+
 function ClassItem(props) {
     const {classItem} = props
-    const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
+    const theme = useTheme();
+    const neutralLight = theme.palette.neutral.light;
+    const dark = theme.palette.neutral.dark;
+    const background = theme.palette.background.default;
+    const primaryLight = theme.palette.primary.light;
+    const alt = theme.palette.background.alt;
+
     return (
-        <Box sx={{ width:"550px", padding:"1rem"}}>
-            <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "48%" }}>
+        <Box sx={{ width:"550px", padding:"1rem",}}>
+            <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "48%",
+                    "&:hover": {
+                        cursor: "pointer",
+                    }, }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography component="div" variant="h5" sx={{ width: "240px", wordWrap: "break-word" }}>
+                        <Typography 
+                        component="div" 
+                        variant="h5" 
+                         sx={{ 
+                            width: "240px", 
+                            wordWrap: "break-word",
+                            color:"primary",
+                    }}>
                             {classItem.title}
                         </Typography>
                         <Typography variant="subtitle1" color="text.secondary" component="div">

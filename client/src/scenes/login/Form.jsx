@@ -108,19 +108,8 @@ const Form = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         
-        
-        // // Get homepage content feed
-        const response = await getHomepageContentRequest()
-
-        // // Check if the HTTP request was successful
-        if (response.status === 200) {
-          console.log("wozhixingle");
-          dispatch(setClassList({
-            allClasses: response.data.classes
-          }))
-          // HTTP request after successful login is sent here
-          navigate("/"); // Navigates to the home page
-        }
+        // Navigates to the home page
+        navigate("/"); 
       }
     } else {
       setErrorMsg(loggedIn.msg);
