@@ -94,7 +94,7 @@ const Form = () => {
             token: token,
           })
         );
-        navigate("/home");
+        navigate("/");
       }
     } else {
       setErrorMsg(loggedIn.msg);

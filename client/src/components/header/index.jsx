@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
     Box,
+    Button,
     IconButton,
     InputBase,
     Typography,
@@ -39,7 +40,13 @@ const Header = () => {
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
 
-    const fullName = `${user.firstName} ${user.lastName}`;
+    let fullName = ""
+    if (user === null) {
+        fullName = ""
+    } else {
+        fullName = `${user.firstName} ${user.lastName}`;
+    }
+
 
     const handleLogout = () => {
         dispatch(setLogout());
@@ -91,30 +98,44 @@ const Header = () => {
                     <Message sx={{ fontSize: "25px" }} />
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />
-                    <FormControl variant="standard" value={fullName}>
-                        <Select
-                            value={fullName}
-                            sx={{
-                                backgroundColor: neutralLight,
-                                width: "150px",
-                                borderRadius: "0.25rem",
-                                p: "0.25rem 1rem",
-                                "& .MuiSvgIcon-root": {
-                                    pr: "0.25rem",
-                                    width: "3rem",
-                                },
-                                "& .MuiSelect-select:focus": {
+                    
+                    {fullName === "" ? (
+                        <Button
+                        variant="outlined"
+                        sx={{ fontSize: "15px" }}
+                        onClick={() => {
+                            navigate("/login");
+                        }}
+                    >Sign in/ Sign up</Button>
+                    ) : (
+                        <FormControl variant="standard" value={fullName}>
+                            <Select
+                                value={fullName}
+                                sx={{
                                     backgroundColor: neutralLight,
-                                },
-                            }}
-                            input={<InputBase />}
-                        >
-                            <MenuItem value={fullName}>
-                                <Typography>{fullName}</Typography>
-                            </MenuItem>
-                            <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
-                        </Select>
-                    </FormControl>
+                                    width: "150px",
+                                    borderRadius: "0.25rem",
+                                    p: "0.25rem 1rem",
+                                    "& .MuiSvgIcon-root": {
+                                        pr: "0.25rem",
+                                        width: "3rem",
+                                    },
+                                    "& .MuiSelect-select:focus": {
+                                        backgroundColor: neutralLight,
+                                    },
+                                }}
+                                input={<InputBase />}
+                            >
+                                <MenuItem value={fullName}>
+                                    <Typography>{fullName}</Typography>
+                                </MenuItem>
+                                <MenuItem onClick={()=>dispatch(setLogout())}>Log Out</MenuItem>
+                            </Select>
+                        </FormControl>
+                    )}
+
+
+
                 </FlexBetween>
             ) : (
                 <IconButton
@@ -166,7 +187,15 @@ const Header = () => {
                         <Message sx={{ fontSize: "25px" }} />
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
-                        <FormControl variant="standard" value={fullName}>
+                        {fullName === "" ? (
+                        <Button
+                        variant="outlined"
+                        sx={{ fontSize: "15px" }}
+                        onClick={() => {
+                            navigate("/");
+                        }}
+                    >Sign in/ Sign up</Button>
+                    ) : (<FormControl variant="standard" value={fullName}>
                             <Select
                                 value={fullName}
                                 sx={{
@@ -191,7 +220,8 @@ const Header = () => {
                                     Log Out
                                 </MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl>)}
+                        
                     </FlexBetween>
                 </Box>
             )}
