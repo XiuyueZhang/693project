@@ -32,7 +32,6 @@ const userRegister = async (req, res) => {
         email,
         password,
     } = req.body;
-
     // Validate firstName and lastName are strings
     if (typeof firstName !== "string" || typeof lastName !== "string") {
         return res.status(400).json({ msg: "First name and last name must be strings. " });
@@ -63,7 +62,6 @@ const userRegister = async (req, res) => {
     } else {
         return res.status(400).json({ msg: isValidate.msg });
     }
-
 
 };
 
