@@ -12,7 +12,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "../../store";
+import { setLogin, setClassList } from "../../store";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -109,7 +109,9 @@ const Form = () => {
   
           // Check if the HTTP request was successful
           if (response.status === 200) {
-            console.log(response.data)
+            dispatch(setClassList({
+              classes: response.data
+            }))
             // HTTP request after successful login is sent here
             navigate("/"); // Navigates to the home page
           }
