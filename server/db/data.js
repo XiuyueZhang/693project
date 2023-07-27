@@ -33,7 +33,7 @@ const classes = [
     isActive: true
   },
   {
-    title: 'AWS Certified Solutions Architect - Associate',
+    title: 'AWS Certified Solutions Architect',
     level: 'Associate',
     videoPath: '/videos/aws-certified-solutions-architect-associate.mp4',
     category: 'aws',
