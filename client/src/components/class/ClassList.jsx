@@ -1,13 +1,38 @@
-import React from 'react';
+import React,  { useEffect } from 'react';
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import ClassItem from './ClassItem';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getHomepageContentRequest } from '../../services/requests';
+import { setClassList } from '../../store';
 
 function ClassList(props) {
     const theme = useTheme();
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const isWideScreen = useMediaQuery("(min-width: 590px)");
-    const classList = useSelector((state) => state.auth.allClasses)
+    const classList = useSelector((state) => state.classes.allClasses);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch the homepage content
+                const response = await getHomepageContentRequest();
+
+                // Check if the HTTP request was successful
+                if (response.status === 200) {
+                    dispatch(setClassList({
+                        allClasses: response.data.classes
+                    }));
+                }
+            } catch (error) {
+                // Handle any errors here
+                console.error("Error fetching homepage content:", error);
+            }
+        };
+
+        fetchData(); // Call the fetchData function when the component mounts
+    }, [dispatch]);
+
     return (
         <Box>
             <Box

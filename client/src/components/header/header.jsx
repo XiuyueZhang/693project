@@ -31,6 +31,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
+    const mode= useSelector((state) => state.settings.mode);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme();
@@ -44,7 +45,6 @@ const Header = () => {
     if (user === null) {
         fullName = ""
     } else {
-        // TODO: find the reason why user is undefined
         fullName = user ? `${user.firstName} ${user.lastName}`: "";
     }
 

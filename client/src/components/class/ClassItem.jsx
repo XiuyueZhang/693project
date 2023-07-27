@@ -16,7 +16,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 function ClassItem(props) {
     const {classItem} = props
     const theme = useTheme();
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     return (

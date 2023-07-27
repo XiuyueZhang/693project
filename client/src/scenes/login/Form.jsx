@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from 'axios';
+import { getHomepageContentRequest } from "../../services/requests";
 import {
   Box,
   Button,
@@ -95,26 +95,32 @@ const Form = () => {
             token: token,
           })
         );
-        // Store role, token to localStorage
-        
-        // Get homepage content feed
-        // send Axios get request to get homepage content
-        const response = await axios.get('http://localhost:5050/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            role: role,
-          },
-        });
 
-        // Check if the HTTP request was successful
+        // Store role, token to localStorage
+        const user = {
+          id,
+          firstName,
+          lastName,
+          role,
+          email,
+        };
+        
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        
+        // // Get homepage content feed
+        const response = await getHomepageContentRequest()
+
+        // // Check if the HTTP request was successful
         if (response.status === 200) {
+          console.log("wozhixingle");
           dispatch(setClassList({
             allClasses: response.data.classes
           }))
           // HTTP request after successful login is sent here
           navigate("/"); // Navigates to the home page
         }
-
       }
     } else {
       setErrorMsg(loggedIn.msg);

@@ -1,19 +1,12 @@
 import { combineReducers, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  mode: "light",
-  user: null,
-  token: null,
-  allClasses: []
-};
-
 export const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: {
+    user: null,
+    token: null,
+  },
   reducers: {
-    setMode: (state) => {
-      state.mode = state.mode === "light" ? "dark" : "light";
-    },
     setLogin: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -22,6 +15,27 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
+  },
+});
+
+export const settingsSlice = createSlice({
+  name: "settings",
+  initialState:{
+    mode: "light",
+  },
+  reducers: {
+    setMode: (state) => {
+      state.mode = state.mode === "light" ? "dark" : "light";
+    },
+  },
+});
+
+export const classSlice = createSlice({
+  name: "classes",
+  initialState:{
+    allClasses: [],
+  },
+  reducers: {
     setClassList: (state, action) => {
       state.allClasses = action.payload.allClasses;
     }
@@ -29,9 +43,16 @@ export const authSlice = createSlice({
 });
 
 const reducers = combineReducers({
-  auth: authSlice.reducer
+  auth: authSlice.reducer,
+  settings: settingsSlice.reducer,
+  classes: classSlice.reducer
 })
 
-export const { setMode, setLogin, setLogout, setClassList } =
+export const { setMode } =
+  settingsSlice.actions;
+export const { setLogin, setLogout } =
   authSlice.actions;
+export const { setClassList } =
+  classSlice.actions;
+
 export default reducers;
