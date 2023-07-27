@@ -192,7 +192,7 @@ const Header = () => {
                         variant="outlined"
                         sx={{ fontSize: "15px" }}
                         onClick={() => {
-                            navigate("/");
+                            navigate("/login");
                         }}
                     >Sign in/ Sign up</Button>
                     ) : (<FormControl variant="standard" value={fullName}>

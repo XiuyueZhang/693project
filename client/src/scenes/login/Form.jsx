@@ -94,6 +94,10 @@ const Form = () => {
             token: token,
           })
         );
+        // Store role, token to localStorage
+        
+        // Get homepage content feed
+        
         navigate("/");
       }
     } else {

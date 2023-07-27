@@ -8,17 +8,17 @@ import { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, 
 // HOMEPAGE FEED
 const homepageFeed = async (req, res) => {
     // get user profile
-    const userResults = await getUserInfo();
+    // const userResults = await getUserInfo();
     // get classes list
     const classesResults = await getClassList();
     // get enrolments list
-    const enrolmentsResults = await getEnrolmentInfo();
+    // const enrolmentsResults = await getEnrolmentInfo();
 
     // Send user, classes and enrolments data in a single response object
     const responseData = {
-        users: userResults,
+        // users: userResults,
         classes: classesResults,
-        enrolments: enrolmentsResults
+        // enrolments: enrolmentsResults
     };
 
     res.status(200).json(responseData);
