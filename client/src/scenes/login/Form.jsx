@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { getHomepageContentRequest } from "../../services/requests";
 import {
   Box,
   Button,
@@ -12,7 +11,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin, setClassList } from "../../store";
+import { setLogin } from "../../store";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),

@@ -34,10 +34,14 @@ export const classSlice = createSlice({
   name: "classes",
   initialState:{
     allClasses: [],
+    filteredClasses:[]
   },
   reducers: {
     setClassList: (state, action) => {
       state.allClasses = action.payload.allClasses;
+    },
+    setfilteredClassList:(state, action) => {
+      state.filteredClasses = action.payload.filteredClasses;
     }
   },
 });
@@ -52,7 +56,7 @@ export const { setMode } =
   settingsSlice.actions;
 export const { setLogin, setLogout } =
   authSlice.actions;
-export const { setClassList } =
+export const { setClassList, setfilteredClassList } =
   classSlice.actions;
 
 export default reducers;

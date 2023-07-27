@@ -22,7 +22,7 @@ import {
     Close,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "../../store"
+import { setMode, setLogout,setfilteredClassList } from "../../store"
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "../FlexBetween"
 
@@ -31,7 +31,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.auth.user);
-    const mode= useSelector((state) => state.settings.mode);
+    const allClasses = useSelector((state) => state.classes.allClasses);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme();
@@ -52,6 +52,17 @@ const Header = () => {
     const handleLogout = () => {
         dispatch(setLogout());
         navigate("/")
+    }
+
+    const searchClass = (e) => {
+        const searchKeyWord = e.target.value.trim().toLowerCase();
+        const filteredClasses = allClasses.filter((classItem) =>
+            classItem.title.toLowerCase().includes(searchKeyWord) || classItem.level.toLowerCase().includes(searchKeyWord) 
+        );
+        console.log(filteredClasses)
+        dispatch(setfilteredClassList({
+            filteredClasses: filteredClasses
+        }))
     }
 
     return (
@@ -79,7 +90,10 @@ const Header = () => {
                         gap="3rem"
                         padding="0.1rem 1.5rem"
                     >
-                        <InputBase placeholder="Search..." />
+                        <InputBase 
+                            placeholder="Search..." 
+                            onChange={searchClass}
+                        />
                         <IconButton>
                             <Search />
                         </IconButton>

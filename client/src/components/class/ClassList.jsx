@@ -1,4 +1,4 @@
-import React,  { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import ClassItem from './ClassItem';
 import { useSelector, useDispatch } from "react-redux";
@@ -9,9 +9,11 @@ function ClassList(props) {
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const isWideScreen = useMediaQuery("(min-width: 590px)");
-    const classList = useSelector((state) => state.classes.allClasses);
+    let classList = useSelector((state) => state.classes.allClasses);
+    const filteredclassList = useSelector((state) => state.classes.filteredClasses);
     const dispatch = useDispatch();
 
+    // fetch all class data when first render
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -31,7 +33,9 @@ function ClassList(props) {
         };
 
         fetchData(); // Call the fetchData function when the component mounts
-    }, [dispatch]);
+    }, []);
+
+
 
     return (
         <Box>
@@ -62,14 +66,20 @@ function ClassList(props) {
                     alignItems="center"
                     flexWrap="wrap"
                 >
-                    {classList.map((classItem) => (
-                        <Box
-                            key={classItem._id}
-                            sx={{ minWidth: "350px" }}
-                        >
-                            <ClassItem classItem={classItem} />
-                        </Box>
-                    ))}
+
+                    {filteredclassList.length === 0 ? (
+                        classList.map((classItem) => (
+                            <Box key={classItem._id} sx={{ minWidth: "350px" }}>
+                                <ClassItem classItem={classItem} />
+                            </Box>
+                        ))
+                    ) : (
+                        filteredclassList.map((classItem) => (
+                            <Box key={classItem._id} sx={{ minWidth: "350px" }}>
+                                <ClassItem classItem={classItem} />
+                            </Box>
+                        ))
+                    )}
                 </Box>
             </Box>
 

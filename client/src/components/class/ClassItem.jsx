@@ -28,7 +28,7 @@ function ClassItem(props) {
 
     return (
         <Box sx={{ width:"550px", padding:"1rem",}}>
-            <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "48%",
+            <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "52%",
                     "&:hover": {
                         cursor: "pointer",
                     }, }}>
