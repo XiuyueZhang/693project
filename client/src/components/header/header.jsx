@@ -30,7 +30,7 @@ const Header = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.auth.user);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme();
@@ -44,7 +44,8 @@ const Header = () => {
     if (user === null) {
         fullName = ""
     } else {
-        fullName = `${user.firstName} ${user.lastName}`;
+        // TODO: find the reason why user is undefined
+        fullName = user ? `${user.firstName} ${user.lastName}`: "";
     }
 
 
@@ -55,6 +56,7 @@ const Header = () => {
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
+            
             <FlexBetween gap="1.75rem">
                 <Typography
                     fontWeight="bold"

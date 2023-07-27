@@ -1,12 +1,16 @@
 import React from 'react';
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import ClassItem from './ClassItem';
+import { useDispatch, useSelector } from "react-redux";
 
 function ClassList(props) {
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const classes = useSelector((state) => state.auth.classes)
+    console.log(classes)
     return (
         <Box>
+            {classes.map((c) => c.title)}
             <Box
                 width="100%"
                 backgroundColor={theme.palette.background.alt}
@@ -25,6 +29,7 @@ function ClassList(props) {
                 <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
                     Explore classes ...
                 </Typography>
+                
                 <ClassItem />
             </Box>
         </Box>
