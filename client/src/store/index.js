@@ -4,7 +4,7 @@ const initialState = {
   mode: "light",
   user: null,
   token: null,
-  classes: []
+  allClasses: []
 };
 
 export const authSlice = createSlice({
@@ -23,7 +23,7 @@ export const authSlice = createSlice({
       state.token = null;
     },
     setClassList: (state, action) => {
-      state.classes = action.payload.classes;
+      state.allClasses = action.payload.allClasses;
     }
   },
 });

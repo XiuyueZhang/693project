@@ -98,27 +98,23 @@ const Form = () => {
         // Store role, token to localStorage
         
         // Get homepage content feed
-        try {
-          // send Axios get request to get homepage content
-          const response = await axios.get('http://localhost:5050/', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              role: role,
-            },
-          });
-  
-          // Check if the HTTP request was successful
-          if (response.status === 200) {
-            dispatch(setClassList({
-              classes: response.data
-            }))
-            // HTTP request after successful login is sent here
-            navigate("/"); // Navigates to the home page
-          }
-        } catch (error) {
-          console.error('Axios GET error:', error);
-          // Handle errors with the Axios GET request if any
+        // send Axios get request to get homepage content
+        const response = await axios.get('http://localhost:5050/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            role: role,
+          },
+        });
+
+        // Check if the HTTP request was successful
+        if (response.status === 200) {
+          dispatch(setClassList({
+            allClasses: response.data.classes
+          }))
+          // HTTP request after successful login is sent here
+          navigate("/"); // Navigates to the home page
         }
+
       }
     } else {
       setErrorMsg(loggedIn.msg);
@@ -157,7 +153,6 @@ const Form = () => {
           handleBlur,
           handleChange,
           handleSubmit,
-          setFieldValue,
           resetForm,
         }) => (
           <form onSubmit={handleSubmit}>
