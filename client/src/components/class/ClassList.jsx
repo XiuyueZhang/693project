@@ -4,6 +4,7 @@ import ClassItem from './ClassItem';
 import { useSelector, useDispatch } from "react-redux";
 import { getHomepageContentRequest } from '../../services/requests';
 import { setClassList } from '../../store';
+import MultipleSelect from '../widgets/MultipleSelect';
 
 function ClassList(props) {
     const theme = useTheme();
@@ -56,9 +57,7 @@ function ClassList(props) {
                 minWidth="350px"
             >
                 <Box >
-                    <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-                        Explore classes ...
-                    </Typography>
+                    <MultipleSelect />
                 </Box>
                 <Box
                     display="flex"

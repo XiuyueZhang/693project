@@ -10,6 +10,8 @@ import {
     FormControl,
     useTheme,
     useMediaQuery,
+    OutlinedInput,
+    InputLabel,
 } from "@mui/material";
 import {
     Search,
@@ -59,7 +61,6 @@ const Header = () => {
         const filteredClasses = allClasses.filter((classItem) =>
             classItem.title.toLowerCase().includes(searchKeyWord) || classItem.level.toLowerCase().includes(searchKeyWord) 
         );
-        console.log(filteredClasses)
         dispatch(setfilteredClassList({
             filteredClasses: filteredClasses
         }))
