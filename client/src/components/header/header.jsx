@@ -26,7 +26,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout,setfilteredClassList } from "../../store"
 import { useNavigate } from "react-router-dom";
-import FlexBetween from "../FlexBetween"
+import FlexBetween from "../widgets/FlexBetween";
 
 const Header = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
