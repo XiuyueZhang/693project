@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import ClassList from './components/class/ClassList';
+import ClassDetail from './components/class/ClassDetail';
 
 function App() {
   const mode = useSelector((state) => state.settings.mode);
@@ -18,7 +20,10 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path='/' element={<Home />}/>
+            <Route path='/' element={<Home />}>
+              <Route path='/' element={<ClassList/>}></Route>
+              <Route path='/classDetail' element={<ClassDetail/>}></Route>
+            </Route>
             <Route
               path="/login"
               element={<Login /> }

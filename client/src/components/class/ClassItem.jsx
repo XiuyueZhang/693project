@@ -12,12 +12,14 @@ import {
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { useNavigate } from "react-router-dom";
 
 
 function ClassItem(props) {
     const {classItem} = props
     const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
+    const navigate = useNavigate();
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
@@ -26,12 +28,19 @@ function ClassItem(props) {
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
 
+    const navigateToClassDetail = () => {
+        const classId = classItem._id;
+        navigate("classDetail")
+    }
+
     return (
         <Box sx={{ width:"530px", padding:"1rem",}}>
             <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "52%",
                     "&:hover": {
                         cursor: "pointer",
-                    }, }}>
+                    }, }}
+                    onClick={navigateToClassDetail}
+                >
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <Typography 
