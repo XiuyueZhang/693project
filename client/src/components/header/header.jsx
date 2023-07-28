@@ -92,7 +92,7 @@ const Header = () => {
                         padding="0.1rem 1.5rem"
                     >
                         <InputBase 
-                            placeholder="Search..." 
+                            placeholder="Search certificate or level..." 
                             onChange={searchClass}
                         />
                         <IconButton>

@@ -27,7 +27,7 @@ function ClassItem(props) {
     const alt = theme.palette.background.alt;
 
     return (
-        <Box sx={{ width:"550px", padding:"1rem",}}>
+        <Box sx={{ width:"530px", padding:"1rem",}}>
             <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "52%",
                     "&:hover": {
                         cursor: "pointer",

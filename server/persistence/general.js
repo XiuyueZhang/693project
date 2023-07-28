@@ -3,7 +3,7 @@ import db from "../db/conn.js";
 // CLASSES
 const getClassList = async () => {
     let classesCollection = await db.collection("classes");
-    let classesResults = await classesCollection.find({}).toArray();
+    let classesResults = await classesCollection.find({isActive:true}).toArray();
     return classesResults;
 }
 

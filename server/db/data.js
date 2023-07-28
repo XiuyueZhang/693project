@@ -53,6 +53,49 @@ const classes = [
     category: 'google',
     isActive: true
   },
+  // Additional cloud certificates objects
+  {
+    title: 'AWS Certified Developer - Associate',
+    level: 'Associate',
+    videoPath: '/videos/aws-certified-developer-associate.mp4',
+    category: 'aws',
+    isActive: true
+  },
+  {
+    title: 'Azure Fundamentals',
+    level: 'Fundamental',
+    videoPath: '/videos/azure-fundamentals.mp4',
+    category: 'azure',
+    isActive: true
+  },
+  {
+    title: 'Microsoft Certified: Azure Administrator Associate',
+    level: 'Associate',
+    videoPath: '/videos/microsoft-certified-azure-administrator-associate.mp4',
+    category: 'azure',
+    isActive: true
+  },
+  {
+    title: 'Google Cloud Professional Cloud Architect',
+    level: 'Professional',
+    videoPath: '/videos/google-cloud-professional-cloud-architect.mp4',
+    category: 'google',
+    isActive: true
+  },
+  {
+    title: 'IBM Certified Cloud Solution Architect v3',
+    level: 'Professional',
+    videoPath: '/videos/ibm-certified-cloud-solution-architect-v3.mp4',
+    category: 'ibm',
+    isActive: true
+  },
+  {
+    title: 'Microsoft Certified: Azure Solutions Architect Expert',
+    level: 'Expert',
+    videoPath: '/videos/microsoft-certified-azure-solutions-architect-expert.mp4',
+    category: 'azure',
+    isActive: true
+  },
 ];
 
 const enrolments = [

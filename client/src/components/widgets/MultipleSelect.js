@@ -22,6 +22,8 @@ const MenuProps = {
 const clouds = [
     'AWS',
     'Google',
+    "Azure",
+    "IBM"
 ];
 
 export default function MultipleSelect() {
