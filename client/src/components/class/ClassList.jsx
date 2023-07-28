@@ -16,7 +16,7 @@ function ClassList(props) {
 
     // fetch all class data when first render
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchAllClassData = async () => {
             try {
                 // Fetch the homepage content
                 const response = await getHomepageContentRequest();
@@ -33,7 +33,7 @@ function ClassList(props) {
             }
         };
 
-        fetchData(); // Call the fetchData function when the component mounts
+        fetchAllClassData(); // Call the fetchData function when the component mounts
     }, []);
 
 

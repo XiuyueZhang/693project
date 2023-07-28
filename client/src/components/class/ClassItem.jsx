@@ -30,7 +30,7 @@ function ClassItem(props) {
 
     const navigateToClassDetail = () => {
         const classId = classItem._id;
-        navigate("classDetail")
+        navigate(`/:${classId}`)
     }
 
     return (
