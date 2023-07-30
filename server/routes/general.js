@@ -11,7 +11,7 @@ router.post("/register", userRegister)
 router.post("/login", userLogin)
 
 // CLASSES VIEW
-router.get("/classlist", classList)
-router.get("/:classId", classDetail)
+// router.get("/classlist", classList)
+router.get("/classes/:classId", classDetail)
 
 export default router;

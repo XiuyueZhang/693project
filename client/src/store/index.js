@@ -34,7 +34,8 @@ export const classSlice = createSlice({
   name: "classes",
   initialState:{
     allClasses: [],
-    filteredClasses:[]
+    filteredClasses:[],
+    selectedClass:null,
   },
   reducers: {
     setClassList: (state, action) => {
@@ -42,7 +43,10 @@ export const classSlice = createSlice({
     },
     setfilteredClassList:(state, action) => {
       state.filteredClasses = action.payload.filteredClasses;
-    }
+    },
+    setSelectedClass: (state, action) => {
+      state.selectedClass = action.payload.selectedClass;
+    },
   },
 });
 
@@ -56,7 +60,7 @@ export const { setMode } =
   settingsSlice.actions;
 export const { setLogin, setLogout } =
   authSlice.actions;
-export const { setClassList, setfilteredClassList } =
+export const { setClassList, setfilteredClassList,setSelectedClass } =
   classSlice.actions;
 
 export default reducers;

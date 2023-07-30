@@ -22,7 +22,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />}>
               <Route path='/' element={<ClassList/>}></Route>
-              <Route path='/:classId' element={<ClassDetail/>}></Route>
+              <Route path='/classes/:classId' element={<ClassDetail/>}></Route>
             </Route>
             <Route
               path="/login"

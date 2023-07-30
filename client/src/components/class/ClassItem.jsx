@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-    Box,
-    useTheme,
-    useMediaQuery,
-    Card,
-    CardContent,
-    CardMedia,
-    IconButton,
-    Typography,
-} from "@mui/material";
+import { Box, Button, Typography, useTheme, useMediaQuery, CardActionArea, CardActions, CardContent, CardMedia, Card } from "@mui/material";
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -16,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function ClassItem(props) {
-    const {classItem} = props
+    const { classItem } = props
     const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const navigate = useNavigate();
@@ -30,51 +21,34 @@ function ClassItem(props) {
 
     const navigateToClassDetail = () => {
         const classId = classItem._id;
-        navigate(`/:${classId}`)
+        navigate(`/classes/${classId}`)
     }
 
     return (
-        <Box sx={{ width:"530px", padding:"1rem",}}>
-            <Card sx={{ display: 'flex', width:isNonMobileScreens ? "90%" : "52%",
-                    "&:hover": {
-                        cursor: "pointer",
-                    }, }}
-                    onClick={navigateToClassDetail}
-                >
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography 
-                        component="div" 
-                        variant="h5" 
-                         sx={{ 
-                            width: "240px", 
-                            wordWrap: "break-word",
-                            color:"primary",
-                    }}>
+        <Box sx={{ width: "530px", padding: "1rem", }}>
+            <Card sx={{ maxWidth: 345 }}
+                   onClick={navigateToClassDetail}>
+                <CardActionArea>
+                    <CardMedia
+                        component="img"
+                        height="140"
+                        image={imageRootPath + "class02.jpg"}
+                        alt="green iguana"
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
                             {classItem.title}
                         </Typography>
-                        <Typography variant="subtitle1" color="text.secondary" component="div">
+                        <Typography variant="body2" color="text.secondary">
                             {classItem.level}
                         </Typography>
                     </CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                        <IconButton aria-label="previous">
-                            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                        </IconButton>
-                        <IconButton aria-label="play/pause">
-                            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                        </IconButton>
-                        <IconButton aria-label="next">
-                            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                        </IconButton>
-                    </Box>
-                </Box>
-                <CardMedia
-                    component="img"
-                    sx={{ width: "200px" }}
-                    image={imageRootPath + "class01.jpg"}
-                    alt="Class 01 info"
-                />
+                </CardActionArea>
+                <CardActions>
+                    <Button size="small" color="primary">
+                        View Details
+                    </Button>
+                </CardActions>
             </Card>
         </Box>
     );
