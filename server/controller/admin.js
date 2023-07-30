@@ -9,6 +9,7 @@ const addClass = async (req, res) => {
         level,
         videoPath,
         category,
+        description,
         isActive,
     } = req.body;
 
@@ -21,6 +22,7 @@ const addClass = async (req, res) => {
             level,
             videoPath,
             category,
+            description,
             isActive,
         };
 
@@ -47,6 +49,7 @@ const updateClass = async (req, res) => {
                     level: req.body.level,
                     videoPath: req.body.videoPath,
                     category: req.body.category,
+                    description: req.body.description,
                     isActive: req.body.isActive,
                 }
             };

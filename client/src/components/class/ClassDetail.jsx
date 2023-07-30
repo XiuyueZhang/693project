@@ -42,7 +42,10 @@ function ClassDetail(props) {
         fetchClassDetailData(); // Call the fetchData function when the component mounts
     }, [dispatch]);
 
-
+    if (!selectedClass) {
+        // If selectedClass is null (still loading), you can show a loading indicator or a message.
+        return <div>Loading...</div>;
+    }
 
     return (
         <Box>
@@ -70,47 +73,52 @@ function ClassDetail(props) {
                     flexWrap="wrap"
                 >
                     <Card sx={{
-                display: 'flex', width: isNonMobileScreens ? "90%" : "52%",
-                "&:hover": {
-                    cursor: "pointer",
-                },
-            }}
-            >
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography
-                            component="div"
-                            variant="h5"
-                            sx={{
-                                width: "240px",
-                                wordWrap: "break-word",
-                                color: "primary",
-                            }}>
-                            {selectedClass.title}
-                        </Typography>
+                        display: 'flex', width: isNonMobileScreens ? "90%" : "52%",
+                        backgroundColor: "#bfa",
+                        "&:hover": {
+                            cursor: "pointer",
+                        },
+                    }}
+                    >
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardMedia
+                                component="img"
+                                sx={{ width: "272px" }}
+                                image={imageRootPath + "class01.jpg"}
+                                alt="Class 01 info"
+                            />
+                            <CardContent sx={{ flex: '1 0 auto' }}>
+                                <Typography
+                                    component="div"
+                                    variant="h5"
+                                    sx={{
+                                        width: "240px",
+                                        wordWrap: "break-word",
+                                        color: "primary",
+                                    }}>
+                                    {selectedClass.title}
+                                </Typography>
+                                <Typography variant="subtitle1" color="text.secondary" component="div">
+                                    {selectedClass.level}
+                                </Typography>
+                            </CardContent>
+                            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+                                <IconButton aria-label="previous">
+                                    {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
+                                </IconButton>
+                                <IconButton aria-label="play/pause">
+                                    <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+                                </IconButton>
+                                <IconButton aria-label="next">
+                                    {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
+                                </IconButton>
+                            </Box>
+                        </Box>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
-                            {selectedClass.level}
+                            {selectedClass.description}
                         </Typography>
-                    </CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                        <IconButton aria-label="previous">
-                            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                        </IconButton>
-                        <IconButton aria-label="play/pause">
-                            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                        </IconButton>
-                        <IconButton aria-label="next">
-                            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                        </IconButton>
-                    </Box>
-                </Box>
-                <CardMedia
-                    component="img"
-                    sx={{ width: "200px" }}
-                    image={imageRootPath + "class01.jpg"}
-                    alt="Class 01 info"
-                />
-            </Card>
+
+                    </Card>
                 </Box>
             </Box>
 
