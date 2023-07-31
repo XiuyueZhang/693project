@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Box, useTheme, useMediaQuery } from "@mui/material";
-import ClassItem from './ClassItem';
 import { useSelector, useDispatch } from "react-redux";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { getHomepageContentRequest } from '../../services/requests';
 import { setClassList } from '../../store';
 import MultipleSelect from '../widgets/MultipleSelect';
+import ClassItem from './ClassItem';
 
 function ClassList(props) {
     const theme = useTheme();
@@ -33,7 +33,7 @@ function ClassList(props) {
         };
 
         fetchAllClassData(); // Call the fetchData function when the component mounts
-    }, []);
+    }, [dispatch]);
 
 
 

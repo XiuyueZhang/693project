@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -27,11 +26,9 @@ const clouds = [
 ];
 
 export default function MultipleSelect() {
-    const theme = useTheme();
     const [cloudName, setCloudName] = React.useState([]);
     const dispatch = useDispatch();
     const allClasses = useSelector((state) => state.classes.allClasses);
-    let filteredClasses = useSelector((state) => state.classes.filteredClasses);
     let searchingResult = [];
 
     const handleChange = (event) => {
@@ -64,11 +61,6 @@ export default function MultipleSelect() {
         const foundClass = allClasses.filter((classItem) =>
             classItem.category.toLowerCase().includes(searchKeyWord)
         );
-        // dispatch(setfilteredClassList({
-        //     ...filteredClasses,
-        //     foundClass
-        // }))
-        // The filteredClasses array is returned as the result of the function
         return foundClass;
     };
 

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
     Box,
     Button,
@@ -10,8 +12,6 @@ import {
     FormControl,
     useTheme,
     useMediaQuery,
-    OutlinedInput,
-    InputLabel,
 } from "@mui/material";
 import {
     Search,
@@ -23,9 +23,8 @@ import {
     Menu,
     Close,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
+
 import { setMode, setLogout,setfilteredClassList } from "../../store"
-import { useNavigate } from "react-router-dom";
 import FlexBetween from "../widgets/FlexBetween";
 
 const Header = () => {

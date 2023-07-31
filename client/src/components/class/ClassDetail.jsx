@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card, CardActions } from "@mui/material";
+import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { getSelectedClassInfoRequest } from '../../services/requests';
-import { setSelectedClass } from '../../store';
+import { useParams, useNavigate } from 'react-router-dom';
+
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+
 import BasicCard from '../widgets/UserProfile';
+import { setSelectedClass } from '../../store';
+import { getSelectedClassInfoRequest } from '../../services/requests';
 
 function ClassDetail(props) {
     const theme = useTheme();
@@ -19,8 +20,8 @@ function ClassDetail(props) {
     const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
     const { classId } = useParams();
-    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const navigate = useNavigate();
+    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     const enrolClassHandler = () => {
         if(user){
@@ -43,7 +44,6 @@ function ClassDetail(props) {
 
                 // Check if the HTTP request was successful
                 if (response.status === 200) {
-                    const classDetail = response.data
                     dispatch(setSelectedClass({
                         selectedClass: response.data
                     }));
@@ -55,7 +55,7 @@ function ClassDetail(props) {
         };
 
         fetchClassDetailData(); // Call the fetchData function when the component mounts
-    }, [dispatch]);
+    }, [classId, dispatch]);
 
     if (!selectedClass) {
         // If selectedClass is null (still loading), you can show a loading indicator or a message.

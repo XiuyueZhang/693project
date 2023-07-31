@@ -1,23 +1,12 @@
 import React from 'react';
-import { Box, Button, Typography, useTheme, useMediaQuery, CardActionArea, CardActions, CardContent, CardMedia, Card } from "@mui/material";
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
+import { Box, Button, Typography, CardActionArea, CardActions, CardContent, CardMedia, Card } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
 function ClassItem(props) {
     const { classItem } = props
-    const isNonMobileScreens = useMediaQuery("(min-width: 650px)");
-    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const navigate = useNavigate();
-
-    const theme = useTheme();
-    const neutralLight = theme.palette.neutral.light;
-    const dark = theme.palette.neutral.dark;
-    const background = theme.palette.background.default;
-    const primaryLight = theme.palette.primary.light;
-    const alt = theme.palette.background.alt;
+    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     const navigateToClassDetail = () => {
         const classId = classItem._id;

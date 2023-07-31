@@ -1,17 +1,15 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { Box, Container, Grid, Typography, useTheme, IconButton, useMediaQuery } from "@mui/material";
-import FlexBetween from "../widgets/FlexBetween";
+
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
+import FlexBetween from "../widgets/FlexBetween";
+
 export const Footer = () => {
     const theme = useTheme();
-    const neutralLight = theme.palette.neutral.light;
-    const dark = theme.palette.neutral.dark;
-    const background = theme.palette.background.default;
     const primaryLight = theme.palette.primary.light;
-    const alt = theme.palette.background.alt;
     const isWidthLessThan1000px = useMediaQuery("(max-width: 1000px)");
 
     return (

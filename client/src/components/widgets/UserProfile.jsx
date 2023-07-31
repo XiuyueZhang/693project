@@ -1,22 +1,12 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import { CardMedia } from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import StarIcon from '@mui/icons-material/Star';
-
-const bull = (
-    <Box
-        component="span"
-        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-        •
-    </Box>
-);
 
 export default function UserProfile() {
 
@@ -24,7 +14,7 @@ export default function UserProfile() {
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     return (
-        <Card sx={{ minWidth: 275, padding:"2rem" }}>
+        <Card sx={{ minWidth: 275, padding: "2rem" }}>
             <CardMedia
                 component="img"
                 sx={{ width: "100px", margin: "1rem" }}
