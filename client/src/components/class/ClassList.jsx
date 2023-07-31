@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import ClassItem from './ClassItem';
 import { useSelector, useDispatch } from "react-redux";
 import { getHomepageContentRequest } from '../../services/requests';
@@ -9,7 +9,6 @@ import MultipleSelect from '../widgets/MultipleSelect';
 function ClassList(props) {
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
-    const isWideScreen = useMediaQuery("(min-width: 590px)");
     let classList = useSelector((state) => state.classes.allClasses);
     const filteredclassList = useSelector((state) => state.classes.filteredClasses);
     const dispatch = useDispatch();

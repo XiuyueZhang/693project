@@ -12,18 +12,17 @@ export const Footer = () => {
     const background = theme.palette.background.default;
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
-    const isWidthLessThan550px = useMediaQuery("(max-width: 650px)");
+    const isWidthLessThan1000px = useMediaQuery("(max-width: 1000px)");
 
     return (
         <FlexBetween padding="3rem 15%" backgroundColor={theme.palette.background.alt}>
             <Box
                 sx={{
                     display: "flex",
-                    flexDirection: isWidthLessThan550px ? "column" : "row", // Set column direction when width is less than 550px
+                    flexDirection: isWidthLessThan1000px ? "column" : "row", // Set column direction when width is less than 1000px
                     justifyContent: "space-between",
                     alignItems: "center",
-                    width: "85%",
-                    // ... other styles ...
+                    width: "100%",
                 }}
             >
                 <Box>
