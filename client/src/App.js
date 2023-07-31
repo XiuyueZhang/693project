@@ -9,6 +9,8 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import ClassList from './components/class/ClassList';
 import ClassDetail from './components/class/ClassDetail';
+import NeedAuth from './components/widgets/NeedAuth';
+import AdminHomepage from './scenes/admin/Homepage';
 
 function App() {
   const mode = useSelector((state) => state.settings.mode);
@@ -28,6 +30,7 @@ function App() {
               path="/login"
               element={<Login /> }
             />
+            <Route path='/admin' element={<NeedAuth><AdminHomepage/></NeedAuth>}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

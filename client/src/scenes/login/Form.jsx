@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../store";
 
@@ -43,6 +43,7 @@ const Form = () => {
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
@@ -107,8 +108,9 @@ const Form = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
         
-        // Navigates to the home page
-        navigate("/"); 
+        // Navigates to the previous page
+        const from = location.state?.preLocation?.pathname || "/";
+        navigate(from); 
       }
     } else {
       setErrorMsg(loggedIn.msg);

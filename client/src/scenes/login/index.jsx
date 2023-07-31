@@ -1,9 +1,13 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
     const theme = useTheme();
+    const primaryLight = theme.palette.primary.light;
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const navigate = useNavigate();
+
     return (
         <Box>
             <Box
@@ -12,7 +16,14 @@ function Login(props) {
                 p="1rem 6%"
                 textAlign="center"
             >
-                <Typography fontWeight="bold" fontSize="32px" color="primary">
+                <Typography fontWeight="bold" fontSize="32px" color="primary"
+                    onClick={() => navigate("/")}
+                    sx={{
+                        "&:hover": {
+                            color: primaryLight,
+                            cursor: "pointer",
+                        },
+                    }}>
                     CloudTech
                 </Typography>
             </Box>
