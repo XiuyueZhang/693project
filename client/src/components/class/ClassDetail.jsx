@@ -22,6 +22,18 @@ function ClassDetail(props) {
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const navigate = useNavigate();
 
+    const enrolClassHandler = () => {
+        if(user){
+            if(user.role === "user"){
+                // ENROL CLASS
+            }
+            // ADMIN role
+        }else{
+            // NON USER - Navigate to login page
+            navigate("/login")
+        }
+    }
+
     // fetch the selected class data when first render
     useEffect(() => {
         const fetchClassDetailData = async () => {
@@ -135,7 +147,8 @@ function ClassDetail(props) {
                                         </IconButton>
                                     </Box>
                                     <Box m="0.7rem">
-                                        <Button variant="contained">ENROLL NOW</Button>
+                                        <Button variant="contained"
+                                        onClick={enrolClassHandler}>ENROLL NOW</Button>
                                     </Box>
                                 </Box>
 
