@@ -95,18 +95,6 @@ const Form = () => {
             token: token,
           })
         );
-
-        // Store role, token to localStorage
-        const user = {
-          id,
-          firstName,
-          lastName,
-          role,
-          email,
-        };
-        
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
         
         // Navigates to the previous page
         const from = location.state?.preLocation?.pathname || "/";
