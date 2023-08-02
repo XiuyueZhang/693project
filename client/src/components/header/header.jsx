@@ -24,7 +24,7 @@ import {
     Close,
 } from "@mui/icons-material";
 
-import { setMode, setLogout,setfilteredClassList, resetClasses } from "../../store"
+import { setMode, setLogout, setfilteredClassList, resetClasses } from "../../store"
 import FlexBetween from "../widgets/FlexBetween";
 
 const Header = () => {
@@ -35,7 +35,7 @@ const Header = () => {
     const user = useSelector((state) => state.auth.user);
     const allClasses = useSelector((state) => state.classes.allClasses);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const isHomepage = (location.pathname==="/")?true:false;
+    const isHomepage = (location.pathname === "/") ? true : false;
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
@@ -48,21 +48,25 @@ const Header = () => {
     if (user === null) {
         fullName = ""
     } else {
-        fullName = user ? `${user.firstName} ${user.lastName}`: "";
+        fullName = user ? `${user.firstName} ${user.lastName}` : "";
     }
 
 
     const handleLogout = () => {
-        console.log("wozhixingle")
-        dispatch(setLogout());
-        dispatch(resetClasses());
-        navigate("/")
+        if (user.role === "admin") {
+            dispatch(setLogout());
+            dispatch(resetClasses());
+            navigate("/")
+        } else {
+            dispatch(setLogout());
+            dispatch(resetClasses());
+        }
     }
 
     const searchClass = (e) => {
         const searchKeyWord = e.target.value.trim().toLowerCase();
         const filteredClasses = allClasses.filter((classItem) =>
-            classItem.title.toLowerCase().includes(searchKeyWord) || classItem.level.toLowerCase().includes(searchKeyWord) 
+            classItem.title.toLowerCase().includes(searchKeyWord) || classItem.level.toLowerCase().includes(searchKeyWord)
         );
         dispatch(setfilteredClassList({
             filteredClasses: filteredClasses
@@ -71,7 +75,7 @@ const Header = () => {
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-            
+
             <FlexBetween gap="1.75rem">
                 <Typography
                     fontWeight="bold"
@@ -94,8 +98,8 @@ const Header = () => {
                         gap="3rem"
                         padding="0.1rem 1.5rem"
                     >
-                        <InputBase 
-                            placeholder="Search certificate or level..." 
+                        <InputBase
+                            placeholder="Search certificate or level..."
                             onChange={searchClass}
                         />
                         <IconButton>
@@ -118,15 +122,15 @@ const Header = () => {
                     <Message sx={{ fontSize: "25px" }} />
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />
-                    
+
                     {fullName === "" ? (
                         <Button
-                        variant="outlined"
-                        sx={{ fontSize: "15px" }}
-                        onClick={() => {
-                            navigate("/login");
-                        }}
-                    >Sign in/ Sign up</Button>
+                            variant="outlined"
+                            sx={{ fontSize: "15px" }}
+                            onClick={() => {
+                                navigate("/login");
+                            }}
+                        >Sign in/ Sign up</Button>
                     ) : (
                         <FormControl variant="standard" value={fullName}>
                             <Select
@@ -208,14 +212,14 @@ const Header = () => {
                         <Notifications sx={{ fontSize: "25px" }} />
                         <Help sx={{ fontSize: "25px" }} />
                         {fullName === "" ? (
-                        <Button
-                        variant="outlined"
-                        sx={{ fontSize: "15px" }}
-                        onClick={() => {
-                            navigate("/login");
-                        }}
-                    >Sign in/ Sign up</Button>
-                    ) : (<FormControl variant="standard" value={fullName}>
+                            <Button
+                                variant="outlined"
+                                sx={{ fontSize: "15px" }}
+                                onClick={() => {
+                                    navigate("/login");
+                                }}
+                            >Sign in/ Sign up</Button>
+                        ) : (<FormControl variant="standard" value={fullName}>
                             <Select
                                 value={fullName}
                                 sx={{
@@ -241,7 +245,7 @@ const Header = () => {
                                 </MenuItem>
                             </Select>
                         </FormControl>)}
-                        
+
                     </FlexBetween>
                 </Box>
             )}
