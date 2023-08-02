@@ -24,7 +24,7 @@ import {
     Close,
 } from "@mui/icons-material";
 
-import { setMode, setLogout,setfilteredClassList } from "../../store"
+import { setMode, setLogout,setfilteredClassList, resetClasses } from "../../store"
 import FlexBetween from "../widgets/FlexBetween";
 
 const Header = () => {
@@ -53,7 +53,9 @@ const Header = () => {
 
 
     const handleLogout = () => {
+        console.log("wozhixingle")
         dispatch(setLogout());
+        dispatch(resetClasses());
         navigate("/")
     }
 
@@ -147,7 +149,7 @@ const Header = () => {
                                 <MenuItem value={fullName}>
                                     <Typography>{fullName}</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={()=>dispatch(setLogout())}>Log Out</MenuItem>
+                                <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                             </Select>
                         </FormControl>
                     )}
