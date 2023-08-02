@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
-import FlexBetween from "./FlexBetween"
 
 export default function EnrolledClassItem(props) {
     const {classItem} = props;

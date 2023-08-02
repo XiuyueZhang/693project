@@ -30,7 +30,7 @@ export default function UserProfile() {
         if(user){
             enrolledClassedList();                        
         }
-    },[dispatch])
+    },[dispatch, user])
 
 
     return (
@@ -60,7 +60,9 @@ export default function UserProfile() {
             <CardContent>
                 {enrolledClassList && (
                     <Box>
-                        <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
+                        <CardActions>
+                            <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
+                        </CardActions>
                         <Typography variant="h5" component="div">
                             {enrolledClassList.map(classItem => <EnrolledClassItem 
                                 key={classItem._id}

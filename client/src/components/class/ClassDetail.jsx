@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import BasicCard from '../widgets/UserProfile';
-import { setSelectedClass, setPathName } from '../../store';
+import { setSelectedClass } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
@@ -17,12 +17,10 @@ function ClassDetail(props) {
     const isWideScreens = useMediaQuery("(min-width: 1600px)");
     const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1000px)");
     const selectedClass = useSelector((state) => state.classes.selectedClass);
-    const enrolledClasses = useSelector((state) => state.classes.enrolledClasses);
     const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     
@@ -122,13 +120,12 @@ function ClassDetail(props) {
                         }}
                         >
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-start'}} onClick={() => navigate("/")}>
                                     <IconButton sx={{ marginLeft: "1.1rem" }}>
                                         <ArrowBackIosIcon />
                                     </IconButton>
                                     <Typography variant="subtitle1" color="text.secondary" component="div"
-                                        sx={{ margin: "1.1rem" }}
-                                        onClick={() => navigate("/")}>
+                                        sx={{ margin: "1.1rem" }}>
                                         Back to class List
                                     </Typography>
                                 </Box>

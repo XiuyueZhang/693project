@@ -10,9 +10,8 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setLogin, setEnrolledClaases } from "../../store";
-import { getEnrolledClassInfoRequest } from "../../services/requests";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../../store";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
