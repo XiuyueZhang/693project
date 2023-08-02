@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import BasicCard from '../widgets/UserProfile';
-import { setSelectedClass } from '../../store';
+import { setSelectedClass, addEnrolledClaases } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
@@ -35,6 +35,10 @@ function ClassDetail(props) {
                     if (response.status === 201) {
                         // Successfully added enrolment
                         const successMessage = "Successfully added enrolment";
+                        // Add this class to enrolledClasses
+                        dispatch(addEnrolledClaases({
+                            newEnrolledClasses: selectedClass
+                        }))
                         // You might want to display or use the successMessage here
                         console.log(successMessage);
                     } else {

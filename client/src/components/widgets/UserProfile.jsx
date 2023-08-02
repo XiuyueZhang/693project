@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setEnrolledClaases } from '../../store';
 import StarIcon from '@mui/icons-material/Star';
 import { getEnrolledClassInfoRequest } from '../../services/requests';
-import EnrolledClassItem from './EnrolledCVlassItem';
+import EnrolledClassItem from './EnrolledClassItem';
 
 export default function UserProfile() {
 
