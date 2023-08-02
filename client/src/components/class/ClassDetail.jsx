@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import BasicCard from '../widgets/UserProfile';
-import { setSelectedClass } from '../../store';
+import { setSelectedClass, setPathName } from '../../store';
 import { getSelectedClassInfoRequest } from '../../services/requests';
 
 function ClassDetail(props) {
@@ -21,6 +21,7 @@ function ClassDetail(props) {
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
     const enrolClassHandler = () => {
@@ -31,6 +32,9 @@ function ClassDetail(props) {
             // ADMIN role
         }else{
             // NON USER - Navigate to login page
+            dispatch(setPathName({
+                pathName: location.pathname
+            }));
             navigate("/login")
         }
     }
@@ -250,7 +254,8 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            <Button variant="contained">ENROLL NOW</Button>
+                                            <Button variant="contained"
+                                            onClick={enrolClassHandler}>ENROLL NOW</Button>
                                         </Box>
                                     </Box>
                                     <Box
@@ -355,7 +360,8 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            <Button variant="contained">ENROLL NOW</Button>
+                                            <Button variant="contained"
+                                            onClick={enrolClassHandler}>ENROLL NOW</Button>
                                         </Box>
                                     </Box>
                                     <Box
