@@ -98,8 +98,9 @@ const Form = () => {
         );
         
         // Navigates to the previous page
-        const from = location.state?.preLocation?.pathname || "/";
-        navigate(from); 
+        // const from = location.state?.preLocation?.pathname || "/";
+        // navigate(from); 
+        navigate(-1);
       }
     } else {
       setErrorMsg(loggedIn.msg);
