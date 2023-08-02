@@ -11,7 +11,8 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setLogin } from "../../store";
+import { setLogin, setEnrolledClaases } from "../../store";
+import { getEnrolledClassInfoRequest } from "../../services/requests";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -48,6 +49,7 @@ const Form = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const pathName = useSelector(state => state.settings.pathName);
+  
 
   const register = async (values, onSubmitProps) => {
 
@@ -96,6 +98,10 @@ const Form = () => {
             token: token,
           })
         );
+
+        // get enrolled classes, and set into redux
+        const enrolledClassedList = await getEnrolledClassInfoRequest(id);
+        console.log(enrolledClassedList)
         
         // Navigates to the previous page
         const from = location.state?.preLocation?.pathname || pathName || "/";

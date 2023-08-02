@@ -17,6 +17,7 @@ function ClassDetail(props) {
     const isWideScreens = useMediaQuery("(min-width: 1600px)");
     const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1000px)");
     const selectedClass = useSelector((state) => state.classes.selectedClass);
+    const enrolledClasses = useSelector((state) => state.classes.enrolledClasses);
     const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
     const { classId } = useParams();

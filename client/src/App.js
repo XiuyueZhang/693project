@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
-import AxioErrorHandler from './services/errorHandler';
 import ClassList from './components/class/ClassList';
 import ClassDetail from './components/class/ClassDetail';
 import NeedAuth from './components/widgets/NeedAuth';
@@ -20,7 +19,6 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
-        <AxioErrorHandler />
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>

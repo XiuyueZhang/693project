@@ -10,6 +10,11 @@ export const getSelectedClassInfoRequest = async (classId) => {
     return response;
 }
 
+export const getEnrolledClassInfoRequest = async (userId) => {
+    const response = await api.get(`/user/enrolment/${userId}`);
+    return response;
+}
+
 export const userEnrollClassRequest = async(userId, classId) => {
     const response = await api.post("/user/class/addEnrolment", {
         userId:`${userId}`,

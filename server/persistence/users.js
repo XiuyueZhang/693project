@@ -12,6 +12,16 @@ const deleteEnrolledClassById = async(query) => {
     return result;
 }
 
+const findEnrollmentByUserId = async(userId) => {
+    const query = {
+        userId: userId
+    };
+    console.log(query)
+    
+    const results = await collection.find(query).toArray();
+    return results;
+}
+
 const findEnrolmentById = async (userId, classId) => {
     const query = {
         userId: userId, 
@@ -39,4 +49,4 @@ const checkClassIdExist = async (queryId) => {
     return result;
 }
 
-export { enrolClassById, deleteEnrolledClassById, findEnrolmentById, checkUserIdExist, checkClassIdExist }
+export { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist }

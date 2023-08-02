@@ -1,8 +1,11 @@
 import express from "express";
-import { addEnrolment, deleteEnrolment } from "../controller/users.js"
+import { addEnrolment, deleteEnrolment, getEnrolment } from "../controller/users.js"
 import { isUser, verifyToken } from "../controller/auth.js";
 
 const router = express.Router();
+
+// GET ENROLLED CLASSES
+router.get("/enrolment/:userId", verifyToken, isUser, getEnrolment)
 
 // ENROL IN CLASS
 router.post("/class/addEnrolment", verifyToken, isUser, addEnrolment)

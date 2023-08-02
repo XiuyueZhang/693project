@@ -1,5 +1,28 @@
 import { ObjectId } from "mongodb";
-import { enrolClassById, deleteEnrolledClassById, findEnrolmentById, checkUserIdExist, checkClassIdExist } from "../persistence/users.js"
+import { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist } from "../persistence/users.js"
+
+// GET ENROLMENT
+const getEnrolment = async(req, res) => {
+    let { userId } = req.params;
+    const isValidIdUser = isValidObjectId(userId);
+    if(isValidIdUser){
+        userId = new ObjectId(userId);
+        console.log("wozhixingle")
+        const EnrolledClassesList = await findEnrollmentByUserId(userId);
+        let enrolledClassList = [];
+        if(EnrolledClassesList){
+            console.log(EnrolledClassesList)
+            for (let classItem of EnrolledClassesList){
+                console.log(classItem.classId)
+                // enrolledClassList.push(classItemInfo)
+            }
+            console.log(enrolledClassList)
+            res.status(200).send(EnrolledClassesList);
+        } else{
+            res.status(200).send("No enrolled classes yet")
+        }
+    }
+}
 
 // ADD, DELETE CLASSES
 const addEnrolment = async (req, res) => {
@@ -107,4 +130,4 @@ const deleteEnrolment = async (req, res) => {
     }
 };
 
-export { addEnrolment, deleteEnrolment };
+export { addEnrolment, deleteEnrolment, getEnrolment };
