@@ -42,14 +42,10 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
     mode: "light",
-    pathName: "/",
   },
   reducers: {
     setMode: (state) => {
       state.mode = state.mode === "light" ? "dark" : "light";
-    },
-    setPathName: (state, action) => {
-      state.pathName = action.payload.pathName;
     },
   },
 });
@@ -84,7 +80,7 @@ const reducers = combineReducers({
   classes: classSlice.reducer
 })
 
-export const { setMode, setPathName } =
+export const { setMode } =
   settingsSlice.actions;
 export const { setLogin, setLogout } =
   authSlice.actions;

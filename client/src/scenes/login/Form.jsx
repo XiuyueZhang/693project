@@ -48,7 +48,6 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
-  const pathName = useSelector(state => state.settings.pathName);
   
 
   const register = async (values, onSubmitProps) => {
@@ -100,7 +99,7 @@ const Form = () => {
         );
         
         // Navigates to the previous page
-        const from = location.state?.preLocation?.pathname || pathName || "/";
+        const from = location.state?.preLocation?.pathname || "/";
         navigate(from); 
       }
     } else {

@@ -54,9 +54,6 @@ function ClassDetail(props) {
             }
         } else {
             // NON USER - Navigate to login page
-            dispatch(setPathName({
-                pathName: location.pathname
-            }));
             navigate("/login");
         }
     };
