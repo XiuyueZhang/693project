@@ -15,7 +15,7 @@ import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../servi
 function ClassDetail(props) {
     const theme = useTheme();
     const isWideScreens = useMediaQuery("(min-width: 1600px)");
-    const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1000px)");
+    const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1400px)");
     const selectedClass = useSelector((state) => state.classes.selectedClass);
     const selectedClasses = useSelector(state => state.classes.selectedClass);
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
@@ -83,7 +83,7 @@ function ClassDetail(props) {
             }
         };
         fetchClassDetailData(); // Call the fetchData function when the component mounts
-    }, [classId, dispatch, isSelectedClassEnrolled]);
+    }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
     useEffect(()=>{
         if(enrolledClassList && selectedClasses){

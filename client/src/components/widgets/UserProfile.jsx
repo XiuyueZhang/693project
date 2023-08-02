@@ -22,14 +22,16 @@ export default function UserProfile() {
     useEffect(()=>{
         // get enrolled classes, and set into redux
         const enrolledClassedList = async() => {
-            const response = await getEnrolledClassInfoRequest(user.id);
-            dispatch(setEnrolledClaases({
-                enrolledClasses: response.data
-            }))
+            if(user.role === "user"){
+                const response = await getEnrolledClassInfoRequest(user.id);
+                if(response){
+                    dispatch(setEnrolledClaases({
+                        enrolledClasses: response.data
+                    }))
+                }  
+            }
         }
-        if(user){
-            enrolledClassedList();                        
-        }
+        enrolledClassedList();                        
     },[dispatch, user])
 
 

@@ -79,11 +79,10 @@ export const classSlice = createSlice({
       state.isSelectedClassEnrolled = action.payload.isSelectedClassEnrolled;
     },
     resetClasses: (state) => {
-      state.allClasses = [];
       state.filteredClasses = [];
       state.selectedClass = null;
       state.isSelectedClassEnrolled = false;
-      state.enrolledClaases = [];
+      state.enrolledClaases =  [];
     },
   },
 });

@@ -11,8 +11,10 @@ export const getSelectedClassInfoRequest = async (classId) => {
 }
 
 export const getEnrolledClassInfoRequest = async (userId) => {
-    const response = await api.get(`/user/enrolment/${userId}`);
-    return response;
+    if(api.defaults.headers.hasOwnProperty("Authorization")){
+        const response = await api.get(`/user/enrolment/${userId}`);
+        return response;
+    }
 }
 
 export const userEnrollClassRequest = async(userId, classId) => {
