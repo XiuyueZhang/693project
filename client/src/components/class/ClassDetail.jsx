@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import BasicCard from '../widgets/UserProfile';
-import { setSelectedClass, addEnrolledClaases } from '../../store';
+import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
@@ -17,13 +17,16 @@ function ClassDetail(props) {
     const isWideScreens = useMediaQuery("(min-width: 1600px)");
     const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1000px)");
     const selectedClass = useSelector((state) => state.classes.selectedClass);
+    const selectedClasses = useSelector(state => state.classes.selectedClass);
+    const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
+    const isSelectedClassEnrolled = useSelector(state => state.classes.isSelectedClassEnrolled);
     const user = useSelector((state) => state.auth.user);
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
-    
+   
     const enrolClassHandler = async () => {
         if (user) {
             if (user.role === "user") {
@@ -79,9 +82,17 @@ function ClassDetail(props) {
                 console.error("Error fetching the class content:", error);
             }
         };
-
         fetchClassDetailData(); // Call the fetchData function when the component mounts
-    }, [classId, dispatch]);
+    }, [classId, dispatch, isSelectedClassEnrolled]);
+
+    useEffect(()=>{
+        if(enrolledClassList && selectedClasses){
+            const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClasses._id);
+            dispatch(setIsSelectedClassEnrolled({
+                isSelectedClassEnrolled: isSelectedClassEnrolled
+            }))
+        }
+    })
 
     if (!selectedClass) {
         // If selectedClass is null (still loading), you can show a loading indicator or a message.
@@ -173,8 +184,11 @@ function ClassDetail(props) {
                                         </IconButton>
                                     </Box>
                                     <Box m="0.7rem">
-                                        <Button variant="contained"
-                                        onClick={enrolClassHandler}>ENROLL NOW</Button>
+                                        {isSelectedClassEnrolled ? (
+                                            <Button variant="contained">REMOVE</Button>
+                                        ) : (
+                                            <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                        )}
                                     </Box>
                                 </Box>
 
@@ -276,8 +290,11 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            <Button variant="contained"
-                                            onClick={enrolClassHandler}>ENROLL NOW</Button>
+                                            {isSelectedClassEnrolled ? (
+                                                <Button variant="contained">REMOVE</Button>
+                                            ) : (
+                                                <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                            )}
                                         </Box>
                                     </Box>
                                     <Box
@@ -382,8 +399,11 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            <Button variant="contained"
-                                            onClick={enrolClassHandler}>ENROLL NOW</Button>
+                                            {isSelectedClassEnrolled ? (
+                                                <Button variant="contained">REMOVE</Button>
+                                            ) : (
+                                                <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                            )}
                                         </Box>
                                     </Box>
                                     <Box

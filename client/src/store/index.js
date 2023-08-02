@@ -56,6 +56,7 @@ export const classSlice = createSlice({
     allClasses: [],
     filteredClasses: [],
     selectedClass: null,
+    isSelectedClassEnrolled: false,
     enrolledClaases: [],
   },
   reducers: {
@@ -74,6 +75,9 @@ export const classSlice = createSlice({
     addEnrolledClaases:  (state, action) => {
       state.enrolledClaases.push(action.payload.newEnrolledClasses);
     },
+    setIsSelectedClassEnrolled: (state, action) => {
+      state.isSelectedClassEnrolled = action.payload.isSelectedClassEnrolled;
+    },
   },
 });
 
@@ -87,7 +91,8 @@ export const { setMode } =
   settingsSlice.actions;
 export const { setLogin, setLogout } =
   authSlice.actions;
-export const { setClassList, setfilteredClassList, setSelectedClass, setEnrolledClaases, addEnrolledClaases } =
+export const { setClassList, setfilteredClassList, setSelectedClass, setEnrolledClaases, addEnrolledClaases,
+  setIsSelectedClassEnrolled } =
   classSlice.actions;
 
 export default reducers;

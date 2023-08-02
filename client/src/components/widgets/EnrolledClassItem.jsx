@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -7,12 +8,19 @@ import { Box } from '@mui/material';
 
 export default function EnrolledClassItem(props) {
     const {classItem} = props;
+    const navigate = useNavigate();
+
+    const navigateToClassDetail = () => {
+        const classId = classItem._id;
+        navigate(`/classes/${classId}`)
+    }
 
     return (
 
             <CardContent sx={{width:"100%"}}>
                 <Box display="flex" justifyContent="space-around">
-                    <Box width="70%">
+                    <Box width="70%" onClick={navigateToClassDetail}
+                    sx={{ cursor: 'pointer' }}>
                         <Typography variant="body2" fontWeight={550}>
                             title: {classItem.title}
                         </Typography>
