@@ -30,7 +30,6 @@ const addEnrolment = async (req, res) => {
     const isValidIdClass = isValidObjectId(classId);
 
     if (isValidIdUser && isValidIdClass) {
-        console.log("is valid ID")
         const queryUserId = new ObjectId(userId);
         const queryClassId = new ObjectId(classId);
 
