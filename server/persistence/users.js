@@ -16,9 +16,16 @@ const findEnrollmentByUserId = async(userId) => {
     const query = {
         userId: userId
     };
-    console.log(query)
-    
     const results = await collection.find(query).toArray();
+    return results;
+}
+
+const findEnrollmentClassItemByClassId = async(classId) => {
+    const query = {
+        _id: classId
+    };
+    const classCollection = db.collection("classes");
+    const results = await classCollection.findOne(query);
     return results;
 }
 
@@ -49,4 +56,5 @@ const checkClassIdExist = async (queryId) => {
     return result;
 }
 
-export { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist }
+export { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist,
+    findEnrollmentClassItemByClassId }

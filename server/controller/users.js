@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
-import { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist } from "../persistence/users.js"
+import { enrolClassById, deleteEnrolledClassById, findEnrollmentByUserId, findEnrolmentById, checkUserIdExist, checkClassIdExist,
+    findEnrollmentClassItemByClassId } from "../persistence/users.js"
 
 // GET ENROLMENT
 const getEnrolment = async(req, res) => {
@@ -7,17 +8,15 @@ const getEnrolment = async(req, res) => {
     const isValidIdUser = isValidObjectId(userId);
     if(isValidIdUser){
         userId = new ObjectId(userId);
-        console.log("wozhixingle")
-        const EnrolledClassesList = await findEnrollmentByUserId(userId);
-        let enrolledClassList = [];
-        if(EnrolledClassesList){
-            console.log(EnrolledClassesList)
-            for (let classItem of EnrolledClassesList){
-                console.log(classItem.classId)
+        const enrolledClassesList = await findEnrollmentByUserId(userId);
+        let enrolledClassitemDetailList = [];
+        if(enrolledClassesList){
+            for (let classItem of enrolledClassesList){
                 // enrolledClassList.push(classItemInfo)
+                const classItemInfo = await findEnrollmentClassItemByClassId(classItem.classId);
+                enrolledClassitemDetailList.push(classItemInfo)
             }
-            console.log(enrolledClassList)
-            res.status(200).send(EnrolledClassesList);
+            res.status(200).send(enrolledClassitemDetailList);
         } else{
             res.status(200).send("No enrolled classes yet")
         }

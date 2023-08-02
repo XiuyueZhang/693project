@@ -98,10 +98,6 @@ const Form = () => {
             token: token,
           })
         );
-
-        // get enrolled classes, and set into redux
-        const enrolledClassedList = await getEnrolledClassInfoRequest(id);
-        console.log(enrolledClassedList)
         
         // Navigates to the previous page
         const from = location.state?.preLocation?.pathname || pathName || "/";

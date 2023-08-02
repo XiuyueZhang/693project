@@ -1,17 +1,37 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { CardMedia } from '@mui/material';
+import { Box, CardMedia } from '@mui/material';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setEnrolledClaases } from '../../store';
 import StarIcon from '@mui/icons-material/Star';
+import { getEnrolledClassInfoRequest } from '../../services/requests';
+import EnrolledClassItem from './EnrolledCVlassItem';
 
 export default function UserProfile() {
 
     const user = useSelector((state) => state.auth.user);
+    const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
+    const dispatch = useDispatch();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
+   
+    useEffect(()=>{
+        // get enrolled classes, and set into redux
+        const enrolledClassedList = async() => {
+            const response = await getEnrolledClassInfoRequest(user.id);
+            dispatch(setEnrolledClaases({
+                enrolledClasses: response.data
+            }))
+        }
+        if(user){
+            enrolledClassedList();                        
+        }
+    },[dispatch])
+
 
     return (
         <Card sx={{ minWidth: 275, padding: "2rem" }}>
@@ -37,9 +57,18 @@ export default function UserProfile() {
                     <br />
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Button size="small">Profile</Button>
-            </CardActions>
+            <CardContent>
+                {enrolledClassList && (
+                    <Box>
+                        <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
+                        <Typography variant="h5" component="div">
+                            {enrolledClassList.map(classItem => <EnrolledClassItem 
+                                key={classItem._id}
+                                classItem={classItem}/>)}
+                        </Typography>
+                    </Box>
+                )}
+        </CardContent>
         </Card>
     );
 }

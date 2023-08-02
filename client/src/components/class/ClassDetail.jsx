@@ -150,6 +150,7 @@ function ClassDetail(props) {
                                             width: "400px",
                                             wordWrap: "break-word",
                                             color: "primary",
+                                            fontWeight:550
                                         }}>
                                         {selectedClass.title}
                                     </Typography>
