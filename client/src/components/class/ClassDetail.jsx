@@ -8,7 +8,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-import BasicCard from '../widgets/UserProfile';
+import UserProfile from '../users/UserProfile';
 import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
 
@@ -218,7 +218,7 @@ function ClassDetail(props) {
                         <Box>
                             <Card>
                                 {user ? (
-                                    <BasicCard />
+                                    <UserProfile />
                                 ) : null}
                             </Card>
                         </Box>
@@ -336,7 +336,7 @@ function ClassDetail(props) {
                             <Box>
                                 <Card>
                                     {user ? (
-                                        <BasicCard />
+                                        <UserProfile />
                                     ) : null}
                                 </Card>
                             </Box>
