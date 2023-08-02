@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     Box,
     Button,
@@ -31,9 +31,11 @@ const Header = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const user = useSelector((state) => state.auth.user);
     const allClasses = useSelector((state) => state.classes.allClasses);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const isHomepage = (location.pathname==="/")?true:false;
 
     const theme = useTheme();
     const neutralLight = theme.palette.neutral.light;
@@ -83,7 +85,7 @@ const Header = () => {
                 >
                     CloudTech
                 </Typography>
-                {isNonMobileScreens && (
+                {isNonMobileScreens && isHomepage && (
                     <FlexBetween
                         backgroundColor={neutralLight}
                         borderRadius="9px"
