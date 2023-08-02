@@ -26,43 +26,44 @@ function ClassDetail(props) {
     const navigate = useNavigate();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
-   
+
     const enrolClassHandler = async () => {
         if (user) {
-            if (user.role === "user") {
-                try {
-                    // ENROL CLASS
-                    const response = await userEnrollClassRequest(user.id, classId);
-    
-                    // Check if the HTTP request was successful
-                    if (response.status === 201) {
-                        // Successfully added enrolment
-                        const successMessage = "Successfully added enrolment";
-                        // Add this class to enrolledClasses
-                        dispatch(addEnrolledClaases({
-                            newEnrolledClasses: selectedClass
-                        }))
-                        // You might want to display or use the successMessage here
-                        console.log(successMessage);
-                    } else {
-                        const errorMessage = "Error adding enrollment: Status " + response.status;
-                        // You might want to display or use the errorMessage here
-                        console.error(errorMessage);
-                    }
-                } catch (error) {
-                    const errorMessage = "Error adding enrollment: " + error.message;
+            try {
+                // ENROL CLASS
+                const response = await userEnrollClassRequest(user.id, classId);
+
+                // Check if the HTTP request was successful
+                if (response.status === 201) {
+                    // Successfully added enrolment
+                    const successMessage = "Successfully added enrolment";
+                    // Add this class to enrolledClasses
+                    dispatch(addEnrolledClaases({
+                        newEnrolledClasses: selectedClass
+                    }))
+                    // You might want to display or use the successMessage here
+                    console.log(successMessage);
+                } else {
+                    const errorMessage = "Error adding enrollment: Status " + response.status;
                     // You might want to display or use the errorMessage here
                     console.error(errorMessage);
                 }
-            } else {
-                // ADMIN role
+            } catch (error) {
+                const errorMessage = "Error adding enrollment: " + error.message;
+                // You might want to display or use the errorMessage here
+                console.error(errorMessage);
             }
         } else {
             // NON USER - Navigate to login page
             navigate("/login");
         }
     };
-    
+
+    const editClassHandler = () =>{
+        // ADMIN USER
+        navigate(`/admin/class/update/${classId}`)
+    }
+
 
     // fetch the selected class data when first render
     useEffect(() => {
@@ -85,8 +86,8 @@ function ClassDetail(props) {
         fetchClassDetailData(); // Call the fetchData function when the component mounts
     }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
-    useEffect(()=>{
-        if(enrolledClassList && selectedClasses){
+    useEffect(() => {
+        if (enrolledClassList && selectedClasses) {
             const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClasses._id);
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
@@ -135,7 +136,7 @@ function ClassDetail(props) {
                         }}
                         >
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-start'}} onClick={() => navigate("/")}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }} onClick={() => navigate("/")}>
                                     <IconButton sx={{ marginLeft: "1.1rem" }}>
                                         <ArrowBackIosIcon />
                                     </IconButton>
@@ -159,7 +160,7 @@ function ClassDetail(props) {
                                             width: "400px",
                                             wordWrap: "break-word",
                                             color: "primary",
-                                            fontWeight:550
+                                            fontWeight: 550
                                         }}>
                                         {selectedClass.title}
                                     </Typography>
@@ -184,8 +185,18 @@ function ClassDetail(props) {
                                         </IconButton>
                                     </Box>
                                     <Box m="0.7rem">
-                                        {isSelectedClassEnrolled ? (
-                                            <Button variant="contained">REMOVE</Button>
+                                        {user ? (
+                                            user.role === "user" ? (
+                                                isSelectedClassEnrolled ? (
+                                                    <Button variant="contained">REMOVE</Button>
+                                                ) : (
+                                                    <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                                )
+                                            ) : (
+                                                user.role === "admin" && (
+                                                    <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
+                                                )
+                                            )
                                         ) : (
                                             <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                         )}
@@ -290,12 +301,23 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            {isSelectedClassEnrolled ? (
-                                                <Button variant="contained">REMOVE</Button>
+                                            {user ? (
+                                                user.role === "user" ? (
+                                                    isSelectedClassEnrolled ? (
+                                                        <Button variant="contained">REMOVE</Button>
+                                                    ) : (
+                                                        <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                                    )
+                                                ) : (
+                                                    user.role === "admin" && (
+                                                        <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
+                                                    )
+                                                )
                                             ) : (
                                                 <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                             )}
                                         </Box>
+
                                     </Box>
                                     <Box
                                         m="1rem"
@@ -399,12 +421,22 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                            {isSelectedClassEnrolled ? (
-                                                <Button variant="contained">REMOVE</Button>
+                                        {user ? (
+                                            user.role === "user" ? (
+                                                isSelectedClassEnrolled ? (
+                                                    <Button variant="contained">REMOVE</Button>
+                                                ) : (
+                                                    <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                                )
                                             ) : (
-                                                <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
-                                            )}
-                                        </Box>
+                                                user.role === "admin" && (
+                                                    <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
+                                                )
+                                            )
+                                        ) : (
+                                            <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                        )}
+                                    </Box>
                                     </Box>
                                     <Box
                                         m="1rem"

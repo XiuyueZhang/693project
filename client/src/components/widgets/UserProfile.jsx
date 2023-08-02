@@ -62,9 +62,14 @@ export default function UserProfile() {
             <CardContent>
                 {enrolledClassList && (
                     <Box>
-                        <CardActions>
-                            <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
-                        </CardActions>
+                        {user.role === "admin"? (
+                            null
+                        ) : (
+                            <CardActions>
+                                <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
+                            </CardActions>
+                        )}
+                        
                         <Typography variant="h5" component="div">
                             {enrolledClassList.map(classItem => <EnrolledClassItem 
                                 key={classItem._id}
