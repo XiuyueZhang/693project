@@ -1,23 +1,23 @@
 import axios from "axios";
 
-const token = localStorage.getItem("token")
-const user = localStorage.getItem("user")
+const token = localStorage.getItem("token");
+// Parse the JSON data
+const user = JSON.parse(localStorage.getItem("user")); 
 
-const api = axios.create({
-    baseURL: "http://localhost:5050/",
-   });
+let api = null;
 
-//    If token and user not null, set header
-if(token && user){
-    const api = axios.create({
+if (token && user) {
+    api = axios.create({
         baseURL: "http://localhost:5050/",
-        headers:{
+        headers: {
             "Authorization": `Bearer ${token}`,
             "role": user.role,
-        }
+        },
+    });
+} else {
+    api = axios.create({
+        baseURL: "http://localhost:5050/",
     });
 }
-
-
 
 export default api;

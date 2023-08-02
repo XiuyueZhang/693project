@@ -10,7 +10,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import BasicCard from '../widgets/UserProfile';
 import { setSelectedClass, setPathName } from '../../store';
-import { getSelectedClassInfoRequest } from '../../services/requests';
+import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
     const theme = useTheme();
@@ -24,20 +24,42 @@ function ClassDetail(props) {
     const location = useLocation();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
 
-    const enrolClassHandler = () => {
-        if(user){
-            if(user.role === "user"){
-                // ENROL CLASS
+    
+    const enrolClassHandler = async () => {
+        if (user) {
+            if (user.role === "user") {
+                try {
+                    // ENROL CLASS
+                    const response = await userEnrollClassRequest(user.id, classId);
+    
+                    // Check if the HTTP request was successful
+                    if (response.status === 201) {
+                        // Successfully added enrolment
+                        const successMessage = "Successfully added enrolment";
+                        // You might want to display or use the successMessage here
+                        console.log(successMessage);
+                    } else {
+                        const errorMessage = "Error adding enrollment: Status " + response.status;
+                        // You might want to display or use the errorMessage here
+                        console.error(errorMessage);
+                    }
+                } catch (error) {
+                    const errorMessage = "Error adding enrollment: " + error.message;
+                    // You might want to display or use the errorMessage here
+                    console.error(errorMessage);
+                }
+            } else {
+                // ADMIN role
             }
-            // ADMIN role
-        }else{
+        } else {
             // NON USER - Navigate to login page
             dispatch(setPathName({
                 pathName: location.pathname
             }));
-            navigate("/login")
+            navigate("/login");
         }
-    }
+    };
+    
 
     // fetch the selected class data when first render
     useEffect(() => {
