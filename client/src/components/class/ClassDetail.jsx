@@ -217,8 +217,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user ? (
-                                    <UserProfile />
+                                {user? (user.role? (<UserProfile />): (null)
                                 ) : null}
                             </Card>
                         </Box>
