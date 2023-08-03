@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
     Box,
     Button,
@@ -26,6 +26,7 @@ import {
 
 import { setMode, setLogout, setfilteredClassList, resetClasses } from "../../store"
 import FlexBetween from "../widgets/FlexBetween";
+import NavbarAdmin from "../navbar/NavbarAdmin";
 
 const Header = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -122,6 +123,8 @@ const Header = () => {
                     <Message sx={{ fontSize: "25px" }} />
                     <Notifications sx={{ fontSize: "25px" }} />
                     <Help sx={{ fontSize: "25px" }} />
+                    {user? (user.role==="admin"?(<NavbarAdmin />):(null)):(null)}
+                    
 
                     {fullName === "" ? (
                         <Button
