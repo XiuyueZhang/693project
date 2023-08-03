@@ -17,7 +17,6 @@ function ClassDetail(props) {
     const isWideScreens = useMediaQuery("(min-width: 1600px)");
     const isScreenWidthMothThan1000 = useMediaQuery("(min-width: 1400px)");
     const selectedClass = useSelector((state) => state.classes.selectedClass);
-    const selectedClasses = useSelector(state => state.classes.selectedClass);
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
     const isSelectedClassEnrolled = useSelector(state => state.classes.isSelectedClassEnrolled);
     const user = useSelector((state) => state.auth.user);
@@ -70,7 +69,7 @@ function ClassDetail(props) {
                     const successMessage = "Successfully deleted enrolment";
                     // Delete this class from enrolledClasses
                     // Filter the enrolledClassesList
-                    const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== selectedClasses._id);
+                    const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classId);
                     dispatch(setEnrolledClaases({
                         enrolledClasses: updatedEnrolledClassList
                     }))
@@ -86,8 +85,6 @@ function ClassDetail(props) {
                 // You might want to display or use the errorMessage here
                 console.error(errorMessage);
             }
-        } else{
-
         }
     }
 
@@ -119,8 +116,8 @@ function ClassDetail(props) {
     }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
     useEffect(() => {
-        if (enrolledClassList && selectedClasses) {
-            const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClasses._id);
+        if (enrolledClassList && selectedClass) {
+            const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClass._id);
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
             }))
@@ -249,7 +246,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user? (user.role? (<UserProfile removeClassHandler={removeClassHandler}/>): (null)
+                                {user? (user.role? (<UserProfile/>): (null)
                                 ) : null}
                             </Card>
                         </Box>
@@ -367,7 +364,7 @@ function ClassDetail(props) {
                             <Box>
                                 <Card>
                                     {user ? (
-                                        <UserProfile removeClassHandler={removeClassHandler}/>
+                                        <UserProfile/>
                                     ) : null}
                                 </Card>
                             </Box>
