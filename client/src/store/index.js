@@ -98,7 +98,7 @@ export const { setMode } =
 export const { setLogin, setLogout } =
   authSlice.actions;
 export const { setClassList, setfilteredClassList, setSelectedClass, setEnrolledClaases, addEnrolledClaases,
-  setIsSelectedClassEnrolled, resetClasses } =
+  setIsSelectedClassEnrolled, resetClasses, removeEnrolledClasses } =
   classSlice.actions;
 
 export default reducers;

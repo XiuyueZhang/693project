@@ -25,4 +25,14 @@ export const userEnrollClassRequest = async(userId, classId) => {
     return response;
 }
 
+export const userRemoveClassRequest = async(userId, classId) => {
+    const response = await api.delete("/user/class/deleteEnrolment", {
+        data: {
+            userId,
+            classId,
+        },
+    });
+    return response;
+}
+
 

@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 
 export default function EnrolledClassItem(props) {
-    const {classItem} = props;
+    const {classItem, removeClassHandler} = props;
     const navigate = useNavigate();
 
     const navigateToClassDetail = () => {
@@ -29,7 +29,7 @@ export default function EnrolledClassItem(props) {
                         </Typography>
                     </Box>
                 
-                    <IconButton aria-label="delete" size="small">
+                    <IconButton aria-label="delete" size="small" onClick={removeClassHandler}>
                         <DeleteIcon/>
                     </IconButton>
                 </Box>

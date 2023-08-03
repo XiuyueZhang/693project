@@ -12,7 +12,8 @@ import StarIcon from '@mui/icons-material/Star';
 import { getEnrolledClassInfoRequest } from '../../services/requests';
 import EnrolledClassItem from './EnrolledClassItem';
 
-export default function UserProfile() {
+export default function UserProfile(props) {
+    const {removeClassHandler} = props;
 
     const user = useSelector((state) => state.auth.user);
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
@@ -73,7 +74,8 @@ export default function UserProfile() {
                         <Typography variant="h5" component="div">
                             {enrolledClassList.map(classItem => <EnrolledClassItem 
                                 key={classItem._id}
-                                classItem={classItem}/>)}
+                                classItem={classItem}
+                                removeClassHandler={removeClassHandler}/>)}
                         </Typography>
                     </Box>
                 )}

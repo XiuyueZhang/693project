@@ -9,8 +9,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import UserProfile from '../users/UserProfile';
-import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled } from '../../store';
-import { getSelectedClassInfoRequest, userEnrollClassRequest } from '../../services/requests';
+import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases } from '../../store';
+import { getSelectedClassInfoRequest, userEnrollClassRequest, userRemoveClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
     const theme = useTheme();
@@ -58,6 +58,38 @@ function ClassDetail(props) {
             navigate("/login");
         }
     };
+
+    const removeClassHandler = async () => {
+        if(user){
+            try {
+                // DELETE ENROLLED CLASS
+                const response = await userRemoveClassRequest(user.id, classId);
+                // Check if the HTTP request was successful
+                if (response.status === 200) {
+                    // Successfully deleted enrolment
+                    const successMessage = "Successfully deleted enrolment";
+                    // Delete this class from enrolledClasses
+                    // Filter the enrolledClassesList
+                    const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== selectedClasses._id);
+                    dispatch(setEnrolledClaases({
+                        enrolledClasses: updatedEnrolledClassList
+                    }))
+                    // You might want to display or use the successMessage here
+                    console.log(successMessage);
+                } else {
+                    const errorMessage = "Error deleting enrollment: Status " + response.status;
+                    // You might want to display or use the errorMessage here
+                    console.error(errorMessage);
+                }
+            } catch (error) {
+                const errorMessage = "Error deleting enrollment: " + error.message;
+                // You might want to display or use the errorMessage here
+                console.error(errorMessage);
+            }
+        } else{
+
+        }
+    }
 
     const editClassHandler = () =>{
         // ADMIN USER
@@ -188,7 +220,7 @@ function ClassDetail(props) {
                                         {user ? (
                                             user.role === "user" ? (
                                                 isSelectedClassEnrolled ? (
-                                                    <Button variant="contained">REMOVE</Button>
+                                                    <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                 )
@@ -217,7 +249,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user? (user.role? (<UserProfile />): (null)
+                                {user? (user.role? (<UserProfile removeClassHandler={removeClassHandler}/>): (null)
                                 ) : null}
                             </Card>
                         </Box>
@@ -303,7 +335,7 @@ function ClassDetail(props) {
                                             {user ? (
                                                 user.role === "user" ? (
                                                     isSelectedClassEnrolled ? (
-                                                        <Button variant="contained">REMOVE</Button>
+                                                        <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
                                                     ) : (
                                                         <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                     )
@@ -335,7 +367,7 @@ function ClassDetail(props) {
                             <Box>
                                 <Card>
                                     {user ? (
-                                        <UserProfile />
+                                        <UserProfile removeClassHandler={removeClassHandler}/>
                                     ) : null}
                                 </Card>
                             </Box>
@@ -423,7 +455,7 @@ function ClassDetail(props) {
                                         {user ? (
                                             user.role === "user" ? (
                                                 isSelectedClassEnrolled ? (
-                                                    <Button variant="contained">REMOVE</Button>
+                                                    <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                 )
