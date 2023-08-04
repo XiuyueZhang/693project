@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -27,6 +27,19 @@ function ClassDetail(props) {
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const errorMessage = useSelector(state => state.settings.errorMessage)
     const successMessage = useSelector(state => state.settings.successMessage);
+    const [show, setShow] = useState(true)
+
+    // On componentDidMount set the timer
+    useEffect(() => {
+        const timeId = setTimeout(() => {
+            // After 3 seconds set the show value to false
+            setShow(false)
+        }, 3000)
+
+        return () => {
+            clearTimeout(timeId)
+        }
+    }, [show]);
 
     const enrolClassHandler = async () => {
         if (user) {
@@ -49,6 +62,7 @@ function ClassDetail(props) {
                     dispatch(setSuccessMessage({
                         successMessage: successMessage
                     }))
+                    setShow(true)
                 } else {
                     const errorMessage = "Error adding enrollment: " + response;
                     dispatch(setErrorMessage({
@@ -57,6 +71,7 @@ function ClassDetail(props) {
                     dispatch(setSuccessMessage({
                         successMessage: ""
                     }))
+                    setShow(true)
                 }
             } catch (error) {
                 const errorMessage = "Error adding enrollment: " + error.message;
@@ -66,6 +81,7 @@ function ClassDetail(props) {
                 dispatch(setSuccessMessage({
                     successMessage: ""
                 }))
+                setShow(true)
             }
         } else {
             // NON USER - Navigate to login page
@@ -94,6 +110,7 @@ function ClassDetail(props) {
                     dispatch(setEnrolledClaases({
                         enrolledClasses: updatedEnrolledClassList
                     }))
+                    setShow(true)
                 } else {
                     const errorMessage = "Error deleting enrollment: Status " + response.status;
                     dispatch(setErrorMessage({
@@ -102,6 +119,7 @@ function ClassDetail(props) {
                     dispatch(setSuccessMessage({
                         successMessage: ""
                     }))
+                    setShow(true)
                 }
             } catch (error) {
                 const errorMessage = "Error deleting enrollment: " + error.message;
@@ -111,6 +129,7 @@ function ClassDetail(props) {
                 dispatch(setSuccessMessage({
                     successMessage: ""
                 }))
+                setShow(true);
             }
         }
     }
@@ -202,20 +221,22 @@ function ClassDetail(props) {
                                     </Typography>
                                 </Box>
 
-                                <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                    <Typography width="90%">
-                                        {errorMessage && (
-                                            <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                {errorMessage}
-                                            </Alert>
-                                        )}
-                                        {successMessage && (
-                                            <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                {successMessage}
-                                            </Alert>
-                                        )}
-                                    </Typography>
-                                </Box>
+                                {show && (
+                                        <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                            <Typography width="90%">
+                                                {errorMessage && (
+                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {errorMessage}
+                                                    </Alert>
+                                                )}
+                                                {successMessage && (
+                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {successMessage}
+                                                    </Alert>
+                                                )}
+                                            </Typography>
+                                        </Box>
+                                    )}
 
                                 <CardMedia
                                     component="img"
@@ -333,20 +354,22 @@ function ClassDetail(props) {
                                         </Typography>
                                     </Box>
 
-                                    <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                        <Typography width="90%">
-                                            {errorMessage && (
-                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {errorMessage}
-                                                </Alert>
-                                            )}
-                                            {successMessage && (
-                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {successMessage}
-                                                </Alert>
-                                            )}
-                                        </Typography>
-                                    </Box>
+                                    {show && (
+                                        <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                            <Typography width="90%">
+                                                {errorMessage && (
+                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {errorMessage}
+                                                    </Alert>
+                                                )}
+                                                {successMessage && (
+                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {successMessage}
+                                                    </Alert>
+                                                )}
+                                            </Typography>
+                                        </Box>
+                                    )}
 
                                     <CardMedia
                                         component="img"
@@ -468,20 +491,22 @@ function ClassDetail(props) {
                                         </Typography>
                                     </Box>
 
-                                    <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                        <Typography width="90%">
-                                            {errorMessage && (
-                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {errorMessage}
-                                                </Alert>
-                                            )}
-                                            {successMessage && (
-                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {successMessage}
-                                                </Alert>
-                                            )}
-                                        </Typography>
-                                    </Box>
+                                    {show && (
+                                        <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                            <Typography width="90%">
+                                                {errorMessage && (
+                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {errorMessage}
+                                                    </Alert>
+                                                )}
+                                                {successMessage && (
+                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                        {successMessage}
+                                                    </Alert>
+                                                )}
+                                            </Typography>
+                                        </Box>
+                                    )}
 
                                     <CardMedia
                                         component="img"
