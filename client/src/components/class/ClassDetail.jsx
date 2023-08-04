@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -24,6 +24,8 @@ function ClassDetail(props) {
     const { classId } = useParams();
     const navigate = useNavigate();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
 
     const enrolClassHandler = async () => {
@@ -35,22 +37,23 @@ function ClassDetail(props) {
                 // Check if the HTTP request was successful
                 if (response.status === 201) {
                     // Successfully added enrolment
-                    const successMessage = "Successfully added enrolment";
+                    setErrorMessage("")
                     // Add this class to enrolledClasses
                     dispatch(addEnrolledClaases({
                         newEnrolledClasses: selectedClass
                     }))
                     // You might want to display or use the successMessage here
-                    console.log(successMessage);
+                    const successMessage = "Successfully added enrolment";
+                    setSuccessMessage(successMessage);
                 } else {
-                    const errorMessage = "Error adding enrollment: Status " + response.status;
-                    // You might want to display or use the errorMessage here
-                    console.error(errorMessage);
+                    const errorMessage = "Error adding enrollment: "+ response;
+                    setErrorMessage(errorMessage);
+                    setSuccessMessage("");
                 }
             } catch (error) {
                 const errorMessage = "Error adding enrollment: " + error.message;
-                // You might want to display or use the errorMessage here
-                console.error(errorMessage);
+                setErrorMessage(errorMessage);
+                setSuccessMessage("");
             }
         } else {
             // NON USER - Navigate to login page
@@ -67,6 +70,7 @@ function ClassDetail(props) {
                 if (response.status === 200) {
                     // Successfully deleted enrolment
                     const successMessage = "Successfully deleted enrolment";
+                    setErrorMessage("");
                     // Delete this class from enrolledClasses
                     // Filter the enrolledClassesList
                     const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classId);
@@ -74,16 +78,16 @@ function ClassDetail(props) {
                         enrolledClasses: updatedEnrolledClassList
                     }))
                     // You might want to display or use the successMessage here
-                    console.log(successMessage);
+                    setSuccessMessage(successMessage);
                 } else {
                     const errorMessage = "Error deleting enrollment: Status " + response.status;
-                    // You might want to display or use the errorMessage here
-                    console.error(errorMessage);
+                    setErrorMessage(errorMessage);
+                    setSuccessMessage("");
                 }
             } catch (error) {
                 const errorMessage = "Error deleting enrollment: " + error.message;
-                // You might want to display or use the errorMessage here
-                console.error(errorMessage);
+                setErrorMessage(errorMessage);
+                setSuccessMessage("");
             }
         }
     }
@@ -213,6 +217,7 @@ function ClassDetail(props) {
                                             {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
                                         </IconButton>
                                     </Box>
+
                                     <Box m="0.7rem">
                                         {user ? (
                                             user.role === "user" ? (
@@ -230,6 +235,12 @@ function ClassDetail(props) {
                                             <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                         )}
                                     </Box>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent:"flex-end", alignItems: 'center', pl: 1, pb: 1 }}>
+                                    <Typography color="red" fontWeight="600">
+                                        {errorMessage}
+                                        {successMessage}
+                                    </Typography>
                                 </Box>
 
                             </Box>

@@ -1,34 +1,28 @@
-import React from "react";
-import api from "../config";
-import { useNavigate } from "react-router-dom";
-
-const AxioErrorHandler = () => {
-    const navigate = useNavigate();
-
-    api.interceptors.response.use(
-        function (response) {
-            return response;
-        },
-        function (error) {
+const createAxioErrorHandler = (navigate) => {
+    const responseInterceptor = {
+        onSuccess: (response) => response,
+        onError: (error) => {
             const status = error.response.status;
-            const message = error.response.data.message;
+            let message = error.response.data.message;
 
             if (status === 400) {
                 alert("Error: " + message);
             } else if (status === 403) {
-                alert("You do not have permission to receive the data");
+                message = "Please log in.";
             } else if (status === 429) {
-                alert("Too many requests");
+                message = "Too many requests";
             } else if (status === 401) {
                 localStorage.clear();
                 navigate("/login");
             }
 
-            return Promise.reject(error);
-        }
-    );
+            return message;
+        },
+    };
 
-    return <></>;
+    return {
+        responseInterceptor,
+    };
 };
 
-export default AxioErrorHandler;
+export default createAxioErrorHandler;

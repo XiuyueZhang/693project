@@ -1,4 +1,5 @@
 import axios from "axios";
+import createAxioErrorHandler from "../errorHandler";
 
 const token = localStorage.getItem("token");
 // Parse the JSON data
@@ -19,5 +20,12 @@ if (token && user) {
         baseURL: "http://localhost:5050/",
     });
 }
+
+const { responseInterceptor } = createAxioErrorHandler();
+
+api.interceptors.response.use(
+    responseInterceptor.onSuccess,
+    responseInterceptor.onError
+);
 
 export default api;
