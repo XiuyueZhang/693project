@@ -25,9 +25,8 @@ function ClassDetail(props) {
     const navigate = useNavigate();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const errorMessage = useSelector(state => state.settings.errorMessage)
-    const successMessage = useSelector(state => state.settings.successMessage)
-
-
+    const successMessage = useSelector(state => state.settings.successMessage);
+    
     const enrolClassHandler = async () => {
         if (user) {
             try {
@@ -46,7 +45,6 @@ function ClassDetail(props) {
                     }))
                     // You might want to display or use the successMessage here
                     const successMessage = "Successfully added enrolment";
-                    console.log("wozhixingle",successMessage)
                     dispatch(setSuccessMessage({
                         successMessage: successMessage
                     }))
@@ -144,13 +142,13 @@ function ClassDetail(props) {
     }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
     useEffect(() => {
-        if (enrolledClassList && selectedClass) {
+        if (enrolledClassList.length !== 0) {
             const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClass._id);
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
-            }))
+            }));
         }
-    })
+    }, [enrolledClassList, selectedClass, dispatch]);
 
     if (!selectedClass) {
         // If selectedClass is null (still loading), you can show a loading indicator or a message.

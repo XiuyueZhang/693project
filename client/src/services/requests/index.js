@@ -13,6 +13,7 @@ export const getSelectedClassInfoRequest = async (classId) => {
 export const getEnrolledClassInfoRequest = async (userId) => {
     if(api.defaults.headers.hasOwnProperty("Authorization")){
         const response = await api.get(`/user/enrolment/${userId}`);
+        console.log("axios get response,", response )
         return response;
     }
 }

@@ -24,6 +24,7 @@ export default function UserProfile(props) {
         const enrolledClassedList = async() => {
             if(user.role === "user"){
                 const response = await getEnrolledClassInfoRequest(user.id);
+                console.log("useProfile lide get enrolled class request", response)
                 if(response){
                     dispatch(setEnrolledClaases({
                         enrolledClasses: response.data

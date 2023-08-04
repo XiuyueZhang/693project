@@ -24,7 +24,7 @@ import {
     Close,
 } from "@mui/icons-material";
 
-import { setMode, setLogout, setfilteredClassList, resetClasses } from "../../store"
+import { setMode, setLogout, setfilteredClassList, resetClasses, setErrorMessage, setSuccessMessage } from "../../store"
 import FlexBetween from "../widgets/FlexBetween";
 import NavbarAdmin from "../navbar/NavbarAdmin";
 
@@ -61,6 +61,12 @@ const Header = () => {
         } else {
             dispatch(setLogout());
             dispatch(resetClasses());
+            dispatch(setErrorMessage({
+                errorMessage: ""
+            }))
+            dispatch(setSuccessMessage({
+                successMessage: ""
+            }))
         }
     }
 
@@ -76,7 +82,6 @@ const Header = () => {
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
-
             <FlexBetween gap="1.75rem">
                 <Typography
                     fontWeight="bold"
