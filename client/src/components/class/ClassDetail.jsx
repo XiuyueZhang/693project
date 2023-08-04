@@ -7,6 +7,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Alert from '@mui/material/Alert';
 
 import UserProfile from '../users/UserProfile';
 import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';
@@ -26,7 +27,7 @@ function ClassDetail(props) {
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const errorMessage = useSelector(state => state.settings.errorMessage)
     const successMessage = useSelector(state => state.settings.successMessage);
-    
+
     const enrolClassHandler = async () => {
         if (user) {
             try {
@@ -49,7 +50,7 @@ function ClassDetail(props) {
                         successMessage: successMessage
                     }))
                 } else {
-                    const errorMessage = "Error adding enrollment: "+ response;
+                    const errorMessage = "Error adding enrollment: " + response;
                     dispatch(setErrorMessage({
                         errorMessage: errorMessage
                     }))
@@ -73,7 +74,7 @@ function ClassDetail(props) {
     };
 
     const removeClassHandler = async () => {
-        if(user){
+        if (user) {
             try {
                 // DELETE ENROLLED CLASS
                 const response = await userRemoveClassRequest(user.id, classId);
@@ -114,7 +115,7 @@ function ClassDetail(props) {
         }
     }
 
-    const editClassHandler = () =>{
+    const editClassHandler = () => {
         // ADMIN USER
         navigate(`/admin/class/update/${classId}`)
     }
@@ -201,6 +202,21 @@ function ClassDetail(props) {
                                     </Typography>
                                 </Box>
 
+                                <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                    <Typography width="90%">
+                                        {errorMessage && (
+                                            <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                {errorMessage}
+                                            </Alert>
+                                        )}
+                                        {successMessage && (
+                                            <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                {successMessage}
+                                            </Alert>
+                                        )}
+                                    </Typography>
+                                </Box>
+
                                 <CardMedia
                                     component="img"
                                     sx={{ width: "90%", margin: "1rem" }}
@@ -258,13 +274,6 @@ function ClassDetail(props) {
                                         )}
                                     </Box>
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent:"flex-end", alignItems: 'center', pl: 1, pb: 1 }}>
-                                    <Typography color="red" fontWeight="600">
-                                        {errorMessage}
-                                        {successMessage}
-                                    </Typography>
-                                </Box>
-
                             </Box>
                             <Box
                                 m="1rem"
@@ -279,7 +288,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user? (user.role? (<UserProfile/>): (null)
+                                {user ? (user.role ? (<UserProfile />) : (null)
                                 ) : null}
                             </Card>
                         </Box>
@@ -321,6 +330,21 @@ function ClassDetail(props) {
                                             sx={{ margin: "1.1rem" }}
                                             onClick={() => navigate("/")}>
                                             Back to class List
+                                        </Typography>
+                                    </Box>
+
+                                    <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                        <Typography width="90%">
+                                            {errorMessage && (
+                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {errorMessage}
+                                                </Alert>
+                                            )}
+                                            {successMessage && (
+                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {successMessage}
+                                                </Alert>
+                                            )}
                                         </Typography>
                                     </Box>
 
@@ -397,7 +421,7 @@ function ClassDetail(props) {
                             <Box>
                                 <Card>
                                     {user ? (
-                                        <UserProfile/>
+                                        <UserProfile />
                                     ) : null}
                                 </Card>
                             </Box>
@@ -444,6 +468,21 @@ function ClassDetail(props) {
                                         </Typography>
                                     </Box>
 
+                                    <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                        <Typography width="90%">
+                                            {errorMessage && (
+                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {errorMessage}
+                                                </Alert>
+                                            )}
+                                            {successMessage && (
+                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {successMessage}
+                                                </Alert>
+                                            )}
+                                        </Typography>
+                                    </Box>
+
                                     <CardMedia
                                         component="img"
                                         sx={{ width: "93%", margin: "1rem" }}
@@ -482,22 +521,22 @@ function ClassDetail(props) {
                                             </IconButton>
                                         </Box>
                                         <Box m="0.7rem">
-                                        {user ? (
-                                            user.role === "user" ? (
-                                                isSelectedClassEnrolled ? (
-                                                    <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
+                                            {user ? (
+                                                user.role === "user" ? (
+                                                    isSelectedClassEnrolled ? (
+                                                        <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
+                                                    ) : (
+                                                        <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                                    )
                                                 ) : (
-                                                    <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                                    user.role === "admin" && (
+                                                        <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
+                                                    )
                                                 )
                                             ) : (
-                                                user.role === "admin" && (
-                                                    <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
-                                                )
-                                            )
-                                        ) : (
-                                            <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
-                                        )}
-                                    </Box>
+                                                <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                            )}
+                                        </Box>
                                     </Box>
                                     <Box
                                         m="1rem"
