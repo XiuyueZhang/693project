@@ -42,11 +42,19 @@ export const settingsSlice = createSlice({
   name: "settings",
   initialState: {
     mode: "light",
+    errorMessage: "",
+    successMessage: "",
   },
   reducers: {
     setMode: (state) => {
       state.mode = state.mode === "light" ? "dark" : "light";
     },
+    setErrorMessage: (state, action) => {
+      state.errorMessage = action.payload.errorMessage;
+    },
+    setSuccessMessage: (state, action) => {
+      state.successMessage = action.payload.successMessage;
+    }
   },
 });
 
@@ -93,7 +101,7 @@ const reducers = combineReducers({
   classes: classSlice.reducer
 })
 
-export const { setMode } =
+export const { setMode, setErrorMessage, setSuccessMessage } =
   settingsSlice.actions;
 export const { setLogin, setLogout } =
   authSlice.actions;

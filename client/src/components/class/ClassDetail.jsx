@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 import UserProfile from '../users/UserProfile';
-import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases } from '../../store';
+import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest, userRemoveClassRequest } from '../../services/requests';
 
 function ClassDetail(props) {
@@ -24,8 +24,8 @@ function ClassDetail(props) {
     const { classId } = useParams();
     const navigate = useNavigate();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
+    const errorMessage = useSelector(state => state.settings.errorMessage)
+    const successMessage = useSelector(state => state.settings.successMessage)
 
 
     const enrolClassHandler = async () => {
@@ -37,23 +37,36 @@ function ClassDetail(props) {
                 // Check if the HTTP request was successful
                 if (response.status === 201) {
                     // Successfully added enrolment
-                    setErrorMessage("")
+                    dispatch(setErrorMessage({
+                        errorMessage: ""
+                    }))
                     // Add this class to enrolledClasses
                     dispatch(addEnrolledClaases({
                         newEnrolledClasses: selectedClass
                     }))
                     // You might want to display or use the successMessage here
                     const successMessage = "Successfully added enrolment";
-                    setSuccessMessage(successMessage);
+                    console.log("wozhixingle",successMessage)
+                    dispatch(setSuccessMessage({
+                        successMessage: successMessage
+                    }))
                 } else {
                     const errorMessage = "Error adding enrollment: "+ response;
-                    setErrorMessage(errorMessage);
-                    setSuccessMessage("");
+                    dispatch(setErrorMessage({
+                        errorMessage: errorMessage
+                    }))
+                    dispatch(setSuccessMessage({
+                        successMessage: ""
+                    }))
                 }
             } catch (error) {
                 const errorMessage = "Error adding enrollment: " + error.message;
-                setErrorMessage(errorMessage);
-                setSuccessMessage("");
+                dispatch(setErrorMessage({
+                    errorMessage: errorMessage
+                }))
+                dispatch(setSuccessMessage({
+                    successMessage: ""
+                }))
             }
         } else {
             // NON USER - Navigate to login page
@@ -70,24 +83,35 @@ function ClassDetail(props) {
                 if (response.status === 200) {
                     // Successfully deleted enrolment
                     const successMessage = "Successfully deleted enrolment";
-                    setErrorMessage("");
+                    dispatch(setErrorMessage({
+                        errorMessage: ""
+                    }))
+                    dispatch(setSuccessMessage({
+                        successMessage: successMessage
+                    }))
                     // Delete this class from enrolledClasses
                     // Filter the enrolledClassesList
                     const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classId);
                     dispatch(setEnrolledClaases({
                         enrolledClasses: updatedEnrolledClassList
                     }))
-                    // You might want to display or use the successMessage here
-                    setSuccessMessage(successMessage);
                 } else {
                     const errorMessage = "Error deleting enrollment: Status " + response.status;
-                    setErrorMessage(errorMessage);
-                    setSuccessMessage("");
+                    dispatch(setErrorMessage({
+                        errorMessage: errorMessage
+                    }))
+                    dispatch(setSuccessMessage({
+                        successMessage: ""
+                    }))
                 }
             } catch (error) {
                 const errorMessage = "Error deleting enrollment: " + error.message;
-                setErrorMessage(errorMessage);
-                setSuccessMessage("");
+                dispatch(setErrorMessage({
+                    errorMessage: errorMessage
+                }))
+                dispatch(setSuccessMessage({
+                    successMessage: ""
+                }))
             }
         }
     }
