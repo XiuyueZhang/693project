@@ -162,11 +162,16 @@ function ClassDetail(props) {
     }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
     useEffect(() => {
-        if (enrolledClassList.length !== 0) {
+        const getEnrolledClassList = () => {
             const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClass._id);
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
             }));
+        }
+        if (enrolledClassList.length !== 0) {
+            getEnrolledClassList();
+        } else{
+            // 
         }
     }, [enrolledClassList, selectedClass, dispatch]);
 
