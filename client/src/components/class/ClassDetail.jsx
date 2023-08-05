@@ -21,6 +21,7 @@ function ClassDetail(props) {
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
     const isSelectedClassEnrolled = useSelector(state => state.classes.isSelectedClassEnrolled);
     const user = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
@@ -45,10 +46,10 @@ function ClassDetail(props) {
         if (user) {
             try {
                 // ENROL CLASS
-                const response = await userEnrollClassRequest(user.id, classId);
+                const response = await userEnrollClassRequest(user.id, classId, token, "user");
 
                 // Check if the HTTP request was successful
-                if (response.status === 201) {
+                if (!response.error) {
                     // Successfully added enrolment
                     dispatch(setErrorMessage({
                         errorMessage: ""
@@ -57,14 +58,14 @@ function ClassDetail(props) {
                     dispatch(addEnrolledClaases({
                         newEnrolledClasses: selectedClass
                     }))
-                    // You might want to display or use the successMessage here
+                    // Display or use the successMessage here
                     const successMessage = "Successfully added enrolment";
                     dispatch(setSuccessMessage({
                         successMessage: successMessage
                     }))
                     setShow(true)
                 } else {
-                    const errorMessage = "Error adding enrollment: " + response;
+                    const errorMessage = "Error adding enrollment: " + response.error;
                     dispatch(setErrorMessage({
                         errorMessage: errorMessage
                     }))
@@ -93,9 +94,9 @@ function ClassDetail(props) {
         if (user) {
             try {
                 // DELETE ENROLLED CLASS
-                const response = await userRemoveClassRequest(user.id, classId);
+                const response = await userRemoveClassRequest(user.id, classId, token, "user");
                 // Check if the HTTP request was successful
-                if (response.status === 200) {
+                if (!response.error) {
                     // Successfully deleted enrolment
                     const successMessage = "Successfully deleted enrolment";
                     dispatch(setErrorMessage({
@@ -104,7 +105,6 @@ function ClassDetail(props) {
                     dispatch(setSuccessMessage({
                         successMessage: successMessage
                     }))
-                    // Delete this class from enrolledClasses
                     // Filter the enrolledClassesList
                     const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classId);
                     dispatch(setEnrolledClaases({
@@ -112,7 +112,7 @@ function ClassDetail(props) {
                     }))
                     setShow(true)
                 } else {
-                    const errorMessage = "Error deleting enrollment: Status " + response.status;
+                    const errorMessage = "Error deleting enrollment: Status " + response.error;
                     dispatch(setErrorMessage({
                         errorMessage: errorMessage
                     }))
@@ -224,20 +224,18 @@ function ClassDetail(props) {
                                 </Box>
 
                                 {show && (
-                                        <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                            <Typography width="90%">
-                                                {errorMessage && (
-                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {errorMessage}
-                                                    </Alert>
-                                                )}
-                                                {successMessage && (
-                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {successMessage}
-                                                    </Alert>
-                                                )}
-                                            </Typography>
-                                        </Box>
+                                    <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                                            {errorMessage && (
+                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {errorMessage}
+                                                </Alert>
+                                            )}
+                                            {successMessage && (
+                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {successMessage}
+                                                </Alert>
+                                            )}
+                                    </Box>
                                     )}
 
                                 <CardMedia
@@ -311,7 +309,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user ? (user.role ? (<UserProfile />) : (null)
+                                {user ? (user.role ? (<UserProfile removeClassHandler={removeClassHandler}/>) : (null)
                                 ) : null}
                             </Card>
                         </Box>
@@ -358,18 +356,16 @@ function ClassDetail(props) {
 
                                     {show && (
                                         <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                            <Typography width="90%">
-                                                {errorMessage && (
-                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {errorMessage}
-                                                    </Alert>
-                                                )}
-                                                {successMessage && (
-                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {successMessage}
-                                                    </Alert>
-                                                )}
-                                            </Typography>
+                                            {errorMessage && (
+                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {errorMessage}
+                                                </Alert>
+                                            )}
+                                            {successMessage && (
+                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {successMessage}
+                                                </Alert>
+                                            )}
                                         </Box>
                                     )}
 
@@ -446,7 +442,7 @@ function ClassDetail(props) {
                             <Box>
                                 <Card>
                                     {user ? (
-                                        <UserProfile />
+                                        <UserProfile removeClassHandler={removeClassHandler}/>
                                     ) : null}
                                 </Card>
                             </Box>
@@ -495,18 +491,16 @@ function ClassDetail(props) {
 
                                     {show && (
                                         <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                            <Typography width="90%">
-                                                {errorMessage && (
-                                                    <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {errorMessage}
-                                                    </Alert>
-                                                )}
-                                                {successMessage && (
-                                                    <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                        {successMessage}
-                                                    </Alert>
-                                                )}
-                                            </Typography>
+                                            {errorMessage && (
+                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {errorMessage}
+                                                </Alert>
+                                            )}
+                                            {successMessage && (
+                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                    {successMessage}
+                                                </Alert>
+                                            )}
                                         </Box>
                                     )}
 

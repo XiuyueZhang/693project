@@ -16,9 +16,16 @@ const getEnrolment = async(req, res) => {
                 const classItemInfo = await findEnrollmentClassItemByClassId(classItem.classId);
                 enrolledClassitemDetailList.push(classItemInfo)
             }
-            res.status(200).send(enrolledClassitemDetailList);
-        } else{
-            res.status(200).send("No enrolled classes yet")
+            res.status(200).send({
+                data: enrolledClassitemDetailList,
+                error:null
+            });
+        } else if(enrolledClassesList === []){
+            res.status(200).send({
+                data: enrolledClassitemDetailList,
+                error: null,
+                msg: "The use has not enrolled in any classes"
+            })
         }
     }
 }
@@ -46,15 +53,27 @@ const addEnrolment = async (req, res) => {
                 };
 
                 const response = await enrolClassById(enrolmentToInsert);
-                res.status(201).send(response); // 201 (Created) for success response
+                res.status(201).send({
+                    data: response,
+                    error: null
+                }); // 201 (Created) for success response
             } else {
-                res.status(409).send("You have already added the class"); // 409 (Conflict) for duplicate enrolment
+                res.status(409).send({
+                    data: null,
+                    error: "You have already added the class."
+                }); // 409 (Conflict) for duplicate enrolment
             }
         } else {
-            res.status(404).send("User or class does not exist");
+            res.status(404).send({
+                data: null, 
+                error: "User or class does not exist."
+            });
         }
     } else {
-        res.status(400).send("Invalid userId or classId");
+        res.status(400).send({
+            data: null,
+            error: "Invalid userId or classId."
+        });
     }
 };
 
@@ -116,15 +135,27 @@ const deleteEnrolment = async (req, res) => {
             if(isEnrolmentExists){
                 const query = { userId: queryUserId, classId: queryClassId };
                 const response = await deleteEnrolledClassById(query);
-                res.send(response).status(200);
+                res.send({
+                    data: response,
+                    error: null
+                }).status(200);
             } else{
-                res.status(404).send("Oops, you have not enrolled in this class");
+                res.status(404).send({
+                    data: null,
+                    error: "Oops, you have not enrolled in this class."
+                });
             }
         } else {
-            res.status(404).send("User or class does not exist");
+            res.status(404).send({
+                data: null,
+                error:"User or class does not exist."
+            });
         }
     } else {
-        res.status(404).send("User or class not found");
+        res.status(404).send({
+            data: null,
+            error: "User or class not found."
+        });
     }
 };
 

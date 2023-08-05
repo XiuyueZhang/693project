@@ -15,25 +15,29 @@ import EnrolledClassItem from './EnrolledClassItem';
 export default function UserProfile(props) {
 
     const user = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.token);
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
     const dispatch = useDispatch();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
+    const {removeClassHandler} = props
    
     useEffect(()=>{
+        
         // get enrolled classes, and set into redux
         const enrolledClassedList = async() => {
             if(user.role === "user"){
-                const response = await getEnrolledClassInfoRequest(user.id);
-                console.log("useProfile lide get enrolled class request", response)
-                if(response){
+                const response = await getEnrolledClassInfoRequest(user.id, token, "user");
+                if(!response.error){
                     dispatch(setEnrolledClaases({
                         enrolledClasses: response.data
                     }))
-                }  
+                } else {
+                    // response.error is not null
+                }
             }
         }
         enrolledClassedList();                        
-    },[dispatch, user])
+    },[dispatch, user, token])
 
 
     return (
@@ -75,6 +79,7 @@ export default function UserProfile(props) {
                             {enrolledClassList.map(classItem => <EnrolledClassItem 
                                 key={classItem._id}
                                 classItem={classItem}
+                                removeClassHandler={removeClassHandler}
                                 />)}
                         </Typography>
                     </Box>

@@ -21,7 +21,6 @@ export const registerRequest = async(registerInfo) => {
 export const getHomepageContentRequest = async () => {
     const response = await api.get('/');
     return response;
-    
 }
 
 export const getSelectedClassInfoRequest = async (classId) => {
@@ -29,28 +28,42 @@ export const getSelectedClassInfoRequest = async (classId) => {
     return response;
 }
 
-export const getEnrolledClassInfoRequest = async (userId) => {
-    if(api.defaults.headers.hasOwnProperty("Authorization")){
-        const response = await api.get(`/user/enrolment/${userId}`);
-        console.log("axios get response,", response )
-        return response;
-    }
-}
-
-export const userEnrollClassRequest = async(userId, classId) => {
-    const response = await api.post("/user/class/addEnrolment", {
-        userId:`${userId}`,
-        classId: `${classId}`,
+export const getEnrolledClassInfoRequest = async (userId, token, role) => {
+    const response = await api.get(`/user/enrolment/${userId}`,{
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "role": role,
+        },
     });
     return response;
 }
 
-export const userRemoveClassRequest = async(userId, classId) => {
-    const response = await api.delete("/user/class/deleteEnrolment", {
-        data: {
-            userId,
-            classId,
+export const userEnrollClassRequest = async(userId, classId, token, role) => {
+    const data = {
+        userId,
+        classId
+    }
+    
+    const response = await api.post("/user/class/addEnrolment", data, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "role": role,
         },
+    });
+    return response;
+}
+
+export const userRemoveClassRequest = async(userId, classId, token, role) => {
+    const data = {
+        userId,
+        classId
+    }
+    const response = await api.delete("/user/class/deleteEnrolment", {
+        data,
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "role": role,
+        }
     });
     return response;
 }
