@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box } from '@mui/material';
 import { setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';
-import { userRemoveClassRequest } from '../../services/requests';
+import { userRemoveClassRequest } from '../../api/requests';
 
 export default function EnrolledClassItem(props) {
     const { classItem } = props;

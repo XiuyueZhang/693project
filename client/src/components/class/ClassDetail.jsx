@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 
 import UserProfile from '../users/UserProfile';
 import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';
-import { getSelectedClassInfoRequest, userEnrollClassRequest, userRemoveClassRequest } from '../../services/requests';
+import { getSelectedClassInfoRequest, userEnrollClassRequest, userRemoveClassRequest } from '../../api/requests';
 
 function ClassDetail(props) {
     const theme = useTheme();

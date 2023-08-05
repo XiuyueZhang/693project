@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { useSelector, useDispatch } from "react-redux";
 import { setEnrolledClaases } from '../../store';
 import StarIcon from '@mui/icons-material/Star';
-import { getEnrolledClassInfoRequest } from '../../services/requests';
+import { getEnrolledClassInfoRequest } from '../../api/requests';
 import EnrolledClassItem from './EnrolledClassItem';
 
 export default function UserProfile(props) {
