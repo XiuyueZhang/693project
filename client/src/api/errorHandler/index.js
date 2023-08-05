@@ -1,22 +1,32 @@
 const createAxioErrorHandler = (navigate) => {
     const responseInterceptor = {
-        onSuccess: (response) => response,
+        onSuccess: (response) => {
+            return response.data
+        },
         onError: (error) => {
             const status = error.response.status;
             let message = error.response.data.message;
 
-            if (status === 400) {
-                alert("Error: " + message);
-            } else if (status === 403) {
-                message = "Please log in.";
-            } else if (status === 429) {
-                message = "Too many requests";
-            } else if (status === 401) {
-                localStorage.clear();
-                navigate("/login");
+            switch (status) {
+                case 400:
+                    alert("Error: " + message);
+                    break;
+                case 403:
+                    message = "Please log in.";
+                    break;
+                case 429:
+                    message = "Too many requests";
+                    break;
+                case 401:
+                    localStorage.clear();
+                    navigate("/login");
+                    break;
+                // Add more cases as needed for other status codes
+                default:
+                    // Default message if none of the cases match
+                    message = "An error occurred.";
+                    break;
             }
-
-            return message;
         },
     };
 

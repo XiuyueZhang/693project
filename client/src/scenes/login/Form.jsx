@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../store";
+import { loginRequest, registerRequest } from "../../api/requests";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -49,64 +50,41 @@ const Form = () => {
   
 
   const register = async (values, onSubmitProps) => {
+    const registerUserResponse = await registerRequest(values);
 
-    const savedUserResponse = await fetch(
-      "http://localhost:5050/register",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values)
-      }
-    );
-
-    const savedUser = await savedUserResponse.json();
-    const error = savedUser?.msg
-    if (error === undefined) {
+    if(!registerUserResponse.error){
       onSubmitProps.resetForm();
       setPageType("login");
     } else {
-      setErrorMsg(savedUser.msg);
+      setErrorMsg(registerUserResponse.error);
     }
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:5050/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    const error = loggedIn?.msg
+    const response = await loginRequest(values);
 
-    if (error === undefined) {
+    // Get correct response
+    if (!response.error) {
       // User info is received
-      const { id, email, firstName, lastName, role, token } = loggedIn.response;
+      const { id, email, firstName, lastName, role, token } = response.response.data;
       onSubmitProps.resetForm();
-      if (loggedIn) {
-        dispatch(
-          setLogin({
-            user: {
-              id,
-              firstName,
-              lastName,
-              role,
-              email,
-            },
-            token: token,
-          })
-        );
+      dispatch(setLogin({
+        user: {
+          id,
+          firstName,
+          lastName,
+          role,
+          email,
+        },
+        token: token,
+      }))
         
-        // Navigates to the previous page
-        // const from = location.state?.preLocation?.pathname || "/";
-        // navigate(from); 
-        navigate(-1);
-      }
+      // Navigates to the previous page
+      navigate(-1);
     } else {
-      setErrorMsg(loggedIn.msg);
+      setErrorMsg(response.response.error);
     }
   }
-
-
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);

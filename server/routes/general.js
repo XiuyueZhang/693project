@@ -1,5 +1,5 @@
 import express from "express";
-import { homepageFeed, userRegister, userLogin, classList, classDetail }  from "../controller/general.js";
+import { homepageFeed, userRegister, userLogin, classDetail }  from "../controller/general.js";
 
 const router = express.Router();
 

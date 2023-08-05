@@ -16,19 +16,16 @@ function ClassList(props) {
     // fetch all class data when first render
     useEffect(() => {
         const fetchAllClassData = async () => {
-            try {
-                // Fetch the homepage content
-                const response = await getHomepageContentRequest();
+            // Fetch the homepage content
+            const response = await getHomepageContentRequest();
 
-                // Check if the HTTP request was successful
-                if (response.status === 200) {
-                    dispatch(setClassList({
-                        allClasses: response.data.classes
-                    }));
-                }
-            } catch (error) {
-                // Handle any errors here
-                console.error("Error fetching homepage content:", error);
+            // Check if the HTTP request was successful
+            if (!response.error) {
+                dispatch(setClassList({
+                    allClasses: response.data
+                }));
+            } else {
+                // response.error is not null
             }
         };
 

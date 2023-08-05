@@ -143,19 +143,16 @@ function ClassDetail(props) {
     // fetch the selected class data when first render
     useEffect(() => {
         const fetchClassDetailData = async () => {
-            try {
-                // Fetch the homepage content
-                const response = await getSelectedClassInfoRequest(classId);
+            // Fetch the homepage content
+            const response = await getSelectedClassInfoRequest(classId);
 
-                // Check if the HTTP request was successful
-                if (response.status === 200) {
-                    dispatch(setSelectedClass({
-                        selectedClass: response.data
-                    }));
-                }
-            } catch (error) {
-                // Handle any errors here
-                console.error("Error fetching the class content:", error);
+            // Check if the HTTP request was successful
+            if (!response.error) {
+                dispatch(setSelectedClass({
+                    selectedClass: response.data
+                }));
+            }else{
+                // reponse.error is not null
             }
         };
         fetchClassDetailData(); // Call the fetchData function when the component mounts

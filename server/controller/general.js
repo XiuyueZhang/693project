@@ -7,22 +7,15 @@ import { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, 
 
 // HOMEPAGE FEED
 const homepageFeed = async (req, res) => {
-    // get user profile
-    // const userResults = await getUserInfo();
     // get classes list
     const classesResults = await getClassList();
-    // get enrolments list
-    // const enrolmentsResults = await getEnrolmentInfo();
-
-    // Send user, classes and enrolments data in a single response object
     const responseData = {
-        // users: userResults,
-        classes: classesResults,
-        // enrolments: enrolmentsResults
+        data: classesResults,
+        error: null
     };
 
     res.status(200).json(responseData);
-};
+}; 
 
 // REGISTER, LOGIN
 const userRegister = async (req, res) => {
@@ -34,7 +27,10 @@ const userRegister = async (req, res) => {
     } = req.body;
     // Validate firstName and lastName are strings
     if (typeof firstName !== "string" || typeof lastName !== "string") {
-        return res.status(400).json({ msg: "First name and last name must be strings. " });
+        return res.status(400).send({
+            data: null,
+            error: "First name and last name must be strings."
+        });
     }
 
     const isValidate = validateReq(email, password);
@@ -57,10 +53,16 @@ const userRegister = async (req, res) => {
             const response = userFormatResponse(newUser)
             res.send(response).status(204);
         } else {
-            res.status(424).json({ msg: "Email already exists. Please log in. " });
+            res.status(424).send({
+                data: null,
+                error: "Email already exists. Please log in."
+            });
         }
     } else {
-        return res.status(400).json({ msg: isValidate.msg });
+        return res.status(400).send({ 
+            data: null,
+            error: isValidate.msg
+         });
     }
 
 };
@@ -111,36 +113,42 @@ const validateReq = (email, password) => {
 
 const userFormatResponse = (user, token) => {
     const response = {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        token: token || "",
+        data:{
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            token: token || "",
+        },
+        error: null
+
     }
     return response;
 }
 
 
 // CLASSES
-const classList = async (req, res) => {
-    // get classes list
-    let response = await getClassList();
-    res.send(response).status(200);
-};
-
 const classDetail = async (req, res) => {
     const isValidId = isValidObjectId(req.params.classId)
     if (isValidId) {
         let query = { _id: new ObjectId(req.params.classId) };
         // get selected class info
         let response = await getClassDetail(query);
-        if (!response) res.send("Class not found").status(404);
-        else res.send(response).status(200);
+        if (!response) res.send({
+            data: null,
+            error: "Class not found"
+        }).status(404);
+        else res.send({
+            data: response,
+            error: null
+        }).status(200);
     } else {
-        res.status(404).send("Class not found");
+        res.status(404).send({
+            data: null,
+            error: "Class not found"
+        });
     }
-
 };
 
 // VALIDATE classId
@@ -153,4 +161,4 @@ function isValidObjectId(str) {
     }
 }
 
-export { homepageFeed, userRegister, userLogin, classList, classDetail };
+export { homepageFeed, userRegister, userLogin, classDetail };

@@ -1,8 +1,27 @@
 import api from "../config";
 
+export const loginRequest = async(loginInfo) => {
+    const response = await api.post('/login',{
+        email: loginInfo.email,
+        password: loginInfo.password
+    });
+    return response;
+}
+
+export const registerRequest = async(registerInfo) => {
+    const response = await api.post('/register',{
+        firstName:  registerInfo.firstName,
+        lastName:  registerInfo.lastName,
+        email: registerInfo.email,
+        password: registerInfo.password
+    });
+    return response;
+}
+
 export const getHomepageContentRequest = async () => {
     const response = await api.get('/');
     return response;
+    
 }
 
 export const getSelectedClassInfoRequest = async (classId) => {
