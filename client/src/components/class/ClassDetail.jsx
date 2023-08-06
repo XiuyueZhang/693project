@@ -90,11 +90,11 @@ function ClassDetail(props) {
         }
     };
 
-    const removeClassHandler = async () => {
+    const removeClassHandler = async (classIdToRemove) => {
         if (user) {
             try {
                 // DELETE ENROLLED CLASS
-                const response = await userRemoveClassRequest(user.id, classId, token, "user");
+                const response = await userRemoveClassRequest(user.id, classIdToRemove, token, "user");
                 // Check if the HTTP request was successful
                 if (!response.error) {
                     // Successfully deleted enrolment
@@ -106,7 +106,7 @@ function ClassDetail(props) {
                         successMessage: successMessage
                     }))
                     // Filter the enrolledClassesList
-                    const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classId);
+                    const updatedEnrolledClassList = enrolledClassList.filter(item => item._id !== classIdToRemove);
                     dispatch(setEnrolledClaases({
                         enrolledClasses: updatedEnrolledClassList
                     }))
@@ -159,16 +159,15 @@ function ClassDetail(props) {
     }, [classId, dispatch, isSelectedClassEnrolled, user]);
 
     useEffect(() => {
-        const getEnrolledClassList = () => {
+        if (enrolledClassList.length !== 0) {
             const isSelectedClassEnrolled = enrolledClassList.some(item => item._id === selectedClass._id);
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
             }));
-        }
-        if (enrolledClassList.length !== 0) {
-            getEnrolledClassList();
         } else{
-            // 
+            dispatch(setIsSelectedClassEnrolled({
+                isSelectedClassEnrolled: false
+            }));
         }
     }, [enrolledClassList, selectedClass, dispatch]);
 
@@ -281,7 +280,7 @@ function ClassDetail(props) {
                                         {user ? (
                                             user.role === "user" ? (
                                                 isSelectedClassEnrolled ? (
-                                                    <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
+                                                    <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                 )
@@ -318,7 +317,7 @@ function ClassDetail(props) {
 
             ) : (
                 isScreenWidthMothThan1000 ? (
-                    // SCREENS 1000PX ~ 1600PX
+                    // SCREENS 1300PX ~ 1600PX
                     <Box
                         width="80%"
                         p="2rem"
@@ -410,7 +409,7 @@ function ClassDetail(props) {
                                             {user ? (
                                                 user.role === "user" ? (
                                                     isSelectedClassEnrolled ? (
-                                                        <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
+                                                        <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
                                                     ) : (
                                                         <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                     )
@@ -439,17 +438,10 @@ function ClassDetail(props) {
                                     </Box>
                                 </Box>
                             </Card>
-                            <Box>
-                                <Card>
-                                    {user ? (
-                                        <UserProfile removeClassHandler={removeClassHandler}/>
-                                    ) : null}
-                                </Card>
-                            </Box>
                         </Box>
                     </Box>
                 ) : (
-                    // SCREENS UNDER 800PX
+                    // SCREENS UNDER 1300PX
                     <Box
                         p="1rem"
                         m="1rem auto"
@@ -545,7 +537,7 @@ function ClassDetail(props) {
                                             {user ? (
                                                 user.role === "user" ? (
                                                     isSelectedClassEnrolled ? (
-                                                        <Button variant="contained" onClick={removeClassHandler}>REMOVE</Button>
+                                                        <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
                                                     ) : (
                                                         <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                     )
