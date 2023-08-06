@@ -14,6 +14,12 @@ const getClassDetail = async (query) => {
 }
 
 // USERS
+const getUserInfoById = async (userId) => {
+    let userCollection = await db.collection("users");
+    let userInfoResults = await userCollection.find({_id: userId}).toArray();
+    return userInfoResults;
+}
+
 const getUserInfo = async () => {
     let userCollection = await db.collection("users");
     let userResults = await userCollection.find({}).toArray();
@@ -39,4 +45,4 @@ const getEnrolmentInfo = async () => {
     return enrolmentsResults
 }
 
-export { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, insertUser }
+export { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, insertUser, getUserInfoById }

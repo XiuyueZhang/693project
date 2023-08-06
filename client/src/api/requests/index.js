@@ -1,5 +1,15 @@
 import api from "../config";
 
+
+export const getUserInfoRequest = async (token) => {
+    const response = await api.get('/user/info', {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+    });
+    return response;
+}
+
 export const loginRequest = async(loginInfo) => {
     const response = await api.post('/login',{
         email: loginInfo.email,

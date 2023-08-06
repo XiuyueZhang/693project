@@ -7,18 +7,16 @@ export const authSlice = createSlice({
 
     if (!token) {
       return {
-        user: null,
         token: null,
       };
 
-    } 
+    }
 
     return {
-      user: JSON.parse(localStorage.getItem("user")),
       token
     }
-    
-    
+
+
   },
   reducers: {
     setLogin: (state, action) => {
@@ -26,14 +24,12 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
 
       localStorage.setItem('token', state.token);
-      localStorage.setItem('user', JSON.stringify(state.user));
     },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
 
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
     },
   },
 });
@@ -77,10 +73,10 @@ export const classSlice = createSlice({
     setSelectedClass: (state, action) => {
       state.selectedClass = action.payload.selectedClass;
     },
-    setEnrolledClaases:  (state, action) => {
+    setEnrolledClaases: (state, action) => {
       state.enrolledClaases = action.payload.enrolledClasses;
     },
-    addEnrolledClaases:  (state, action) => {
+    addEnrolledClaases: (state, action) => {
       state.enrolledClaases.push(action.payload.newEnrolledClasses);
     },
     setIsSelectedClassEnrolled: (state, action) => {
@@ -90,7 +86,7 @@ export const classSlice = createSlice({
       state.filteredClasses = [];
       state.selectedClass = null;
       state.isSelectedClassEnrolled = false;
-      state.enrolledClaases =  [];
+      state.enrolledClaases = [];
     },
   },
 });
