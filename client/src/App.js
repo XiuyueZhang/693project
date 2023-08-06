@@ -2,7 +2,7 @@ import './App.css';
 import Home from './scenes/homepage';
 import Login from './scenes/login';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
@@ -20,20 +20,21 @@ function App() {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
 
-  const loggedInUserInfo = async (token) => {
+  const loggedInUserInfo = useCallback(async (token) => {
     const response = await getUserInfoRequest(token);
 
     dispatch(setLogin({
       user: response.data,
       token
     }))
-  }
+  }, [dispatch]);
+
 
   useEffect(() => {
     if (token) {
       loggedInUserInfo(token);
     }
-  }, [token])
+  }, [token, loggedInUserInfo])
 
 
   return (
