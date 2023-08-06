@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { getClassList, getClassDetail, getUserInfo, getEnrolmentInfo, findUser, insertUser } from "../persistence/general.js"
+import { getClassList, getClassDetail, findUser, insertUser } from "../persistence/general.js"
 
 
 // HOMEPAGE FEED

@@ -10,7 +10,7 @@ import { themeSettings } from "./theme";
 import ClassList from './components/class/ClassList';
 import ClassDetail from './components/class/ClassDetail';
 import NeedAuth from './components/widgets/NeedAuth';
-import AdminHomepage from './scenes/admin/Homepage';
+import AdminAddClass from './scenes/admin/AddClass';
 import { getUserInfoRequest } from './api/requests';
 import { setLogin } from './store';
 
@@ -51,7 +51,7 @@ function App() {
               path="/login"
               element={<Login />}
             />
-            <Route path='/admin' element={<NeedAuth><AdminHomepage /></NeedAuth>} />
+            <Route path='/admin/class/update/:classId' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
