@@ -10,8 +10,10 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Alert from '@mui/material/Alert';
 
 import UserProfile from '../users/UserProfile';
+import LoadingBody from '../widgets/LoadingBody';
 import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';
 import { getSelectedClassInfoRequest, userEnrollClassRequest, userRemoveClassRequest } from '../../api/requests';
+
 
 function ClassDetail(props) {
     const theme = useTheme();
@@ -172,8 +174,8 @@ function ClassDetail(props) {
     }, [enrolledClassList, selectedClass, dispatch]);
 
     if (!selectedClass) {
-        // If selectedClass is null (still loading), you can show a loading indicator or a message.
-        return <div>Loading...</div>;
+        // If selectedClass is null (still loading), show loading page
+        return <LoadingBody />;
     }
 
     return (

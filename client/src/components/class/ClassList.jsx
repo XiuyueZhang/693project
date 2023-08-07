@@ -77,7 +77,6 @@ function ClassList(props) {
                     )}
                 </Box>
             </Box>
-
         </Box>
     );
 };

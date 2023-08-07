@@ -52,6 +52,7 @@ function App() {
               element={<Login />}
             />
             <Route path='/admin/class/update/:classId' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
+            <Route path='/admin/class/add' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

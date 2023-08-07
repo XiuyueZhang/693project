@@ -4,11 +4,15 @@ import {
     Radio, RadioGroup, FormControlLabel, FormControl, FormLabel
 } from "@mui/material";
 import { useDropzone } from 'react-dropzone';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const ClassEdit = (props) => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+    const location = useLocation();
+    const isAddClassPage = location.pathname === "/admin/class/add"
 
     const files = acceptedFiles.map(file => (
         <li key={file.path}>
@@ -46,10 +50,10 @@ const ClassEdit = (props) => {
                             <Link underline="hover" color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link underline="hover" color="inherit" href="/">
+                            <Link underline="hover" color="inherit" onClick={()=>navigate(-1)}>
                                 Class
                             </Link>
-                            <Typography color="text.primary">Update</Typography>
+                            <Typography color="text.primary">{isAddClassPage? "Add" : "Edit"}</Typography>
                         </Breadcrumbs>
                     </Box>
                     <Box width={isNonMobileScreens ? "60%" : "90%"} textAlign='center' my="1rem">
@@ -122,7 +126,7 @@ const ClassEdit = (props) => {
                     </section>
                     <Box my="2rem">
                         <Button color="primary" variant="contained">
-                            Upload
+                            {isAddClassPage? "Add class":"Update class"}
                         </Button>
                     </Box>
                 </Box>
