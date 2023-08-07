@@ -1,20 +1,96 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Box, useTheme, useMediaQuery, Button, TextField, Typography, Breadcrumbs, Link,
     Radio, RadioGroup, FormControlLabel, FormControl, FormLabel
 } from "@mui/material";
 import { useDropzone } from 'react-dropzone';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const ClassEdit = (props) => {
     const theme = useTheme();
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
     const location = useLocation();
     const isAddClassPage = location.pathname === "/admin/class/add"
 
-    const files = acceptedFiles.map(file => (
+    const [certificateTitle, setCertificateTitle] = useState('');
+    const [selectedLevel, setSelectedLevel] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [certificateDescription, setCertificateDescription] = useState('');
+
+    const handleCertificateTitleChange = (event) => {
+        setCertificateTitle(event.target.value);
+    };
+
+    const handleLevelChange = (event) => {
+        setSelectedLevel(event.target.value);
+    };
+
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value);
+    };
+
+    const handleCertificateDescriptionChange = (event) => {
+        setCertificateDescription(event.target.value);
+    };
+
+    const handleUploadButtonClick = async () => {
+        // Here you can perform the upload logic
+        // You can access all the user input values and the selected MP4 files here
+        console.log('Certificate Title:', certificateTitle);
+        console.log('Selected Level:', selectedLevel);
+        console.log('Selected Category:', selectedCategory);
+        console.log('Certificate Description:', certificateDescription);
+        console.log('Selected MP4 Files:', mp4Files);
+
+        // Implement your upload logic here
+        const S3_BUCKET = "cloudtech-project-videos";
+        const REGION = "ap-southeast-2";
+
+        const s3 = new S3Client({
+            region: REGION,
+            credentials: {
+                accessKeyId: "AKIAVMSHZ56SJAIIMSVF",
+                secretAccessKey: "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",
+            },
+        });
+
+        // Loop through each selected file and upload
+        for (const mp4File of mp4Files) {
+            const uploadParams = {
+                Bucket: S3_BUCKET,
+                Key: mp4File.name, // Use file name as the key
+                Body: mp4File, // Make sure file is a valid Blob or Buffer
+            };
+
+            const uploadCommand = new PutObjectCommand(uploadParams);
+
+            try {
+                const result = await s3.send(uploadCommand);
+                console.log("File uploaded successfully:", result);
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    };
+
+    // Only accept mp4 videos files
+    const acceptedFileTypes = '.mp4';
+    const [mp4Files, setMp4Files] = useState([]);
+
+    const onDrop = useCallback((acceptedFiles) => {
+        // Filter out files that are not of the desired format (MP4)
+        const mp4Files = acceptedFiles.filter(file => file.type === 'video/mp4');
+        setMp4Files(mp4Files);
+    }, []);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: acceptedFileTypes,
+    });
+
+    const files = mp4Files.map(file => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
         </li>
@@ -50,10 +126,10 @@ const ClassEdit = (props) => {
                             <Link underline="hover" color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link underline="hover" color="inherit" onClick={()=>navigate(-1)}>
+                            <Link underline="hover" color="inherit" onClick={() => navigate(-1)}>
                                 Class
                             </Link>
-                            <Typography color="text.primary">{isAddClassPage? "Add" : "Edit"}</Typography>
+                            <Typography color="text.primary">{isAddClassPage ? "Add" : "Edit"}</Typography>
                         </Breadcrumbs>
                     </Box>
                     <Box width={isNonMobileScreens ? "60%" : "90%"} textAlign='center' my="1rem">
@@ -62,6 +138,7 @@ const ClassEdit = (props) => {
                             label="Certificate title"
                             id="fullWidth"
                             placeholder="Title"
+                            onChange={handleCertificateTitleChange}
                         />
                     </Box>
                     <Box alignSelf="flex-start" m="0.5rem 20%">
@@ -71,6 +148,7 @@ const ClassEdit = (props) => {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
+                                onChange={handleLevelChange}
                             >
                                 <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
                                 <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
@@ -86,6 +164,7 @@ const ClassEdit = (props) => {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
+                                onChange={handleCategoryChange}
                             >
                                 <FormControlLabel value="aws" control={<Radio />} label="AWS" />
                                 <FormControlLabel value="google" control={<Radio />} label="Google" />
@@ -104,6 +183,7 @@ const ClassEdit = (props) => {
                             maxRows={10}
                             placeholder="Description"
                             fullWidth
+                            onChange={handleCertificateDescriptionChange}
                         />
                     </Box>
                     <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
@@ -117,7 +197,7 @@ const ClassEdit = (props) => {
                             },
                         })}>
                             <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
                         </div>
                         <aside>
                             <h4>Files</h4>
@@ -125,8 +205,8 @@ const ClassEdit = (props) => {
                         </aside>
                     </section>
                     <Box my="2rem">
-                        <Button color="primary" variant="contained">
-                            {isAddClassPage? "Add class":"Update class"}
+                        <Button color="primary" variant="contained" onClick={handleUploadButtonClick}>
+                            {isAddClassPage ? "Add class" : "Update class"}
                         </Button>
                     </Box>
                 </Box>
