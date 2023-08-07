@@ -9,16 +9,20 @@ const NeedAuth = (props) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const delay = 1000;
+      if (user === undefined) {
+        const delay = 1000;
   
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, delay);
+        const timer = setTimeout(() => {
+          setLoading(true); // Set loading to true after delay
+        }, delay);
   
-      return () => {
-        clearTimeout(timer);
-      };
-    }, []);
+        return () => {
+          clearTimeout(timer);
+        };
+      } else {
+        setLoading(false); // No delay if user exists
+      }
+    }, [user]);
   
     if (loading) {
       return <Loading />; // Show loading page
