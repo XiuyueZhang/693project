@@ -18,7 +18,10 @@ app.use('/admin', admin);
 
 // Handle 404 request
 app.use((req, res) => {
-  res.status(404).send({error: "Page not found"})
+  res.status(404).send({{
+    data: null,
+    error: "Page not found"
+  }})
 })
 
 // start the Express server
