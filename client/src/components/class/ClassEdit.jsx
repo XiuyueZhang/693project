@@ -84,7 +84,7 @@ const ClassEdit = (props) => {
                         // Redirect to success message page
                         navigate("/admin/success")
                     } else {
-                        console.error("Error uploading file:", response.error)
+                        console.error("Error storing file:", response.error)
                     }
                 } else {
                     // Edit page
