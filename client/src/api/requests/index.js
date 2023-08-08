@@ -78,4 +78,12 @@ export const userRemoveClassRequest = async(userId, classId, token, role) => {
     return response;
 }
 
-
+export const adminAddClassRequest = async(data, token, role) => {
+    const response = await api.post("/admin/class/add", data, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "role": role,
+        },
+    });
+    return response;
+}

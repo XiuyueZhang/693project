@@ -13,6 +13,7 @@ import NeedAuth from './components/widgets/NeedAuth';
 import AdminAddClass from './scenes/admin/AddClass';
 import { getUserInfoRequest } from './api/requests';
 import { setLogin } from './store';
+import SuccessPage from './scenes/admin/SuccessPage';
 
 function App() {
   const mode = useSelector((state) => state.settings.mode);
@@ -53,6 +54,7 @@ function App() {
             />
             <Route path='/admin/class/update/:classId' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
             <Route path='/admin/class/add' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
+            <Route path='/admin/success' element={<NeedAuth><SuccessPage /></NeedAuth>} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

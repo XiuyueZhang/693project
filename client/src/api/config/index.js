@@ -1,19 +1,6 @@
 import axios from "axios";
 import createAxioErrorHandler from "../errorHandler";
 
-// const token = localStorage.getItem("token");
-// // Parse the JSON data
-// const user = JSON.parse(localStorage.getItem("user")); 
-
-// if (token && user) {
-//     api = axios.create({
-//         baseURL: "http://localhost:5050/",
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             "role": user.role,
-//         },
-//     });
-// } else {
 const api = axios.create({
     baseURL: "http://localhost:5050/",
 });

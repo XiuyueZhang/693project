@@ -5,13 +5,16 @@ import {
 } from "@mui/material";
 import { useDropzone } from 'react-dropzone';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { adminAddClassRequest } from '../../api/requests';
 
 const ClassEdit = (props) => {
     const theme = useTheme();
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const location = useLocation();
+    const token = useSelector(state => state.auth.token)
     const isAddClassPage = location.pathname === "/admin/class/add"
 
     const [certificateTitle, setCertificateTitle] = useState('');
@@ -36,15 +39,7 @@ const ClassEdit = (props) => {
     };
 
     const handleUploadButtonClick = async () => {
-        // Here you can perform the upload logic
-        // You can access all the user input values and the selected MP4 files here
-        console.log('Certificate Title:', certificateTitle);
-        console.log('Selected Level:', selectedLevel);
-        console.log('Selected Category:', selectedCategory);
-        console.log('Certificate Description:', certificateDescription);
-        console.log('Selected MP4 Files:', mp4Files);
-
-        // Implement your upload logic here
+        // Upload the video to S3 bucket
         const S3_BUCKET = "cloudtech-project-videos";
         const REGION = "ap-southeast-2";
 
@@ -61,14 +56,30 @@ const ClassEdit = (props) => {
             const uploadParams = {
                 Bucket: S3_BUCKET,
                 Key: mp4File.name, // Use file name as the key
-                Body: mp4File, // Make sure file is a valid Blob or Buffer
+                Body: mp4File,
+                ContentType: 'video/mp4',
             };
 
             const uploadCommand = new PutObjectCommand(uploadParams);
 
             try {
-                const result = await s3.send(uploadCommand);
-                console.log("File uploaded successfully:", result);
+                await s3.send(uploadCommand);
+                const uploadedFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${mp4File.name}`;
+
+                // Set request body
+                const data = {
+                    title: certificateTitle,
+                    level: selectedLevel,
+                    videoPath: uploadedFileUrl,
+                    category: selectedCategory,
+                    description: certificateDescription,
+                    isActive: true
+                } 
+                // Send request to store data to DB
+                const response = await adminAddClassRequest(data, token, "admin")
+
+                // Navigate to success message page
+                // navigate("/admin/success")
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
