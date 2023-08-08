@@ -43,13 +43,7 @@ const ClassEdit = (props) => {
         const S3_BUCKET = "cloudtech-project-videos";
         const REGION = "ap-southeast-2";
 
-        const s3 = new S3Client({
-            region: REGION,
-            credentials: {
-                accessKeyId: "AKIAVMSHZ56SJAIIMSVF",
-                secretAccessKey: "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",
-            },
-        });
+
 
         // Loop through each selected file and upload
         for (const mp4File of mp4Files) {
