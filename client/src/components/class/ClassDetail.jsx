@@ -27,7 +27,6 @@ function ClassDetail(props) {
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
-    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
     const errorMessage = useSelector(state => state.settings.errorMessage)
     const successMessage = useSelector(state => state.settings.successMessage);
     const [show, setShow] = useState(true)
@@ -153,7 +152,7 @@ function ClassDetail(props) {
                 dispatch(setSelectedClass({
                     selectedClass: response.data
                 }));
-            }else{
+            } else {
                 // reponse.error is not null
             }
         };
@@ -166,7 +165,7 @@ function ClassDetail(props) {
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: isSelectedClassEnrolled
             }));
-        } else{
+        } else {
             dispatch(setIsSelectedClassEnrolled({
                 isSelectedClassEnrolled: false
             }));
@@ -226,23 +225,25 @@ function ClassDetail(props) {
 
                                 {show && (
                                     <Box width="60%" display="flex" justifyContent="center" alignItems="center">
-                                            {errorMessage && (
-                                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {errorMessage}
-                                                </Alert>
-                                            )}
-                                            {successMessage && (
-                                                <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
-                                                    {successMessage}
-                                                </Alert>
-                                            )}
+                                        {errorMessage && (
+                                            <Alert severity="error" sx={{ width: '100%', textAlign: 'center' }}>
+                                                {errorMessage}
+                                            </Alert>
+                                        )}
+                                        {successMessage && (
+                                            <Alert severity="success" sx={{ width: '100%', textAlign: 'center' }}>
+                                                {successMessage}
+                                            </Alert>
+                                        )}
                                     </Box>
-                                    )}
+                                )}
 
                                 <CardMedia
-                                    component="img"
+                                    component="video"
+                                    controls  // Add controls attribute to enable video controls
+                                    autoPlay  // Add autoPlay attribute to start playing the video automatically
                                     sx={{ width: "90%", margin: "1rem" }}
-                                    image={imageRootPath + "class01.jpg"}
+                                    src={selectedClass.videoPath}
                                     alt="Class 01 info"
                                 />
                                 <CardContent sx={{ flex: '1 0 auto' }}>
@@ -282,7 +283,7 @@ function ClassDetail(props) {
                                         {user ? (
                                             user.role === "user" ? (
                                                 isSelectedClassEnrolled ? (
-                                                    <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
+                                                    <Button variant="contained" onClick={() => removeClassHandler(classId)}>REMOVE</Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                 )
@@ -310,7 +311,7 @@ function ClassDetail(props) {
                         </Card>
                         <Box>
                             <Card>
-                                {user ? (user.role ? (<UserProfile removeClassHandler={removeClassHandler}/>) : (null)
+                                {user ? (user.role ? (<UserProfile removeClassHandler={removeClassHandler} />) : (null)
                                 ) : null}
                             </Card>
                         </Box>
@@ -371,9 +372,9 @@ function ClassDetail(props) {
                                     )}
 
                                     <CardMedia
-                                        component="img"
+                                        component="video"
                                         sx={{ width: "93%", margin: "1rem" }}
-                                        image={imageRootPath + "class01.jpg"}
+                                        src={selectedClass.videoPath}
                                         alt="Class 01 info"
                                     />
                                     <CardContent sx={{ flex: '1 0 auto', width: "95%", flexWrap: "wrap" }}>
@@ -411,7 +412,7 @@ function ClassDetail(props) {
                                             {user ? (
                                                 user.role === "user" ? (
                                                     isSelectedClassEnrolled ? (
-                                                        <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
+                                                        <Button variant="contained" onClick={() => removeClassHandler(classId)}>REMOVE</Button>
                                                     ) : (
                                                         <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                     )
@@ -499,9 +500,9 @@ function ClassDetail(props) {
                                     )}
 
                                     <CardMedia
-                                        component="img"
+                                        component="video"
                                         sx={{ width: "93%", margin: "1rem" }}
-                                        image={imageRootPath + "class01.jpg"}
+                                        src={selectedClass.videoPath}
                                         alt="Class 01 info"
                                     />
                                     <CardContent sx={{ flex: '1 0 auto', width: "95%", flexWrap: "wrap" }}>
@@ -539,7 +540,7 @@ function ClassDetail(props) {
                                             {user ? (
                                                 user.role === "user" ? (
                                                     isSelectedClassEnrolled ? (
-                                                        <Button variant="contained" onClick={()=>removeClassHandler(classId)}>REMOVE</Button>
+                                                        <Button variant="contained" onClick={() => removeClassHandler(classId)}>REMOVE</Button>
                                                     ) : (
                                                         <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                                     )
