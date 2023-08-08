@@ -43,6 +43,13 @@ const ClassEdit = (props) => {
         const S3_BUCKET = "cloudtech-project-videos";
         const REGION = "ap-southeast-2";
 
+        const s3 = new S3Client({
+            region: REGION,
+            credentials: {
+                accessKeyId: process.env.REACT_APP_AWS_Access_Key_ID,
+                secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+            },
+        });
 
 
         // Loop through each selected file and upload
@@ -60,20 +67,29 @@ const ClassEdit = (props) => {
                 await s3.send(uploadCommand);
                 const uploadedFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${mp4File.name}`;
 
-                // Set request body
-                const data = {
-                    title: certificateTitle,
-                    level: selectedLevel,
-                    videoPath: uploadedFileUrl,
-                    category: selectedCategory,
-                    description: certificateDescription,
-                    isActive: true
-                } 
-                // Send request to store data to DB
-                const response = await adminAddClassRequest(data, token, "admin")
+                if (isAddClassPage) {
+                    // Set request body
+                    const data = {
+                        title: certificateTitle,
+                        level: selectedLevel,
+                        videoPath: uploadedFileUrl,
+                        category: selectedCategory,
+                        description: certificateDescription,
+                        isActive: true
+                    }
+                    // Send request to store data to DB
+                    const response = await adminAddClassRequest(data, token, "admin")
 
-                // Navigate to success message page
-                // navigate("/admin/success")
+                    if (!response.error) {
+                        // Redirect to success message page
+                        navigate("/admin/success")
+                    } else {
+                        console.error("Error uploading file:", response.error)
+                    }
+                } else {
+                    // Edit page
+                }
+
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
