@@ -27,9 +27,15 @@ const addClass = async (req, res) => {
         };
 
         const response = await addClassById(classToInsert);
-        res.send(response).status(204);
+        res.send({
+            data: response,
+            error: null
+        }).status(204);
     } else {
-        res.status(424).send("The class may already exist, please check");
+        res.status(424).send({
+            data: null,
+            error: "The class may already exist, please check."
+        });
     }
 };
 
@@ -55,12 +61,21 @@ const updateClass = async (req, res) => {
             };
             // Update class info
             const response = await updateClassById(query, updates);
-            res.send(response).status(200);
+            res.send({
+                data: response,
+                error: null
+            }).status(200);
         } else {
-            res.status(404).send("Class not found");
+            res.status(404).send({
+                data: null,
+                error: "Class not found."
+            });
         }
     } else {
-        res.status(404).send("Class not found");
+        res.status(404).send({
+            data: null,
+            error: "Class not found."
+        });
     }
 };
 
@@ -92,12 +107,17 @@ const updateClassStatus = async (req, res) => {
                 }
             };
             const response = await updateActiveStatusClassById(query, updates);
-            console.log(response)
-            res.send(response).status(200);
+            res.send({
+                data: response,
+                error: null
+            }).status(200);
         }
 
     } else {
-        res.status(404).send("Class not found");
+        res.status(404).send({
+            data: null,
+            error: "Class not found."
+        });
     }
 };
 
