@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -27,8 +27,7 @@ function ClassDetail(props) {
     const navigate = useNavigate();
     const errorMessage = useSelector(state => state.settings.errorMessage);
     const successMessage = useSelector(state => state.settings.successMessage);
-    const [show, setShow] = useState(true);
-    const videoRef = useRef(null);
+    const [show, setShow] = useState(false);
 
     // On componentDidMount set the timer
     useEffect(() => {
@@ -241,7 +240,6 @@ function ClassDetail(props) {
                                     sx={{ width: "93%", margin: "1rem" }}
                                     src={selectedClass.videoPath}
                                     alt="Class 01 info"
-                                    ref={videoRef}
                                 />
                                 <CardContent sx={{ flex: '1 0 auto' }}>
                                     <Typography
@@ -263,22 +261,22 @@ function ClassDetail(props) {
                                     </Typography>
                                 </CardContent>
                                 <Box m="0.7rem" alignSelf="flex-end" mr="5rem" mb="5rem">
-                                        {user ? (
-                                            user.role === "user" ? (
-                                                isSelectedClassEnrolled ? (
-                                                    <Button variant="contained" onClick={() => removeClassHandler(classId)}>REMOVE</Button>
-                                                ) : (
-                                                    <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
-                                                )
+                                    {user ? (
+                                        user.role === "user" ? (
+                                            isSelectedClassEnrolled ? (
+                                                <Button variant="contained" onClick={() => removeClassHandler(classId)}>REMOVE</Button>
                                             ) : (
-                                                user.role === "admin" && (
-                                                    <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
-                                                )
+                                                <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                             )
                                         ) : (
-                                            <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
-                                        )}
-                                    </Box>
+                                            user.role === "admin" && (
+                                                <Button variant="contained" onClick={editClassHandler}>EDIT</Button>
+                                            )
+                                        )
+                                    ) : (
+                                        <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
+                                    )}
+                                </Box>
                             </Box>
                             <Box width="50%"
                                 mr="1rem"
@@ -355,6 +353,8 @@ function ClassDetail(props) {
 
                                     <CardMedia
                                         component="video"
+                                        controls  // Add controls attribute to enable video controls
+                                        // autoPlay 
                                         sx={{ width: "93%", margin: "1rem" }}
                                         src={selectedClass.videoPath}
                                         alt="Class 01 info"
@@ -469,9 +469,10 @@ function ClassDetail(props) {
                                             )}
                                         </Box>
                                     )}
-
                                     <CardMedia
                                         component="video"
+                                        controls  // Add controls attribute to enable video controls
+                                        // autoPlay 
                                         sx={{ width: "93%", margin: "1rem" }}
                                         src={selectedClass.videoPath}
                                         alt="Class 01 info"
