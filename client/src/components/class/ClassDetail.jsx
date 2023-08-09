@@ -6,7 +6,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Alert from '@mui/material/Alert';
 
-
 import UserProfile from '../users/UserProfile';
 import LoadingBody from '../widgets/LoadingBody';
 import { setSelectedClass, addEnrolledClaases, setIsSelectedClassEnrolled, setEnrolledClaases, setErrorMessage, setSuccessMessage } from '../../store';

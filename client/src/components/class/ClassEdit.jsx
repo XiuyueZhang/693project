@@ -1,21 +1,27 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
 import {
     Box, useTheme, useMediaQuery, Button, TextField, Typography, Breadcrumbs, Link,
     Radio, RadioGroup, FormControlLabel, FormControl, FormLabel
 } from "@mui/material";
-import { useDropzone } from 'react-dropzone';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import Alert from '@mui/material/Alert';
+
 import { adminAddClassRequest } from '../../api/requests';
+import { setErrorMessage } from "../../store"
 
 const ClassEdit = (props) => {
     const theme = useTheme();
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const location = useLocation();
-    const token = useSelector(state => state.auth.token)
+    const token = useSelector(state => state.auth.token);
+    const errorMessage = useSelector(state => state.settings.errorMessage);
     const isAddClassPage = location.pathname === "/admin/class/add"
+    const dispatch = useDispatch();
 
     const [certificateTitle, setCertificateTitle] = useState('');
     const [selectedLevel, setSelectedLevel] = useState('');
@@ -23,10 +29,21 @@ const ClassEdit = (props) => {
     const [certificateDescription, setCertificateDescription] = useState('');
     const [imageFiles, setImageFiles] = useState([]);
     const [mp4Files, setMp4Files] = useState([]);
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        const timeId = setTimeout(() => {
+            // After 3 seconds set the show value to false
+            setShow(false)
+        }, 3000)
+
+        return () => {
+            clearTimeout(timeId)
+        }
+    }, [show]);
 
 
-
-
+    // INPUT HANDLERS
     const handleCertificateTitleChange = (event) => {
         setCertificateTitle(event.target.value);
     };
@@ -43,27 +60,27 @@ const ClassEdit = (props) => {
         setCertificateDescription(event.target.value);
     };
 
+    // files handlers
+    // S3 bucket set up
+    const S3_BUCKET = "cloudtech-project-videos";
+    const REGION = "ap-southeast-2";
+
+    const s3 = new S3Client({
+        region: REGION,
+        credentials: {
+            accessKeyId: process.env.REACT_APP_AWS_Access_Key_ID,
+            secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+        },
+    });
+
     let uploadedVideoFileUrl = "";
     const mp4FileUpload = async () => {
-        // Upload the video to S3 bucket
-        const S3_BUCKET = "cloudtech-project-videos";
-        const REGION = "ap-southeast-2";
-
-        const s3 = new S3Client({
-            region: REGION,
-            credentials: {
-                accessKeyId: process.env.REACT_APP_AWS_Access_Key_ID,
-                secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-            },
-        });
-
-
-        // Loop through each selected file and upload
-        for (const mp4File of mp4Files) {
+        const uploadedMp4File = mp4Files[0]
+        if (uploadedMp4File) {
             const uploadParams = {
                 Bucket: S3_BUCKET,
-                Key: `videos/${mp4File.name}`, // Use file name as the key
-                Body: mp4File,
+                Key: `videos/${uploadedMp4File.name}`, // Use file name as the key
+                Body: uploadedMp4File,
                 ContentType: 'video/mp4',
             };
 
@@ -74,32 +91,19 @@ const ClassEdit = (props) => {
             } catch (error) {
                 console.log("Error uploading video file to S3 bucket")
             }
-            uploadedVideoFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/videos/${mp4File.name}`;
+            uploadedVideoFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/videos/${uploadedMp4File.name}`;
             return uploadedVideoFileUrl;
         }
     }
 
     let uploadedImageFileUrl = "";
     const imgFileUpload = async () => {
-        // Upload the video to S3 bucket
-        const S3_BUCKET = "cloudtech-project-videos";
-        const REGION = "ap-southeast-2";
-
-        const s3 = new S3Client({
-            region: REGION,
-            credentials: {
-                accessKeyId: process.env.REACT_APP_AWS_Access_Key_ID,
-                secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-            },
-        });
-
-
-        // Loop through each selected file and upload
-        for (const imgFile of imageFiles) {
+        const uploadedImgFile = imageFiles[0]
+        if (uploadedImgFile) {
             const uploadParams = {
                 Bucket: S3_BUCKET,
-                Key: `covers/${imgFile.name}`, // Use file name as the key
-                Body: imgFile,
+                Key: `covers/${uploadedImgFile.name}`, // Use file name as the key
+                Body: uploadedImgFile,
                 ContentType: 'image',
             };
 
@@ -110,43 +114,67 @@ const ClassEdit = (props) => {
             } catch (error) {
                 console.log("Error uploading image file to S3 bucket")
             }
-            uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${imgFile.name}`;
+            uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${uploadedImgFile.name}`;
             return uploadedImageFileUrl;
         }
     }
 
     const handleUploadButtonClick = async () => {
-        const videoPathToUpload = await mp4FileUpload()
-        const posterPathToUpload = await imgFileUpload()
+        const videoPathToUpload = await mp4FileUpload();
+        const posterPathToUpload = await imgFileUpload();
 
         if (isAddClassPage) {
-            // Set request body
-            const data = {
-                title: certificateTitle,
-                level: selectedLevel,
-                videoPath: videoPathToUpload,
-                category: selectedCategory,
-                description: certificateDescription,
-                isActive: true,
-                poster: posterPathToUpload
-            }
-            try {
-                // Send request to store data to DB
-                const response = await adminAddClassRequest(data, token, "admin")
-                if (!response.error) {
-                    // Redirect to success message page
-                    navigate("/admin/success")
-                } else {
-                    console.error("Error adding a new class:", response.error)
+            // Validate the fields
+            if (
+                certificateTitle &&
+                selectedLevel &&
+                videoPathToUpload &&
+                selectedCategory &&
+                certificateDescription &&
+                posterPathToUpload
+            ) {
+                // Set request body
+                const data = {
+                    title: certificateTitle,
+                    level: selectedLevel,
+                    videoPath: videoPathToUpload,
+                    category: selectedCategory,
+                    description: certificateDescription,
+                    isActive: true,
+                    poster: posterPathToUpload
+                };
+                try {
+                    // Send request to store data to DB
+                    const response = await adminAddClassRequest(data, token, "admin");
+                    if (!response.error) {
+                        // Redirect to success message page
+                        navigate("/admin/success");
+                    } else {
+                        console.error("Error adding a new class:", response.error);
+                        dispatch(setErrorMessage({
+                            errorMessage: response.error
+                        }))
+                        setShow(true)
+                    }
+                } catch (error) {
+                    console.error("Error adding a new class:", error);
+                    dispatch(setErrorMessage({
+                        errorMessage: error
+                    }))
+                    setShow(true)
                 }
-            } catch(error) {
-                console.error("Error adding a new class:",error)
+            } else {
+                console.error("All fields must be filled");
+                dispatch(setErrorMessage({
+                    errorMessage: "All fields must be filled"
+                }))
+                setShow(true)
             }
-            
         } else {
             // Edit page
         }
-    }
+    };
+
 
     // Only accept mp4 videos files
     const acceptedFileTypes = '.mp4';
@@ -313,6 +341,16 @@ const ClassEdit = (props) => {
                             </ul>
                         </aside>
                     </section>
+
+                    {show && (
+                        <Box width="60%" display="flex" justifyContent="center" alignItems="center">
+                            {errorMessage && (
+                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center', margin:"1rem 0" }}>
+                                    {errorMessage}
+                                </Alert>
+                            )}
+                        </Box>
+                    )}
 
                     <Box my="2rem">
                         <Button color="primary" variant="contained" onClick={handleUploadButtonClick}>

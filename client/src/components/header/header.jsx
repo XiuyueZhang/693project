@@ -54,12 +54,7 @@ const Header = () => {
 
 
     const handleLogout = () => {
-        if (user.role === "admin") {
-            dispatch(setLogout());
-            dispatch(resetClasses());
-            navigate("/")
-        } else {
-            dispatch(setLogout());
+        dispatch(setLogout());
             dispatch(resetClasses());
             dispatch(setErrorMessage({
                 errorMessage: ""
@@ -67,6 +62,8 @@ const Header = () => {
             dispatch(setSuccessMessage({
                 successMessage: ""
             }))
+        if (user.role === "admin") {
+            navigate("/")
         }
     }
 
