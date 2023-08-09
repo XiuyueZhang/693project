@@ -33,6 +33,7 @@ export default function UserProfile(props) {
                     }))
                 } else {
                     // response.error is not null
+                    console.error(response.error)
                 }
             }
         }

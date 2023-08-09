@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function ClassItem(props) {
     const { classItem } = props
     const navigate = useNavigate();
-    const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
+    const imageRootPath = `${process.env.PUBLIC_URL}/images/cover/`;
 
     const navigateToClassDetail = () => {
         const classId = classItem._id;
@@ -19,10 +19,11 @@ function ClassItem(props) {
                    onClick={navigateToClassDetail}>
                 <CardActionArea>
                     <CardMedia
-                        component="img"
-                        height="140"
-                        image={imageRootPath + "class02.jpg"}
-                        alt="green iguana"
+                        component="video"
+                        poster={imageRootPath + classItem.poster}
+                        height="200"
+                        src={classItem.videoPath}
+                        alt={classItem.title}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
