@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, useMediaQuery, CardContent, CardMedia, Card } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from 'react-router-dom';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Alert from '@mui/material/Alert';
+
 
 import UserProfile from '../users/UserProfile';
 import LoadingBody from '../widgets/LoadingBody';
@@ -27,9 +25,10 @@ function ClassDetail(props) {
     const dispatch = useDispatch();
     const { classId } = useParams();
     const navigate = useNavigate();
-    const errorMessage = useSelector(state => state.settings.errorMessage)
+    const errorMessage = useSelector(state => state.settings.errorMessage);
     const successMessage = useSelector(state => state.settings.successMessage);
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(true);
+    const videoRef = useRef(null);
 
     // On componentDidMount set the timer
     useEffect(() => {
@@ -172,6 +171,7 @@ function ClassDetail(props) {
         }
     }, [enrolledClassList, selectedClass, dispatch]);
 
+
     if (!selectedClass) {
         // If selectedClass is null (still loading), show loading page
         return <LoadingBody />;
@@ -206,10 +206,6 @@ function ClassDetail(props) {
                     >
                         <Card sx={{
                             display: 'flex', width: "60%",
-                            pr: "1rem",
-                            "&:hover": {
-                                cursor: "pointer",
-                            },
                         }}
                         >
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -242,11 +238,12 @@ function ClassDetail(props) {
                                     component="video"
                                     controls  // Add controls attribute to enable video controls
                                     // autoPlay 
-                                    sx={{ width: "90%", margin: "1rem" }}
+                                    sx={{ width: "93%", margin: "1rem" }}
                                     src={selectedClass.videoPath}
                                     alt="Class 01 info"
+                                    ref={videoRef}
                                 />
-                                <CardContent sx={{flex: '1 0 auto'}}>
+                                <CardContent sx={{ flex: '1 0 auto' }}>
                                     <Typography
                                         component="div"
                                         variant="h5"
@@ -265,21 +262,7 @@ function ClassDetail(props) {
                                         Cloud: {selectedClass.category}
                                     </Typography>
                                 </CardContent>
-                                <Box width="90%"
-                                    sx={{ display: 'flex', justifyContent: 'space-between', pl: 1, pb: 1 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                                        <IconButton aria-label="previous">
-                                            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                                        </IconButton>
-                                        <IconButton aria-label="play/pause">
-                                            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                                        </IconButton>
-                                        <IconButton aria-label="next">
-                                            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                                        </IconButton>
-                                    </Box>
-
-                                    <Box m="0.7rem">
+                                <Box m="0.7rem" alignSelf="flex-end" mr="5rem" mb="5rem">
                                         {user ? (
                                             user.role === "user" ? (
                                                 isSelectedClassEnrolled ? (
@@ -296,12 +279,11 @@ function ClassDetail(props) {
                                             <Button variant="contained" onClick={enrolClassHandler}>ENROLL</Button>
                                         )}
                                     </Box>
-                                </Box>
                             </Box>
-                            <Box width="55%"
+                            <Box width="50%"
                                 mr="1rem"
                             >
-                                <Typography variant="subtitle1" color="text.primary" component="div" sx={{ marginTop: "10rem" }}>
+                                <Typography variant="subtitle1" color="text.primary" component="div" sx={{ marginTop: "5rem" }}>
                                     Description:
                                 </Typography>
                                 <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -396,18 +378,7 @@ function ClassDetail(props) {
                                         </Typography>
                                     </CardContent>
                                     <Box width="90%"
-                                        sx={{ display: 'flex', justifyContent: 'space-between', pl: 1, pb: 1 }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                                            <IconButton aria-label="previous">
-                                                {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                                            </IconButton>
-                                            <IconButton aria-label="play/pause">
-                                                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                                            </IconButton>
-                                            <IconButton aria-label="next">
-                                                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                                            </IconButton>
-                                        </Box>
+                                        sx={{ display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
                                         <Box m="0.7rem">
                                             {user ? (
                                                 user.role === "user" ? (
@@ -524,18 +495,7 @@ function ClassDetail(props) {
                                         </Typography>
                                     </CardContent>
                                     <Box width="90%"
-                                        sx={{ display: 'flex', justifyContent: 'space-between', pl: 1, pb: 1 }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-                                            <IconButton aria-label="previous">
-                                                {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-                                            </IconButton>
-                                            <IconButton aria-label="play/pause">
-                                                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-                                            </IconButton>
-                                            <IconButton aria-label="next">
-                                                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-                                            </IconButton>
-                                        </Box>
+                                        sx={{ display: 'flex', justifyContent: 'flex-end', pl: 1, pb: 1 }}>
                                         <Box m="0.7rem">
                                             {user ? (
                                                 user.role === "user" ? (
