@@ -19,15 +19,15 @@ export default function UserProfile(props) {
     const enrolledClassList = useSelector(state => state.classes.enrolledClaases);
     const dispatch = useDispatch();
     const imageRootPath = `${process.env.PUBLIC_URL}/images/`;
-    const {removeClassHandler} = props
-   
-    useEffect(()=>{
-        
+    const { removeClassHandler } = props
+
+    useEffect(() => {
+
         // get enrolled classes, and set into redux
-        const enrolledClassedList = async() => {
-            if(user.role === "user"){
+        const enrolledClassedList = async () => {
+            if (user.role === "user") {
                 const response = await getEnrolledClassInfoRequest(user.id, token, "user");
-                if(!response.error){
+                if (!response.error) {
                     dispatch(setEnrolledClaases({
                         enrolledClasses: response.data
                     }))
@@ -36,19 +36,28 @@ export default function UserProfile(props) {
                 }
             }
         }
-        enrolledClassedList();                        
-    },[dispatch, user, token])
+        enrolledClassedList();
+    }, [dispatch, user, token])
 
 
     return (
         <Card sx={{ minWidth: 275, padding: "2rem" }}>
-            <CardMedia
-                component="img"
-                sx={{ width: "100px", margin: "1rem" }}
-                image={imageRootPath + "p1.jpeg"}
-                alt="Class 01 info"
-            />
 
+            {user.role === "admin" ? (
+                <CardMedia
+                    component="img"
+                    sx={{ width: "100px", margin: "1rem" }}
+                    image={imageRootPath + "admin.jpg"}
+                    alt="admin image"
+                />
+            ) : (
+                <CardMedia
+                    component="img"
+                    sx={{ width: "100px", margin: "1rem" }}
+                    image={imageRootPath + "user.jpg"}
+                    alt="admin image"
+                />
+            )}
             <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     <StarIcon fontSize='10px' /><StarIcon fontSize='10px' /><StarIcon fontSize='10px' />
@@ -67,24 +76,24 @@ export default function UserProfile(props) {
             <CardContent>
                 {enrolledClassList && (
                     <Box>
-                        {user.role === "admin"? (
+                        {user.role === "admin" ? (
                             null
                         ) : (
                             <CardActions>
-                                <Button variant="outlined" size="small" sx={{margin:"0.2rem"}}>Enrolled classes</Button>
+                                <Button variant="outlined" size="small" sx={{ margin: "0.2rem" }}>Enrolled classes</Button>
                             </CardActions>
                         )}
-                        
+
                         <Typography variant="h5" component="div">
-                            {enrolledClassList.map(classItem => <EnrolledClassItem 
+                            {enrolledClassList.map(classItem => <EnrolledClassItem
                                 key={classItem._id}
                                 classItem={classItem}
                                 removeClassHandler={removeClassHandler}
-                                />)}
+                            />)}
                         </Typography>
                     </Box>
                 )}
-        </CardContent>
+            </CardContent>
         </Card>
     );
 }

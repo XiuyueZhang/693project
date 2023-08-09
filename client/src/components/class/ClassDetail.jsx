@@ -241,12 +241,12 @@ function ClassDetail(props) {
                                 <CardMedia
                                     component="video"
                                     controls  // Add controls attribute to enable video controls
-                                    autoPlay  // Add autoPlay attribute to start playing the video automatically
+                                    // autoPlay 
                                     sx={{ width: "90%", margin: "1rem" }}
                                     src={selectedClass.videoPath}
                                     alt="Class 01 info"
                                 />
-                                <CardContent sx={{ flex: '1 0 auto' }}>
+                                <CardContent sx={{flex: '1 0 auto'}}>
                                     <Typography
                                         component="div"
                                         variant="h5"
@@ -298,8 +298,8 @@ function ClassDetail(props) {
                                     </Box>
                                 </Box>
                             </Box>
-                            <Box
-                                m="1rem"
+                            <Box width="55%"
+                                mr="1rem"
                             >
                                 <Typography variant="subtitle1" color="text.primary" component="div" sx={{ marginTop: "10rem" }}>
                                     Description:
