@@ -235,7 +235,7 @@ function ClassDetail(props) {
 
                                 <CardMedia
                                     component="video"
-                                    controls  // Add controls attribute to enable video controls
+                                    { ...(user !== null && { controls: true }) }
                                     // autoPlay 
                                     sx={{ width: "93%", margin: "1rem" }}
                                     src={selectedClass.videoPath}
@@ -353,7 +353,7 @@ function ClassDetail(props) {
 
                                     <CardMedia
                                         component="video"
-                                        controls  // Add controls attribute to enable video controls
+                                        { ...(user !== null && { controls: true }) }
                                         // autoPlay 
                                         sx={{ width: "93%", margin: "1rem" }}
                                         src={selectedClass.videoPath}
@@ -471,7 +471,7 @@ function ClassDetail(props) {
                                     )}
                                     <CardMedia
                                         component="video"
-                                        controls  // Add controls attribute to enable video controls
+                                        { ...(user !== null && { controls: true }) }
                                         // autoPlay 
                                         sx={{ width: "93%", margin: "1rem" }}
                                         src={selectedClass.videoPath}
