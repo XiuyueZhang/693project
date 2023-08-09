@@ -21,6 +21,11 @@ const ClassEdit = (props) => {
     const [selectedLevel, setSelectedLevel] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [certificateDescription, setCertificateDescription] = useState('');
+    const [imageFiles, setImageFiles] = useState([]);
+    const [mp4Files, setMp4Files] = useState([]);
+
+
+
 
     const handleCertificateTitleChange = (event) => {
         setCertificateTitle(event.target.value);
@@ -38,7 +43,8 @@ const ClassEdit = (props) => {
         setCertificateDescription(event.target.value);
     };
 
-    const handleUploadButtonClick = async () => {
+    let uploadedVideoFileUrl = "";
+    const mp4FileUpload = async () => {
         // Upload the video to S3 bucket
         const S3_BUCKET = "cloudtech-project-videos";
         const REGION = "ap-southeast-2";
@@ -56,7 +62,7 @@ const ClassEdit = (props) => {
         for (const mp4File of mp4Files) {
             const uploadParams = {
                 Bucket: S3_BUCKET,
-                Key: mp4File.name, // Use file name as the key
+                Key: `videos/${mp4File.name}`, // Use file name as the key
                 Body: mp4File,
                 ContentType: 'video/mp4',
             };
@@ -65,40 +71,85 @@ const ClassEdit = (props) => {
 
             try {
                 await s3.send(uploadCommand);
-                const uploadedFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${mp4File.name}`;
-
-                if (isAddClassPage) {
-                    // Set request body
-                    const data = {
-                        title: certificateTitle,
-                        level: selectedLevel,
-                        videoPath: uploadedFileUrl,
-                        category: selectedCategory,
-                        description: certificateDescription,
-                        isActive: true
-                    }
-                    // Send request to store data to DB
-                    const response = await adminAddClassRequest(data, token, "admin")
-
-                    if (!response.error) {
-                        // Redirect to success message page
-                        navigate("/admin/success")
-                    } else {
-                        console.error("Error storing file:", response.error)
-                    }
-                } else {
-                    // Edit page
-                }
-
             } catch (error) {
-                console.error("Error uploading file:", error);
+                console.log("Error uploading video file to S3 bucket")
             }
+            uploadedVideoFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/videos/${mp4File.name}`;
+            return uploadedVideoFileUrl;
         }
-    };
+    }
+
+    let uploadedImageFileUrl = "";
+    const imgFileUpload = async () => {
+        // Upload the video to S3 bucket
+        const S3_BUCKET = "cloudtech-project-videos";
+        const REGION = "ap-southeast-2";
+
+        const s3 = new S3Client({
+            region: REGION,
+            credentials: {
+                accessKeyId: process.env.REACT_APP_AWS_Access_Key_ID,
+                secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+            },
+        });
+
+
+        // Loop through each selected file and upload
+        for (const imgFile of imageFiles) {
+            const uploadParams = {
+                Bucket: S3_BUCKET,
+                Key: `covers/${imgFile.name}`, // Use file name as the key
+                Body: imgFile,
+                ContentType: 'image',
+            };
+
+            const uploadCommand = new PutObjectCommand(uploadParams);
+
+            try {
+                await s3.send(uploadCommand);
+            } catch (error) {
+                console.log("Error uploading image file to S3 bucket")
+            }
+            uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${imgFile.name}`;
+            return uploadedImageFileUrl;
+        }
+    }
+
+    const handleUploadButtonClick = async () => {
+        const videoPathToUpload = await mp4FileUpload()
+        const posterPathToUpload = await imgFileUpload()
+
+        if (isAddClassPage) {
+            // Set request body
+            const data = {
+                title: certificateTitle,
+                level: selectedLevel,
+                videoPath: videoPathToUpload,
+                category: selectedCategory,
+                description: certificateDescription,
+                isActive: true,
+                poster: posterPathToUpload
+            }
+            try {
+                // Send request to store data to DB
+                const response = await adminAddClassRequest(data, token, "admin")
+                if (!response.error) {
+                    // Redirect to success message page
+                    navigate("/admin/success")
+                } else {
+                    console.error("Error adding a new class:", response.error)
+                }
+            } catch(error) {
+                console.error("Error adding a new class:",error)
+            }
+            
+        } else {
+            // Edit page
+        }
+    }
 
     // Only accept mp4 videos files
     const acceptedFileTypes = '.mp4';
-    const [mp4Files, setMp4Files] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
         // Filter out files that are not of the desired format (MP4)
@@ -116,6 +167,19 @@ const ClassEdit = (props) => {
             {file.path} - {file.size} bytes
         </li>
     ));
+
+    // Only accept image files
+    const onImageDrop = useCallback((acceptedFiles) => {
+        // Filter out files that are not of the desired format (images)
+        const imageFiles = acceptedFiles.filter(file => file.type.startsWith('image/'));
+        setImageFiles(imageFiles);
+    }, []);
+
+    const { getRootProps: getRootPropsForImage, getInputProps: getInputPropsForImage } = useDropzone({
+        onDrop: onImageDrop,
+        accept: 'image/*', // Accept all image formats
+    });
+
 
     return (
         <Box>
@@ -221,10 +285,35 @@ const ClassEdit = (props) => {
                             <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
                         </div>
                         <aside>
-                            <h4>Files</h4>
+                            <h4>Video Files</h4>
                             <ul>{files}</ul>
                         </aside>
                     </section>
+                    <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
+                        <div {...getRootPropsForImage({
+                            style: {
+                                width: '100%',
+                                border: '2px dashed #ccc',
+                                padding: '20px',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                            },
+                        })}>
+                            <input {...getInputPropsForImage()} />
+                            <p>Drag 'n' drop an image file here, or click to select an image file</p>
+                        </div>
+                        <aside>
+                            <h4>Image Files</h4>
+                            <ul>
+                                {imageFiles.map(file => (
+                                    <li key={file.path}>
+                                        {file.path} - {file.size} bytes
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
+                    </section>
+
                     <Box my="2rem">
                         <Button color="primary" variant="contained" onClick={handleUploadButtonClick}>
                             {isAddClassPage ? "Add class" : "Update class"}

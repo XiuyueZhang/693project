@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 function ClassItem(props) {
     const { classItem } = props
     const navigate = useNavigate();
-    const imageRootPath = `${process.env.PUBLIC_URL}/images/cover/`;
-
+    const imageRootPath = "https://cloudtech-project-videos.s3.ap-southeast-2.amazonaws.com/covers/";
+    
     const navigateToClassDetail = () => {
         const classId = classItem._id;
         navigate(`/classes/${classId}`)

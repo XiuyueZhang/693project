@@ -11,6 +11,7 @@ const addClass = async (req, res) => {
         category,
         description,
         isActive,
+        poster,
     } = req.body;
 
     // Check if class exists
@@ -24,6 +25,7 @@ const addClass = async (req, res) => {
             category,
             description,
             isActive,
+            poster
         };
 
         const response = await addClassById(classToInsert);
@@ -57,6 +59,7 @@ const updateClass = async (req, res) => {
                     category: req.body.category,
                     description: req.body.description,
                     isActive: req.body.isActive,
+                    poster: req.body.poster
                 }
             };
             // Update class info
