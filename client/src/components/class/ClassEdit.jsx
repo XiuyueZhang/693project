@@ -27,7 +27,7 @@ const ClassEdit = (props) => {
     const [selectedLevel, setSelectedLevel] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [certificateDescription, setCertificateDescription] = useState('');
-    const [imageFiles, setImageFiles] = useState([]);
+    // const [imageFiles, setImageFiles] = useState([]);
     const [mp4Files, setMp4Files] = useState([]);
     const [show, setShow] = useState(false);
 
@@ -96,32 +96,32 @@ const ClassEdit = (props) => {
         }
     }
 
-    let uploadedImageFileUrl = "";
-    const imgFileUpload = async () => {
-        const uploadedImgFile = imageFiles[0]
-        if (uploadedImgFile) {
-            const uploadParams = {
-                Bucket: S3_BUCKET,
-                Key: `covers/${uploadedImgFile.name}`, // Use file name as the key
-                Body: uploadedImgFile,
-                ContentType: 'image',
-            };
+    // let uploadedImageFileUrl = "";
+    // const imgFileUpload = async () => {
+    //     const uploadedImgFile = imageFiles[0]
+    //     if (uploadedImgFile) {
+    //         const uploadParams = {
+    //             Bucket: S3_BUCKET,
+    //             Key: `covers/${uploadedImgFile.name}`, // Use file name as the key
+    //             Body: uploadedImgFile,
+    //             ContentType: 'image',
+    //         };
 
-            const uploadCommand = new PutObjectCommand(uploadParams);
+    //         const uploadCommand = new PutObjectCommand(uploadParams);
 
-            try {
-                await s3.send(uploadCommand);
-            } catch (error) {
-                console.log("Error uploading image file to S3 bucket")
-            }
-            uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${uploadedImgFile.name}`;
-            return uploadedImageFileUrl;
-        }
-    }
+    //         try {
+    //             await s3.send(uploadCommand);
+    //         } catch (error) {
+    //             console.log("Error uploading image file to S3 bucket")
+    //         }
+    //         uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${uploadedImgFile.name}`;
+    //         return uploadedImageFileUrl;
+    //     }
+    // }
 
     const handleUploadButtonClick = async () => {
         const videoPathToUpload = await mp4FileUpload();
-        const posterPathToUpload = await imgFileUpload();
+        // const posterPathToUpload = await imgFileUpload();
 
         if (isAddClassPage) {
             // Validate the fields
@@ -130,8 +130,8 @@ const ClassEdit = (props) => {
                 selectedLevel &&
                 videoPathToUpload &&
                 selectedCategory &&
-                certificateDescription &&
-                posterPathToUpload
+                certificateDescription
+                // posterPathToUpload
             ) {
                 // Set request body
                 const data = {
@@ -141,7 +141,7 @@ const ClassEdit = (props) => {
                     category: selectedCategory,
                     description: certificateDescription,
                     isActive: true,
-                    poster: posterPathToUpload
+                    // poster: posterPathToUpload
                 };
                 try {
                     // Send request to store data to DB
@@ -196,17 +196,17 @@ const ClassEdit = (props) => {
         </li>
     ));
 
-    // Only accept image files
-    const onImageDrop = useCallback((acceptedFiles) => {
-        // Filter out files that are not of the desired format (images)
-        const imageFiles = acceptedFiles.filter(file => file.type.startsWith('image/'));
-        setImageFiles(imageFiles);
-    }, []);
+    // // Only accept image files
+    // const onImageDrop = useCallback((acceptedFiles) => {
+    //     // Filter out files that are not of the desired format (images)
+    //     const imageFiles = acceptedFiles.filter(file => file.type.startsWith('image/'));
+    //     setImageFiles(imageFiles);
+    // }, []);
 
-    const { getRootProps: getRootPropsForImage, getInputProps: getInputPropsForImage } = useDropzone({
-        onDrop: onImageDrop,
-        accept: 'image/*', // Accept all image formats
-    });
+    // const { getRootProps: getRootPropsForImage, getInputProps: getInputPropsForImage } = useDropzone({
+    //     onDrop: onImageDrop,
+    //     accept: 'image/*', // Accept all image formats
+    // });
 
 
     return (
@@ -317,7 +317,7 @@ const ClassEdit = (props) => {
                             <ul>{files}</ul>
                         </aside>
                     </section>
-                    <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
+                    {/* <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
                         <div {...getRootPropsForImage({
                             style: {
                                 width: '100%',
@@ -340,7 +340,7 @@ const ClassEdit = (props) => {
                                 ))}
                             </ul>
                         </aside>
-                    </section>
+                    </section> */}
 
                     {show && (
                         <Box width="60%" display="flex" justifyContent="center" alignItems="center">

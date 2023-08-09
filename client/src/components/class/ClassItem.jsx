@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function ClassItem(props) {
     const { classItem } = props
     const navigate = useNavigate();
-    const imageRootPath = "https://cloudtech-project-videos.s3.ap-southeast-2.amazonaws.com/covers/";
+    // const imageRootPath = "https://cloudtech-project-videos.s3.ap-southeast-2.amazonaws.com/covers/";
     
     const navigateToClassDetail = () => {
         const classId = classItem._id;
@@ -20,7 +20,7 @@ function ClassItem(props) {
                 <CardActionArea>
                     <CardMedia
                         component="video"
-                        poster={imageRootPath + classItem.poster}
+                        // poster={imageRootPath + classItem.poster}
                         height="200"
                         src={classItem.videoPath}
                         alt={classItem.title}
