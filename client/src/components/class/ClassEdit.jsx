@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Alert from '@mui/material/Alert';
 
-import { adminAddClassRequest } from '../../api/requests';
+import { adminAddClassRequest, adminUpdateClassRequest } from '../../api/requests';
 import { setErrorMessage } from "../../store"
 
 const ClassEdit = (props) => {
@@ -20,6 +20,7 @@ const ClassEdit = (props) => {
     const location = useLocation();
     const token = useSelector(state => state.auth.token);
     const errorMessage = useSelector(state => state.settings.errorMessage);
+    const selectedClass = useSelector(state => state.classes.selectedClass);
     const isAddClassPage = location.pathname === "/admin/class/add"
     const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const ClassEdit = (props) => {
         const timeId = setTimeout(() => {
             // After 3 seconds set the show value to false
             setShow(false)
+            setErrorMessage("")
         }, 3000)
 
         return () => {
@@ -79,7 +81,7 @@ const ClassEdit = (props) => {
         if (uploadedMp4File) {
             const uploadParams = {
                 Bucket: S3_BUCKET,
-                Key: `videos/${uploadedMp4File.name}`, // Use file name as the key
+                Key: `videos/${uploadedMp4File.name}`,
                 Body: uploadedMp4File,
                 ContentType: 'video/mp4',
             };
@@ -120,10 +122,11 @@ const ClassEdit = (props) => {
     // }
 
     const handleUploadButtonClick = async () => {
-        const videoPathToUpload = await mp4FileUpload();
-        // const posterPathToUpload = await imgFileUpload();
 
         if (isAddClassPage) {
+            const videoPathToUpload = await mp4FileUpload();
+            // const posterPathToUpload = await imgFileUpload();
+
             // Validate the fields
             if (
                 certificateTitle &&
@@ -172,6 +175,64 @@ const ClassEdit = (props) => {
             }
         } else {
             // Edit page
+            if(!certificateTitle){
+                setCertificateTitle(selectedClass.title)
+            }
+            if(!selectedLevel){
+                setSelectedLevel(selectedClass.level)
+            }
+            if(!selectedCategory){
+                setSelectedCategory(selectedClass.category)
+            }
+            if(!certificateDescription){
+                setCertificateDescription(selectedClass.description)
+            }
+            let videoPathToUpload = "";
+            if(!uploadedVideoFileUrl){
+                videoPathToUpload = selectedClass.videoPath;
+            } else{
+                videoPathToUpload = await mp4FileUpload();
+            }
+
+            if (
+                certificateTitle &&
+                selectedLevel &&
+                videoPathToUpload &&
+                selectedCategory &&
+                certificateDescription
+                // posterPathToUpload
+            ) {
+                // Set request body
+                const data = {
+                    title: certificateTitle,
+                    level: selectedLevel,
+                    videoPath: videoPathToUpload,
+                    category: selectedCategory,
+                    description: certificateDescription,
+                    isActive: true,
+                    // poster: posterPathToUpload
+                };
+                try {
+                    // Send request to store data to DB
+                    const response = await adminUpdateClassRequest(data, token, "admin", selectedClass._id);
+                    if (!response.error) {
+                        // Redirect to success message page
+                        navigate("/admin/success");
+                    } else {
+                        console.error("Error adding a new class:", response.error);
+                        dispatch(setErrorMessage({
+                            errorMessage: response.error
+                        }))
+                        setShow(true)
+                    }
+                } catch (error) {
+                    console.error("Error adding a new class:", error);
+                    dispatch(setErrorMessage({
+                        errorMessage: error.message
+                    }))
+                    setShow(true)
+                }
+            }
         }
     };
 
@@ -245,6 +306,7 @@ const ClassEdit = (props) => {
                             <Typography color="text.primary">{isAddClassPage ? "Add" : "Edit"}</Typography>
                         </Breadcrumbs>
                     </Box>
+
                     <Box width={isNonMobileScreens ? "60%" : "90%"} textAlign='center' my="1rem">
                         <TextField
                             fullWidth
@@ -252,6 +314,7 @@ const ClassEdit = (props) => {
                             id="fullWidth"
                             placeholder="Title"
                             onChange={handleCertificateTitleChange}
+                            defaultValue={selectedClass.title}
                         />
                     </Box>
                     <Box alignSelf="flex-start" m="0.5rem 20%">
@@ -262,6 +325,7 @@ const ClassEdit = (props) => {
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
                                 onChange={handleLevelChange}
+                                defaultValue={selectedClass.level}
                             >
                                 <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
                                 <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
@@ -278,6 +342,7 @@ const ClassEdit = (props) => {
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
                                 onChange={handleCategoryChange}
+                                defaultValue={selectedClass.category}
                             >
                                 <FormControlLabel value="aws" control={<Radio />} label="AWS" />
                                 <FormControlLabel value="google" control={<Radio />} label="Google" />
@@ -297,6 +362,7 @@ const ClassEdit = (props) => {
                             placeholder="Description"
                             fullWidth
                             onChange={handleCertificateDescriptionChange}
+                            defaultValue={selectedClass.description}
                         />
                     </Box>
                     <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
@@ -314,7 +380,16 @@ const ClassEdit = (props) => {
                         </div>
                         <aside>
                             <h4>Video Files</h4>
-                            <ul>{files}</ul>
+                            {isAddClassPage ? (
+                                <ul>{files}</ul>
+                            ) : (
+                                files.length > 0 ? (
+                                    <ul>{files}</ul>
+                                ) : (
+                                    <div>{selectedClass.videoPath}</div>
+                                )
+                            )}
+
                         </aside>
                     </section>
                     {/* <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
@@ -345,7 +420,7 @@ const ClassEdit = (props) => {
                     {show && (
                         <Box width="60%" display="flex" justifyContent="center" alignItems="center">
                             {errorMessage && (
-                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center', margin:"1rem 0" }}>
+                                <Alert severity="error" sx={{ width: '100%', textAlign: 'center', margin: "1rem 0" }}>
                                     {errorMessage}
                                 </Alert>
                             )}
