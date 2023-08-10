@@ -13,8 +13,6 @@ import Alert from '@mui/material/Alert';
 import { adminAddClassRequest, adminUpdateClassRequest } from '../../api/requests';
 import { setErrorMessage } from "../../store"
 
-const ACCEPTED_FILE_TYPE = {"video/*":[".mp4"]};
-
 const ClassEdit = (props) => {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -215,8 +213,7 @@ const ClassEdit = (props) => {
                 console.error('Error uploading video:', error);
             }
 
-            console.log(certificateTitleToUpload, selectedLevelToUpload, videoPathToUpload, selectedCategoryToUpload, certificateDescriptionToUpload)
-
+        
             if (
                 certificateTitleToUpload &&
                 selectedLevelToUpload &&
@@ -272,11 +269,11 @@ const ClassEdit = (props) => {
         accept: ACCEPTED_FILE_TYPE,
     });
 
-    // const files = mp4Files.map(file => (
-    //     <li key={file.path}>
-    //         {file.path} - {file.size} bytes
-    //     </li>
-    // ));
+    const files = mp4Files.map(file => (
+        <li key={file.path}>
+            {file.path} - {file.size} bytes
+        </li>
+    ));
 
     // // Only accept image files
     // const onImageDrop = useCallback((acceptedFiles) => {
@@ -330,6 +327,7 @@ const ClassEdit = (props) => {
                     name="row-radio-buttons-group"
                     onChange={handleLevelChange}
                     defaultValue={isAddClassPage ? '' : selectedClass.level}
+                    value={selectedLevel}
                 >
                     <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
                     <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
@@ -350,6 +348,7 @@ const ClassEdit = (props) => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
                     onChange={handleCategoryChange}
+                    value={selectedCategory}
                     defaultValue={isAddClassPage ? '' : selectedClass.category}
                 >
                     <FormControlLabel value="aws" control={<Radio />} label="AWS" />
