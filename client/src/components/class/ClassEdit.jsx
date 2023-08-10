@@ -31,6 +31,7 @@ const ClassEdit = (props) => {
     // const [imageFiles, setImageFiles] = useState([]);
     const [mp4Files, setMp4Files] = useState([]);
     const [show, setShow] = useState(false);
+    const ACCEPTED_FILE_TYPE = { "video/*": [".mp4"] };
 
     useEffect(() => {
         const timeId = setTimeout(() => {
@@ -127,10 +128,10 @@ const ClassEdit = (props) => {
     const handleUploadButtonClick = async () => {
         if (isAddClassPage) {
             const videoPathToUpload = await mp4FileUpload();
-            if(!videoPathToUpload){
+            if (!videoPathToUpload) {
                 setErrorMessage("Video upload failed. Please try again.")
                 setShow(true);
-            }else if (
+            } else if (
                 certificateTitle &&
                 selectedLevel &&
                 videoPathToUpload &&
@@ -177,40 +178,58 @@ const ClassEdit = (props) => {
             }
         } else {
             // Edit page
-            if(!certificateTitle){
-                setCertificateTitle(selectedClass.title)
+            let certificateTitleToUpload = ""
+            if (certificateTitle==="") {
+                certificateTitleToUpload = selectedClass.title
+            }else{
+                certificateTitleToUpload = certificateTitle
             }
-            if(!selectedLevel){
-                setSelectedLevel(selectedClass.level)
+            let selectedLevelToUpload = ""
+            if (selectedLevel==="") {
+                selectedLevelToUpload = selectedClass.level
+            }else{
+                selectedLevelToUpload = selectedLevel
             }
-            if(!selectedCategory){
-                setSelectedCategory(selectedClass.category)
+            let selectedCategoryToUpload = ""
+            if (selectedCategory==="") {
+                selectedCategoryToUpload = selectedClass.category
+            }else{
+                selectedCategoryToUpload = selectedCategory
             }
-            if(!certificateDescription){
-                setCertificateDescription(selectedClass.description)
+            let certificateDescriptionToUpload = ""
+            if (certificateDescription==="") {
+                certificateDescriptionToUpload = selectedClass.description
+            }else{
+                certificateDescriptionToUpload = certificateDescription
             }
-            let videoPathToUpload = "";
-            if(!uploadedVideoFileUrl){
-                videoPathToUpload = selectedClass.videoPath;
-            } else{
+            let videoPathToUpload = ""
+            try {
+                console.log("wozhixingle")
                 videoPathToUpload = await mp4FileUpload();
+                if(!videoPathToUpload){
+                    videoPathToUpload = selectedClass.videoPath;
+                }
+            } catch (error) {
+                console.error('Error uploading video:', error);
             }
 
+            console.log(certificateTitleToUpload, selectedLevelToUpload, videoPathToUpload, selectedCategoryToUpload, certificateDescriptionToUpload)
+
             if (
-                certificateTitle &&
-                selectedLevel &&
+                certificateTitleToUpload &&
+                selectedLevelToUpload &&
                 videoPathToUpload &&
-                selectedCategory &&
-                certificateDescription
+                selectedCategoryToUpload &&
+                certificateDescriptionToUpload
                 // posterPathToUpload
             ) {
                 // Set request body
                 const data = {
-                    title: certificateTitle,
-                    level: selectedLevel,
+                    title: certificateTitleToUpload,
+                    level: selectedLevelToUpload,
                     videoPath: videoPathToUpload,
-                    category: selectedCategory,
-                    description: certificateDescription,
+                    category: selectedCategoryToUpload,
+                    description: certificateDescriptionToUpload,
                     isActive: true,
                     // poster: posterPathToUpload
                 };
@@ -240,8 +259,6 @@ const ClassEdit = (props) => {
 
 
     // Only accept mp4 videos files
-    const acceptedFileTypes = '.mp4';
-
     const onDrop = useCallback((acceptedFiles) => {
         // Filter out files that are not of the desired format (MP4)
         const mp4Files = acceptedFiles.filter(file => file.type === 'video/mp4');
@@ -250,7 +267,7 @@ const ClassEdit = (props) => {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: acceptedFileTypes,
+        accept: ACCEPTED_FILE_TYPE,
     });
 
     const files = mp4Files.map(file => (
