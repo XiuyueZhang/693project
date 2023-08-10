@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-
+import styles from './classEdit.module.scss'
 import {
     Box, useTheme, useMediaQuery, Button, TextField, Typography, Breadcrumbs, Link,
     Radio, RadioGroup, FormControlLabel, FormControl, FormLabel
@@ -12,6 +12,8 @@ import Alert from '@mui/material/Alert';
 
 import { adminAddClassRequest, adminUpdateClassRequest } from '../../api/requests';
 import { setErrorMessage } from "../../store"
+
+const ACCEPTED_FILE_TYPE = {"video/*":[".mp4"]};
 
 const ClassEdit = (props) => {
     const theme = useTheme();
@@ -33,6 +35,7 @@ const ClassEdit = (props) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
+        // TODO: if the selectedClass is null, a new api call should be made
         const timeId = setTimeout(() => {
             // After 3 seconds set the show value to false
             setShow(false)
@@ -239,9 +242,7 @@ const ClassEdit = (props) => {
     };
 
 
-    // Only accept mp4 videos files
-    const acceptedFileTypes = '.mp4';
-
+    // // Only accept mp4 videos files
     const onDrop = useCallback((acceptedFiles) => {
         // Filter out files that are not of the desired format (MP4)
         const mp4Files = acceptedFiles.filter(file => file.type === 'video/mp4');
@@ -250,14 +251,14 @@ const ClassEdit = (props) => {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: acceptedFileTypes,
+        accept: ACCEPTED_FILE_TYPE,
     });
 
-    const files = mp4Files.map(file => (
-        <li key={file.path}>
-            {file.path} - {file.size} bytes
-        </li>
-    ));
+    // const files = mp4Files.map(file => (
+    //     <li key={file.path}>
+    //         {file.path} - {file.size} bytes
+    //     </li>
+    // ));
 
     // // Only accept image files
     // const onImageDrop = useCallback((acceptedFiles) => {
@@ -271,153 +272,186 @@ const ClassEdit = (props) => {
     //     accept: 'image/*', // Accept all image formats
     // });
 
+    const renderInnerHeader = (
+        <Box m="2rem 20%">
+            <Breadcrumbs aria-label="breadcrumb">
+                <Link underline="hover" color="inherit" href="/">
+                    Home
+                </Link>
+                <Link underline="hover" color="inherit" onClick={() => navigate(-1)}>
+                    Class
+                </Link>
+                <Typography color="text.primary">{isAddClassPage ? "Add" : "Edit"}</Typography>
+            </Breadcrumbs>
+        </Box>
+    )
+
+    const renderCertificateTitle = (
+        <Box alignSelf="flex-start" m="0.5rem 20%"
+            // should use media to control the size
+            // should put the properties into scss
+            width={isNonMobileScreens ? "60%" : "70%"} textAlign='center' my="1rem">
+            <TextField
+                fullWidth
+                label="Certificate title"
+                id="fullWidth"
+                placeholder="Title"
+                onChange={handleCertificateTitleChange}
+                defaultValue={isAddClassPage ? '' : selectedClass.title}
+            />
+        </Box>
+    )
+
+    const renderLevelRadioGroup = (
+        <Box alignSelf="flex-start" m="0.5rem 20%">
+            <FormControl>
+                <FormLabel id="level-radio-group">Level</FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={handleLevelChange}
+                    defaultValue={isAddClassPage ? '' : selectedClass.level}
+                >
+                    <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
+                    <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
+                    <FormControlLabel value="Fundamental" control={<Radio />} label="Fundamental" />
+                    <FormControlLabel value="Expert" control={<Radio />} label="Expert" />
+                </RadioGroup>
+            </FormControl>
+        </Box>
+    )
+
+
+    const renderCategoryRadioGroup = (
+        <Box alignSelf="flex-start" m="0.5rem 20%">
+            <FormControl>
+                <FormLabel id="category-radio-group">Category</FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    onChange={handleCategoryChange}
+                    defaultValue={isAddClassPage ? '' : selectedClass.category}
+                >
+                    <FormControlLabel value="aws" control={<Radio />} label="AWS" />
+                    <FormControlLabel value="google" control={<Radio />} label="Google" />
+                    <FormControlLabel value="azure" control={<Radio />} label="Azure" />
+                    <FormControlLabel value="ibm" control={<Radio />} label="IBM" />
+                </RadioGroup>
+            </FormControl>
+        </Box>
+    )
+    const renderCertificateDescription = (
+        <Box width={isNonMobileScreens ? "60%" : "70%"} textAlign='center' my="1rem"
+        alignSelf="flex-start" m="0.5rem 20%">
+            <TextField
+                id="outlined-multiline-flexible"
+                label="Certificate description"
+                multiline
+                minRows={4}
+                maxRows={10}
+                placeholder="Description"
+                fullWidth
+                onChange={handleCertificateDescriptionChange}
+                defaultValue={isAddClassPage ? '' : selectedClass.description}
+            />
+        </Box>
+    )
+
+    const isShowingVideoPath = (files) => {
+        if (isAddClassPage) {
+            return (<ul>{files}</ul>)
+        } else {
+            if (files && files.length > 0) {
+                return (<ul>{files}</ul>)
+            } else {
+                return (<div>{selectedClass.videoPath}</div>)
+            }
+        }
+    }
+
+    const renderMp4Dropzone = (
+        <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf:"flex-start", margin:"0.5rem 20%" }}>
+        <div   {...getRootProps({
+            style: {
+                width: '100%',
+                border: '2px dashed #ccc',
+                padding: '20px',
+                textAlign: 'center',
+                cursor: 'pointer',
+            },
+        })}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
+        </div>
+        <aside>
+            <h4>Video Files</h4>
+            {isShowingVideoPath()}
+        </aside>
+    </section>
+    )
+
+    // const renderImgDropZone = (
+    //     <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%" }}>
+    //     <div {...getRootPropsForImage({
+    //         style: {
+    //             width: '100%',
+    //             border: '2px dashed #ccc',
+    //             padding: '20px',
+    //             textAlign: 'center',
+    //             cursor: 'pointer',
+    //         },
+    //     })}>
+    //         <input {...getInputPropsForImage()} />
+    //         <p>Drag 'n' drop an image file here, or click to select an image file</p>
+    //     </div>
+    //     <aside>
+    //         <h4>Image Files</h4>
+    //         <ul>
+    //             {imageFiles.map(file => (
+    //                 <li key={file.path}>
+    //                     {file.path} - {file.size} bytes
+    //                 </li>
+    //             ))}
+    //         </ul>
+    //     </aside>
+    // </section>
+    // )
+
+
+
+    if (selectedClass === null) {
+        return <div> No classes</div>
+    }
 
     return (
-        <Box>
+        <Box
+            className={styles.outside}
+        >
             <Box
-                width="100%"
-                backgroundColor={theme.palette.background.alt}
-                p="1rem 3%"
-                textAlign="center"
-            >
-            </Box>
-
-            <Box
-                width="90%"
-                p="2rem"
-                m="2rem auto"
+                width={isNonMobileScreens ? "90%" : "90%"}
+                p={isNonMobileScreens ? "0.5rem" : "2rem"}
                 borderRadius="1.5rem"
                 backgroundColor={theme.palette.background.alt}
                 minWidth="350px"
             >
                 <Box
+                    backgroundColor={theme.palette.background.alt}
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
                     flexDirection="column"
                     flexWrap="wrap"
+                    width="100%"
                 >
-                    <Box alignSelf="flex-start" m="2rem 20%">
-                        <Breadcrumbs aria-label="breadcrumb">
-                            <Link underline="hover" color="inherit" href="/">
-                                Home
-                            </Link>
-                            <Link underline="hover" color="inherit" onClick={() => navigate(-1)}>
-                                Class
-                            </Link>
-                            <Typography color="text.primary">{isAddClassPage ? "Add" : "Edit"}</Typography>
-                        </Breadcrumbs>
-                    </Box>
-
-                    <Box width={isNonMobileScreens ? "60%" : "90%"} textAlign='center' my="1rem">
-                        <TextField
-                            fullWidth
-                            label="Certificate title"
-                            id="fullWidth"
-                            placeholder="Title"
-                            onChange={handleCertificateTitleChange}
-                            defaultValue={isAddClassPage ? '' : selectedClass.title}
-                        />
-                    </Box>
-                    <Box alignSelf="flex-start" m="0.5rem 20%">
-                        <FormControl>
-                            <FormLabel id="level-radio-group">Level</FormLabel>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                onChange={handleLevelChange}
-                                defaultValue={isAddClassPage ? '' : selectedClass.level}
-                            >
-                                <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
-                                <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
-                                <FormControlLabel value="Fundamental" control={<Radio />} label="Fundamental" />
-                                <FormControlLabel value="Expert" control={<Radio />} label="Expert" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Box>
-                    <Box alignSelf="flex-start" m="0.5rem 20%">
-                        <FormControl>
-                            <FormLabel id="category-radio-group">Category</FormLabel>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                onChange={handleCategoryChange}
-                                defaultValue={isAddClassPage ? '' : selectedClass.category}
-                            >
-                                <FormControlLabel value="aws" control={<Radio />} label="AWS" />
-                                <FormControlLabel value="google" control={<Radio />} label="Google" />
-                                <FormControlLabel value="azure" control={<Radio />} label="Azure" />
-                                <FormControlLabel value="ibm" control={<Radio />} label="IBM" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Box>
-
-                    <Box width={isNonMobileScreens ? "60%" : "90%"} textAlign='center' my="1rem">
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Certificate description"
-                            multiline
-                            minRows={4}
-                            maxRows={10}
-                            placeholder="Description"
-                            fullWidth
-                            onChange={handleCertificateDescriptionChange}
-                            defaultValue={isAddClassPage ? '' : selectedClass.description}
-                        />
-                    </Box>
-                    <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
-                        <div {...getRootProps({
-                            style: {
-                                width: '100%',
-                                border: '2px dashed #ccc',
-                                padding: '20px',
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                            },
-                        })}>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
-                        </div>
-                        <aside>
-                            <h4>Video Files</h4>
-                            {isAddClassPage ? (
-                                <ul>{files}</ul>
-                            ) : (
-                                files.length > 0 ? (
-                                    <ul>{files}</ul>
-                                ) : (
-                                    <div>{selectedClass.videoPath}</div>
-                                )
-                            )}
-
-                        </aside>
-                    </section>
-                    {/* <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>
-                        <div {...getRootPropsForImage({
-                            style: {
-                                width: '100%',
-                                border: '2px dashed #ccc',
-                                padding: '20px',
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                            },
-                        })}>
-                            <input {...getInputPropsForImage()} />
-                            <p>Drag 'n' drop an image file here, or click to select an image file</p>
-                        </div>
-                        <aside>
-                            <h4>Image Files</h4>
-                            <ul>
-                                {imageFiles.map(file => (
-                                    <li key={file.path}>
-                                        {file.path} - {file.size} bytes
-                                    </li>
-                                ))}
-                            </ul>
-                        </aside>
-                    </section> */}
+                    {renderInnerHeader}
+                    {renderCertificateTitle}
+                    {renderLevelRadioGroup}
+                    {renderCategoryRadioGroup}
+                    {renderCertificateDescription}
+                    {renderMp4Dropzone}
+                    {/* {renderImgDropZone} */}
 
                     {show && (
                         <Box width="60%" display="flex" justifyContent="center" alignItems="center">
