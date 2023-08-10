@@ -90,11 +90,14 @@ const ClassEdit = (props) => {
 
             try {
                 await s3.send(uploadCommand);
+                uploadedVideoFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/videos/${uploadedMp4File.name}`;
+                return uploadedVideoFileUrl;
             } catch (error) {
-                console.log("Error uploading video file to S3 bucket")
+                console.log("Error uploading video file to S3 bucket:", error)
             }
-            uploadedVideoFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/videos/${uploadedMp4File.name}`;
-            return uploadedVideoFileUrl;
+        } else {
+            setErrorMessage("No video file uploaded.");
+            setShow(true);
         }
     }
 
@@ -122,13 +125,12 @@ const ClassEdit = (props) => {
     // }
 
     const handleUploadButtonClick = async () => {
-
         if (isAddClassPage) {
             const videoPathToUpload = await mp4FileUpload();
-            // const posterPathToUpload = await imgFileUpload();
-
-            // Validate the fields
-            if (
+            if(!videoPathToUpload){
+                setErrorMessage("Video upload failed. Please try again.")
+                setShow(true);
+            }else if (
                 certificateTitle &&
                 selectedLevel &&
                 videoPathToUpload &&
@@ -314,7 +316,7 @@ const ClassEdit = (props) => {
                             id="fullWidth"
                             placeholder="Title"
                             onChange={handleCertificateTitleChange}
-                            defaultValue={selectedClass.title}
+                            defaultValue={isAddClassPage ? '' : selectedClass.title}
                         />
                     </Box>
                     <Box alignSelf="flex-start" m="0.5rem 20%">
@@ -325,7 +327,7 @@ const ClassEdit = (props) => {
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
                                 onChange={handleLevelChange}
-                                defaultValue={selectedClass.level}
+                                defaultValue={isAddClassPage ? '' : selectedClass.level}
                             >
                                 <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
                                 <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
@@ -342,7 +344,7 @@ const ClassEdit = (props) => {
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
                                 onChange={handleCategoryChange}
-                                defaultValue={selectedClass.category}
+                                defaultValue={isAddClassPage ? '' : selectedClass.category}
                             >
                                 <FormControlLabel value="aws" control={<Radio />} label="AWS" />
                                 <FormControlLabel value="google" control={<Radio />} label="Google" />
@@ -362,7 +364,7 @@ const ClassEdit = (props) => {
                             placeholder="Description"
                             fullWidth
                             onChange={handleCertificateDescriptionChange}
-                            defaultValue={selectedClass.description}
+                            defaultValue={isAddClassPage ? '' : selectedClass.description}
                         />
                     </Box>
                     <section className="container" style={{ width: isNonMobileScreens ? "60%" : "90%" }}>

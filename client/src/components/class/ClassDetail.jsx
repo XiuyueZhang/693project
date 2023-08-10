@@ -324,13 +324,13 @@ function ClassDetail(props) {
                             }}
                             >
                                 <Box sx={{ display: 'flex', flexDirection: 'column', flexWrap: "wrap", width: "99%", alignItems: "center" }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: "99%", flexWrap: "wrap" }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: "99%", flexWrap: "wrap" }} onClick={() => navigate("/")}>
                                         <IconButton sx={{ marginLeft: "1.1rem" }}>
                                             <ArrowBackIosIcon />
                                         </IconButton>
                                         <Typography variant="subtitle1" color="text.secondary" component="div"
                                             sx={{ margin: "1.1rem" }}
-                                            onClick={() => navigate("/")}>
+                                            >
                                             Back to class List
                                         </Typography>
                                     </Box>
@@ -443,13 +443,13 @@ function ClassDetail(props) {
                             }}
                             >
                                 <Box sx={{ display: 'flex', flexDirection: 'column', flexWrap: "wrap", width: "99%", alignItems: "center" }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: "99%", flexWrap: "wrap" }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: "99%", flexWrap: "wrap" }} onClick={() => navigate("/")}>
                                         <IconButton sx={{ marginLeft: "1.1rem" }}>
                                             <ArrowBackIosIcon />
                                         </IconButton>
                                         <Typography variant="subtitle1" color="text.secondary" component="div"
                                             sx={{ margin: "1.1rem" }}
-                                            onClick={() => navigate("/")}>
+                                            >
                                             Back to class List
                                         </Typography>
                                     </Box>
