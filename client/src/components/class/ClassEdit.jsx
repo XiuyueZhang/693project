@@ -46,6 +46,17 @@ const ClassEdit = (props) => {
         }
     }, [show]);
 
+    let files = ""
+    useEffect(()=>{
+        if(!isAddClassPage){
+            setSelectedLevel(selectedClass.level)
+            setCertificateDescription(selectedClass.description)
+            setCertificateTitle(selectedClass.title)
+            setSelectedCategory(selectedClass.category)
+            files = selectedClass.videoPath
+        }
+    }, [isAddClassPage])
+
 
     // INPUT HANDLERS
     const handleCertificateTitleChange = (event) => {
@@ -179,30 +190,6 @@ const ClassEdit = (props) => {
             }
         } else {
             // Edit page
-            let certificateTitleToUpload = ""
-            if (certificateTitle==="") {
-                certificateTitleToUpload = selectedClass.title
-            }else{
-                certificateTitleToUpload = certificateTitle
-            }
-            let selectedLevelToUpload = ""
-            if (selectedLevel==="") {
-                selectedLevelToUpload = selectedClass.level
-            }else{
-                selectedLevelToUpload = selectedLevel
-            }
-            let selectedCategoryToUpload = ""
-            if (selectedCategory==="") {
-                selectedCategoryToUpload = selectedClass.category
-            }else{
-                selectedCategoryToUpload = selectedCategory
-            }
-            let certificateDescriptionToUpload = ""
-            if (certificateDescription==="") {
-                certificateDescriptionToUpload = selectedClass.description
-            }else{
-                certificateDescriptionToUpload = certificateDescription
-            }
             let videoPathToUpload = ""
             try {
                 videoPathToUpload = await mp4FileUpload();
@@ -215,20 +202,20 @@ const ClassEdit = (props) => {
 
         
             if (
-                certificateTitleToUpload &&
-                selectedLevelToUpload &&
+                certificateTitle &&
+                selectedLevel &&
                 videoPathToUpload &&
-                selectedCategoryToUpload &&
-                certificateDescriptionToUpload
+                selectedCategory &&
+                certificateDescription
                 // posterPathToUpload
             ) {
                 // Set request body
                 const data = {
-                    title: certificateTitleToUpload,
-                    level: selectedLevelToUpload,
+                    title: certificateTitle,
+                    level: selectedLevel,
                     videoPath: videoPathToUpload,
-                    category: selectedCategoryToUpload,
-                    description: certificateDescriptionToUpload,
+                    category: selectedCategory,
+                    description: certificateDescription,
                     isActive: true,
                     // poster: posterPathToUpload
                 };
@@ -269,7 +256,7 @@ const ClassEdit = (props) => {
         accept: ACCEPTED_FILE_TYPE,
     });
 
-    const files = mp4Files.map(file => (
+    files = mp4Files.map(file => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
         </li>
@@ -312,7 +299,7 @@ const ClassEdit = (props) => {
                 id="fullWidth"
                 placeholder="Title"
                 onChange={handleCertificateTitleChange}
-                defaultValue={isAddClassPage ? '' : selectedClass.title}
+                value={selectedClass.title}
             />
         </Box>
     )
@@ -326,7 +313,6 @@ const ClassEdit = (props) => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
                     onChange={handleLevelChange}
-                    defaultValue={isAddClassPage ? '' : selectedClass.level}
                     value={selectedLevel}
                 >
                     <FormControlLabel value="Associate" control={<Radio />} label="Associate" />
@@ -349,7 +335,6 @@ const ClassEdit = (props) => {
                     name="row-radio-buttons-group"
                     onChange={handleCategoryChange}
                     value={selectedCategory}
-                    defaultValue={isAddClassPage ? '' : selectedClass.category}
                 >
                     <FormControlLabel value="aws" control={<Radio />} label="AWS" />
                     <FormControlLabel value="google" control={<Radio />} label="Google" />
@@ -371,22 +356,10 @@ const ClassEdit = (props) => {
                 placeholder="Description"
                 fullWidth
                 onChange={handleCertificateDescriptionChange}
-                defaultValue={isAddClassPage ? '' : selectedClass.description}
+                value={certificateDescription}
             />
         </Box>
     )
-
-    const isShowingVideoPath = (files) => {
-        if (isAddClassPage) {
-            return (<ul>{files}</ul>)
-        } else {
-            if (files && files.length > 0) {
-                return (<ul>{files}</ul>)
-            } else {
-                return (<div>{selectedClass.videoPath}</div>)
-            }
-        }
-    }
 
     const renderMp4Dropzone = (
         <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf:"flex-start", margin:"0.5rem 20%" }}>
@@ -404,7 +377,7 @@ const ClassEdit = (props) => {
         </div>
         <aside>
             <h4>Video Files</h4>
-            {isShowingVideoPath()}
+            <ul>{files}</ul>
         </aside>
     </section>
     )
