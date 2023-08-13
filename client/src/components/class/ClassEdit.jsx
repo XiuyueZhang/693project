@@ -28,6 +28,7 @@ const ClassEdit = (props) => {
     const [selectedLevel, setSelectedLevel] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [certificateDescription, setCertificateDescription] = useState('');
+    const [filesUploaded, setFilesUploaded] = useState('');
     // const [imageFiles, setImageFiles] = useState([]);
     const [mp4Files, setMp4Files] = useState([]);
     const [show, setShow] = useState(false);
@@ -46,16 +47,16 @@ const ClassEdit = (props) => {
         }
     }, [show]);
 
-    let files = ""
-    useEffect(()=>{
-        if(!isAddClassPage){
+
+    useEffect(() => {
+        if (!isAddClassPage) {
             setSelectedLevel(selectedClass.level)
             setCertificateDescription(selectedClass.description)
             setCertificateTitle(selectedClass.title)
             setSelectedCategory(selectedClass.category)
-            files = selectedClass.videoPath
+            setFilesUploaded(selectedClass.videoPath)
         }
-    }, [isAddClassPage])
+    }, [isAddClassPage, selectedClass])
 
 
     // INPUT HANDLERS
@@ -193,14 +194,18 @@ const ClassEdit = (props) => {
             let videoPathToUpload = ""
             try {
                 videoPathToUpload = await mp4FileUpload();
-                if(!videoPathToUpload){
+                if (!videoPathToUpload) {
                     videoPathToUpload = selectedClass.videoPath;
                 }
             } catch (error) {
                 console.error('Error uploading video:', error);
+                dispatch(setErrorMessage({
+                    errorMessage: error.message
+                }))
+                setShow(true)
             }
 
-        
+
             if (
                 certificateTitle &&
                 selectedLevel &&
@@ -256,11 +261,13 @@ const ClassEdit = (props) => {
         accept: ACCEPTED_FILE_TYPE,
     });
 
-    files = mp4Files.map(file => (
+    const files = mp4Files.map(file => (
         <li key={file.path}>
             {file.path} - {file.size} bytes
         </li>
     ));
+
+
 
     // // Only accept image files
     // const onImageDrop = useCallback((acceptedFiles) => {
@@ -299,7 +306,7 @@ const ClassEdit = (props) => {
                 id="fullWidth"
                 placeholder="Title"
                 onChange={handleCertificateTitleChange}
-                value={selectedClass.title}
+                value={certificateTitle}
             />
         </Box>
     )
@@ -346,7 +353,7 @@ const ClassEdit = (props) => {
     )
     const renderCertificateDescription = (
         <Box width={isNonMobileScreens ? "60%" : "70%"} textAlign='center' my="1rem"
-        alignSelf="flex-start" m="0.5rem 20%">
+            alignSelf="flex-start" m="0.5rem 20%">
             <TextField
                 id="outlined-multiline-flexible"
                 label="Certificate description"
@@ -362,24 +369,24 @@ const ClassEdit = (props) => {
     )
 
     const renderMp4Dropzone = (
-        <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf:"flex-start", margin:"0.5rem 20%" }}>
-        <div   {...getRootProps({
-            style: {
-                width: '100%',
-                border: '2px dashed #ccc',
-                padding: '20px',
-                textAlign: 'center',
-                cursor: 'pointer',
-            },
-        })}>
-            <input {...getInputProps()} />
-            <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
-        </div>
-        <aside>
-            <h4>Video Files</h4>
-            <ul>{files}</ul>
-        </aside>
-    </section>
+        <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf: "flex-start", margin: "0.5rem 20%" }}>
+            <div   {...getRootProps({
+                style: {
+                    width: '100%',
+                    border: '2px dashed #ccc',
+                    padding: '20px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                },
+            })}>
+                <input {...getInputProps()} />
+                <p>Drag 'n' drop one mp4 file here, or click to select mp4 file</p>
+            </div>
+            <aside>
+                <h4>Video Files</h4>
+                <ul>{files.length > 0 ? files : filesUploaded}</ul>
+            </aside>
+        </section>
     )
 
     // const renderImgDropZone = (
