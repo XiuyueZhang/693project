@@ -8,7 +8,6 @@ function ClassItem(props) {
     const { classItem } = props
     const navigate = useNavigate();
     const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
-    // const imageRootPath = "https://cloudtech-project-videos.s3.ap-southeast-2.amazonaws.com/covers/";
     
     const navigateToClassDetail = () => {
         const classId = classItem._id;
@@ -22,7 +21,7 @@ function ClassItem(props) {
                 <CardActionArea>
                     <CardMedia
                         component="video"
-                        // poster={imageRootPath + classItem.poster}
+                        poster={classItem.poster}
                         height="200"
                         src={classItem.videoPath}
                         alt={classItem.title}
