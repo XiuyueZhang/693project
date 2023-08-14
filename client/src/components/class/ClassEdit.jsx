@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import styles from './classEdit.module.scss'
@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import Alert from '@mui/material/Alert';
 
-import { adminAddClassRequest, adminUpdateClassRequest } from '../../api/requests';
-import { setErrorMessage } from "../../store"
+import { adminAddClassRequest, adminUpdateClassRequest, getSelectedClassInfoRequest } from '../../api/requests';
+import { setErrorMessage, setSelectedClass } from "../../store"
 
 const ClassEdit = (props) => {
     const theme = useTheme();
@@ -23,6 +23,7 @@ const ClassEdit = (props) => {
     const selectedClass = useSelector(state => state.classes.selectedClass);
     const isAddClassPage = location.pathname === "/admin/class/add"
     const dispatch = useDispatch();
+    const { classId } = useParams();
 
     const [certificateTitle, setCertificateTitle] = useState('');
     const [selectedLevel, setSelectedLevel] = useState('');
@@ -35,7 +36,6 @@ const ClassEdit = (props) => {
     const ACCEPTED_FILE_TYPE = { "video/*": [".mp4"] };
 
     useEffect(() => {
-        // TODO: if the selectedClass is null, a new api call should be made
         const timeId = setTimeout(() => {
             // After 3 seconds set the show value to false
             setShow(false)
@@ -47,9 +47,47 @@ const ClassEdit = (props) => {
         }
     }, [show]);
 
+    const getSelectedClassCall = useCallback(async () => {
+        try {
+            const response = await getSelectedClassInfoRequest(classId);
+            return response;
+        } catch (error) {
+            // Handle the error here
+            throw error; // Rethrow the error to be caught in the useEffect
+        }
+    }, [classId]);
 
     useEffect(() => {
-        if (!isAddClassPage) {
+        const fetchData = async () => {
+            if (!isAddClassPage && selectedClass === null) {
+                try {
+                    // Fetch class info
+                    const response = await getSelectedClassCall();
+                    if (!response.error) {
+                        dispatch(setSelectedClass({
+                            selectedClass: response.data
+                        }));
+                    } else {
+                        dispatch(setErrorMessage({
+                            errorMessage: response.error
+                        }))
+                        setShow(true);
+                    }
+                } catch (error) {
+                    dispatch(setErrorMessage({
+                        errorMessage: error.message
+                    }))
+                    setShow(true);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isAddClassPage, selectedClass, dispatch, getSelectedClassCall]);
+
+
+    useEffect(() => {
+        if (!isAddClassPage && selectedClass) {
             setSelectedLevel(selectedClass.level)
             setCertificateDescription(selectedClass.description)
             setCertificateTitle(selectedClass.title)
@@ -416,11 +454,7 @@ const ClassEdit = (props) => {
     // </section>
     // )
 
-
-
-    if (selectedClass === null) {
-        return <div> No classes</div>
-    }
+  
 
     return (
         <Box
