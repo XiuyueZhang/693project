@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import styles from './classEdit.module.scss'
+// import styles from './classEdit.module.scss'
 import {
     Box, useTheme, useMediaQuery, Button, TextField, Typography, Breadcrumbs, Link,
     Radio, RadioGroup, FormControlLabel, FormControl, FormLabel
@@ -429,7 +429,7 @@ const ClassEdit = (props) => {
     )
 
     const renderMp4Dropzone = (
-        <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf: "flex-start", margin: "0.5rem 20%" }}>
+        <section style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf: "flex-start", margin: "0.5rem 20%" }}>
             <div   {...getRootProps({
                 style: {
                     width: '100%',
@@ -450,7 +450,7 @@ const ClassEdit = (props) => {
     )
 
     const renderImgDropZone = (
-        <section className="container" style={{ width: isNonMobileScreens ? "60%" : "70%" }}>
+        <section style={{ width: isNonMobileScreens ? "60%" : "70%", alignSelf: "flex-start", margin: "0.5rem 20%"  }}>
             <div {...getRootPropsForImage({
                 style: {
                     width: '100%',
@@ -483,24 +483,28 @@ const ClassEdit = (props) => {
 
 
     return (
-        <Box
-            className={styles.outside}
-        >
+        <Box>
             <Box
-                width={isNonMobileScreens ? "90%" : "90%"}
-                p={isNonMobileScreens ? "0.5rem" : "2rem"}
+                width="100%"
+                backgroundColor={theme.palette.background.alt}
+                p="1rem 3%"
+                textAlign="center"
+            >
+            </Box>
+
+            <Box
+                width={isNonMobileScreens ? "90%" : "60%"}
+                p="2rem"
+                m="2rem auto"
                 borderRadius="1.5rem"
                 backgroundColor={theme.palette.background.alt}
                 minWidth="350px"
             >
                 <Box
-                    backgroundColor={theme.palette.background.alt}
                     display="flex"
-                    justifyContent="center"
+                    justifyContent="space-evenly"
                     alignItems="center"
-                    flexDirection="column"
                     flexWrap="wrap"
-                    width="100%"
                 >
                     {renderInnerHeader}
                     {renderCertificateTitle}
