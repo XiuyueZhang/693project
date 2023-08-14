@@ -1,11 +1,13 @@
 import React from 'react';
-import { Box, Button, Typography, CardActionArea, CardActions, CardContent, CardMedia, Card } from "@mui/material";
+import { Box, Button, Typography, CardActionArea, 
+    CardActions, CardContent, CardMedia, Card,useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 
 function ClassItem(props) {
     const { classItem } = props
     const navigate = useNavigate();
+    const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     // const imageRootPath = "https://cloudtech-project-videos.s3.ap-southeast-2.amazonaws.com/covers/";
     
     const navigateToClassDetail = () => {
@@ -14,7 +16,7 @@ function ClassItem(props) {
     }
 
     return (
-        <Box sx={{ width: "530px", padding: "1rem", }}>
+        <Box sx={{ width: isNonMobileScreens? "530px":"350px", padding: "1rem", }}>
             <Card sx={{ maxWidth: 345 }}
                    onClick={navigateToClassDetail}>
                 <CardActionArea>

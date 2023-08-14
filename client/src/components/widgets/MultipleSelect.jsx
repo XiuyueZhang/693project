@@ -3,12 +3,14 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import { useMediaQuery } from "@mui/material";
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from "react-redux";
 import { setfilteredClassList } from "../../store"
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+
 const MenuProps = {
     PaperProps: {
         style: {
@@ -28,6 +30,7 @@ const clouds = [
 export default function MultipleSelect() {
     const [cloudName, setCloudName] = React.useState([]);
     const dispatch = useDispatch();
+    const isNonMobileScreens = useMediaQuery("(min-width: 600px)");
     const allClasses = useSelector((state) => state.classes.allClasses);
     let searchingResult = [];
 
@@ -66,7 +69,7 @@ export default function MultipleSelect() {
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, width: isNonMobileScreens?"300px":"250px" }}>
                 <InputLabel id="demo-multiple-name-label">Cloud</InputLabel>
                 <Select
                     labelId="demo-multiple-name-label"
