@@ -93,6 +93,12 @@ const ClassEdit = (props) => {
             setCertificateTitle(selectedClass.title)
             setSelectedCategory(selectedClass.category)
             setFilesUploaded(selectedClass.videoPath)
+        } else {
+            setSelectedLevel("")
+            setCertificateDescription("")
+            setCertificateTitle("")
+            setSelectedCategory("")
+            setFilesUploaded("")
         }
     }, [isAddClassPage, selectedClass])
 
@@ -454,7 +460,7 @@ const ClassEdit = (props) => {
     // </section>
     // )
 
-  
+
 
     return (
         <Box
