@@ -1,7 +1,7 @@
 import './App.css';
 import Home from './scenes/homepage';
 import Login from './scenes/login';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -57,6 +57,7 @@ function App() {
             <Route path='/admin/class/add' element={<NeedAuth><AdminAddClass /></NeedAuth>} />
             <Route path='/admin/success' element={<NeedAuth><SuccessPage /></NeedAuth>} />
             <Route path='/admin/error' element={<NeedAuth><ErrorPage /></NeedAuth>} />
+            <Route path='*' element={<Navigate to="/" />}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
