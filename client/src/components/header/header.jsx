@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -39,8 +40,8 @@ const Header = () => {
     const isHomepage = (location.pathname === "/") ? true : false;
 
     const theme = useTheme();
-    const neutralLight = theme.palette.neutral.light;
-    const dark = theme.palette.neutral.dark;
+    const neutralLight = theme.palette.neutral?.light;
+    const dark = theme.palette.neutral?.dark;
     const background = theme.palette.background.default;
     const primaryLight = theme.palette.primary.light;
     const alt = theme.palette.background.alt;
