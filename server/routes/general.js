@@ -1,5 +1,5 @@
 import express from "express";
-import { homepageFeed, userRegister, userLogin, classDetail }  from "../controller/general.js";
+import { homepageFeed, userRegister, userLogin, classDetail, healthCheck }  from "../controller/general.js";
 import { getUserInfo } from "../controller/auth.js";
 
 const router = express.Router();
@@ -15,5 +15,8 @@ router.post("/login", userLogin)
 // CLASSES VIEW
 // router.get("/classlist", classList)
 router.get("/classes/:classId", classDetail)
+
+// Health check
+router.get("/healthcheck", healthCheck)
 
 export default router;

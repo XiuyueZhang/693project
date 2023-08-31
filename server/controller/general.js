@@ -4,6 +4,9 @@ import jwt from "jsonwebtoken";
 
 import { getClassList, getClassDetail, findUser, insertUser } from "../persistence/general.js"
 
+const healthCheck = (req, res) => {
+    res.status(200).json({"Health status": "OK"});
+}
 
 // HOMEPAGE FEED
 const homepageFeed = async (req, res) => {
@@ -161,4 +164,4 @@ function isValidObjectId(str) {
     }
 }
 
-export { homepageFeed, userRegister, userLogin, classDetail };
+export { homepageFeed, userRegister, userLogin, classDetail, healthCheck };

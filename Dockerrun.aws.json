@@ -1,12 +1,13 @@
 {
     "AWSEBDockerrunVersion": "1",
     "Image": {
-        "Name": "370591526820.dkr.ecr.ap-southeast-2.amazonaws.com/cloud_tech_server_img_repo_private:cloudTechServer",
+        "Name": "370591526820.dkr.ecr.ap-southeast-2.amazonaws.com/cloud_tech_server_img_repo_private:latest",
         "Update": "true"
     },
     "Ports": [
         {
-            "ContainerPort": 8080
+            "ContainerPort": 5050,
+            "HostPort": 5050
         }
     ]
 }

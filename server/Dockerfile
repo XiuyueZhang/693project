@@ -9,4 +9,6 @@ RUN npm install --production
 
 COPY . .
 
+EXPOSE 5050
+
 CMD ["node", "index.js"]
