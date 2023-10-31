@@ -42,13 +42,13 @@ const ClassEdit = (props) => {
         const timeId = setTimeout(() => {
             // After 3 seconds set the show value to false
             setShow(false)
-            setErrorMessage("")
+            dispatch(setErrorMessage({ errorMessage: '' }));
         }, 3000)
 
         return () => {
             clearTimeout(timeId)
         }
-    }, [show]);
+    }, [dispatch, show]);
 
     const getSelectedClassCall = useCallback(async () => {
         try {
@@ -156,7 +156,7 @@ const ClassEdit = (props) => {
                 console.log("Error uploading video file to S3 bucket:", error)
             }
         } else {
-            setErrorMessage("No video file uploaded.");
+            dispatch(setErrorMessage({ errorMessage: 'No Video file uploaded' }));
             setShow(true);
         }
     }
@@ -181,6 +181,9 @@ const ClassEdit = (props) => {
             }
             uploadedImageFileUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/covers/${uploadedImgFile.name}`;
             return uploadedImageFileUrl;
+        }else{
+            dispatch(setErrorMessage({ errorMessage: 'No Image file uploaded' }));
+            setShow(true);
         }
     }
 
@@ -212,20 +215,19 @@ const ClassEdit = (props) => {
                 try {
                     // Send request to store data to DB
                     const response = await adminAddClassRequest(data, token, "admin");
+                    console.log(response)
                     if (!response.error) {
                         // Redirect to success message page
                         navigate("/admin/success");
                     } else {
-                        console.error("Error adding a new class:", response.error);
                         dispatch(setErrorMessage({
                             errorMessage: response.error
                         }))
                         setShow(true)
                     }
                 } catch (error) {
-                    console.error("Error adding a new class:", error);
                     dispatch(setErrorMessage({
-                        errorMessage: error
+                        errorMessage: error.response.data.error
                     }))
                     setShow(true)
                 }

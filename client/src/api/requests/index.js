@@ -88,6 +88,7 @@ export const adminAddClassRequest = async(data, token, role) => {
     return response;
 }
 
+
 export const adminUpdateClassRequest = async(data, token, role, classId) => {
     const response = await api.patch(`/admin/class/update/${classId}`, data, {
         headers: {
